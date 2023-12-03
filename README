@@ -3,3 +3,11 @@ pinballCS - Bill Budge's Pinball Construction Set
 
 This is revised source code of Pinball Construction Set.
 For terms of The MIT License (MIT), see the LICENSE file.
+
+Bill's original source code is available via
+https://github.com/billbudge/PCS_Atari800
+
+-----------------------------------------------------------
+
+Branch main     : Foenix F256 platform (65c02)
+Branch atari8   : Atari 800 platform   (6502)
