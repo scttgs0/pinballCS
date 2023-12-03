@@ -7,6 +7,9 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/zeropage.equ"
+
+
 ;--------------------------------------
 ; System equates
 ;--------------------------------------
@@ -20,9 +23,9 @@ VVBLKI          = $0222
 ; Zero-page equates
 ;--------------------------------------
 
-STKX                    = $0000         ; [word]
-STKY                    = $0002         ; [word]
-NMICONT                 = $0005
+;STKX                    = $0000         ; [word]
+;STKY                    = $0002         ; [word]
+;NMICONT                 = $0005
 
 
 ;--------------------------------------

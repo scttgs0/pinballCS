@@ -7,6 +7,9 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/zeropage.equ"
+
+
 LIBOBJ          = $03
 
 
@@ -39,51 +42,51 @@ PORTA           = $D300
 ; Zero-page equates
 ;--------------------------------------
 
-PLAYER                  = $0080
-PLAYERCNT               = $0081
-BALLS                   = $0082
+;PLAYER                  = $0080
+;PLAYERCNT               = $0081
+;BALLS                   = $0082
 
-SLEEPCNT                = $0083
-PBASE1                  = $0084         ; [word]
-PBASE2                  = $0086         ; [word]
-PBASE3                  = $0088         ; [word]
-PBASE4                  = $008A         ; [word]
-LASTY                   = $008C
-LIVEBALLS               = $008D
+;SLEEPCNT                = $0083
+;PBASE1                  = $0084         ; [word]
+;PBASE2                  = $0086         ; [word]
+;PBASE3                  = $0088         ; [word]
+;PBASE4                  = $008A         ; [word]
+;LASTY_                  = $008C
+;LIVEBALLS               = $008D
 
-OBJ                     = $008E         ; [word]
-NEXTOBJ                 = $0090
-OBJCOUNT                = $0091
-OBJID                   = $0096
-FILLCOLOR               = $0097
-VRTXCOUNT               = $0098
-LBASE                   = $0099         ; [word]
-RUNLEN                  = $00A8
-PDL0                    = $00A9
-BUTN0                   = $00AB
-BUTN1                   = $00AC
-PTIMER1                 = $00AD
-PTIMER2                 = $00AE
-PARAM                   = $00C0         ; [4-bytes]
-TEMP                    = $00C7
-XTEMP                   = $00C8
-YTEMP                   = $00C9
-BASE1                   = $00D0         ; [word]
-BASE2                   = $00D2         ; [word]
-SHIFTOUT                = $00D4
-SHIFTCOUNT              = $00D5
-SERIES                  = $00E0
-SLICE                   = $00E1
-STEMP                   = $00E2
-DSCORE                  = $00E3
-DBONUS                  = $00E4
-BMULT                   = $00E5
-INITMODE                = $00E6
-SCBASE                  = $00E7         ; [word]
-BSTAT                   = $00E9
-L00EA                   = $00EA
-L00EC                   = $00EC
-Y2_                     = $00ED
+;OBJ                     = $008E         ; [word]
+;NEXTOBJ                 = $0090
+;OBJCOUNT                = $0091
+;OBJID                   = $0096
+;FILLCOLOR               = $0097
+;VRTXCOUNT               = $0098
+;LBASE                   = $0099         ; [word]
+;RUNLEN                  = $00A8
+;PDL0                    = $00A9
+;BUTN0                   = $00AB
+;BUTN1                   = $00AC
+;PTIMER1                 = $00AD
+;PTIMER2                 = $00AE
+;PARAM                   = $00C0         ; [4-bytes]
+;TEMP                    = $00C7
+;XTEMP                   = $00C8
+;YTEMP                   = $00C9
+;BASE1                   = $00D0         ; [word]
+;BASE2                   = $00D2         ; [word]
+;SHIFTOUT                = $00D4
+;SHIFTCOUNT              = $00D5
+;SERIES                  = $00E0
+;SLICE                   = $00E1
+;STEMP                   = $00E2
+;DSCORE                  = $00E3
+;DBONUS                  = $00E4
+;BMULT                   = $00E5
+;INITMODE                = $00E6
+;SCBASE                  = $00E7         ; [word]
+;BSTAT                   = $00E9
+;X1_                     = $00EA
+;X2_                     = $00EC
+;Y2_                     = $00ED
 
 
 ;--------------------------------------
@@ -160,13 +163,13 @@ _XIT            rts
 
 ;--------------------------------------
 ;--------------------------------------
-L900C           lda L00EA
+L900C           lda X1_
                 beq L9002._XIT
 
-                dec L00EA
-                dec L00EC
+                dec X1_
+                dec X2_
 
-                ldy L00EA
+                ldy X1_
                 lda DIV8,Y
                 sta L9032
                 sta L903E
@@ -682,7 +685,7 @@ _next8          dey
                 lda PBDX,Y
                 beq _next8
 
-                sty LASTY
+                sty LASTY_
 
 ; init scores
 
@@ -1273,7 +1276,7 @@ _next2          lda (LBASE),Y
                 jmp _4
 
 _3              lda Y2_
-                cmp LASTY
+                cmp LASTY_
                 beq _5
 
 _4              lda #$FF
@@ -1336,7 +1339,7 @@ _setAddr2       jsr $FFFF               ; [smc]
                 bmi _13
 
                 lda Y2_
-                cmp LASTY
+                cmp LASTY_
                 beq _11
 
                 lda #$FF

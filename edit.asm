@@ -7,6 +7,9 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/zeropage.equ"
+
+
 POLYGON         = 1
 BPOLYGON        = 2
 LIBOBJ          = 3
@@ -16,67 +19,67 @@ LIBOBJ          = 3
 ; Zero-page equates
 ;--------------------------------------
 
-CY_                     = $0082
-CXD8                    = $0083
-CXM8                    = $0084
-LASTITEM                = $008C
-OBJ                     = $008E         ; [word]
-NEXTOBJ                 = $0090
-OBJCOUNT                = $0091
-PLYPTRX                 = $0092         ; [word]
-PLYPTRY                 = $0094         ; [word]
-OBJID                   = $0096
-FILLCOLOR               = $0097
-VRTXCOUNT               = $0098
-LB_                     = $0099
-SCANMODE                = $009B
-MEMBTM                  = $009C         ; [word]
-MIDBTM                  = $009E         ; [word]
-MIDTOP                  = $00A0         ; [word]
-MIDY                    = $00A2
-COLOR                   = $00A3
-CX_                     = $00A4
-EDITMODE                = $00A5
-OBJ2                    = $00A6
-MINX                    = $00AA
-MINY                    = $00AB
-LFTSTOP                 = $00AC
-MINPT                   = $00AC
-RTSTOP                  = $00AD
-MINDIST                 = $00AD
-TOPSTOP                 = $00AE
-MINPOLY                 = $00AE
-BTMSTOP                 = $00AF
-DELX                    = $00B0
-DELY                    = $00B1
-DRAGX                   = $00B2
-DRAGY                   = $00B3
-PARAM                   = $00C0         ; [6-bytes]
-TEMP                    = $00C7
-XTEMP                   = $00C8
-YTEMP                   = $00C9
-B1_                     = $00D0
-VERTA                   = $00D4
-D8A                     = $00D5
-M8A                     = $00D6
-VERTB                   = $00D7
-D8B                     = $00DA
-M8B                     = $00DB
-BYTE2                   = $00DC
+;CY_                     = $0082
+;CXD8                    = $0083
+;CXM8                    = $0084
+;LASTITEM                = $008C
+;OBJ                     = $008E         ; [word]
+;NEXTOBJ                 = $0090
+;OBJCOUNT                = $0091
+;PLYPTRX                 = $0092         ; [word]
+;PLYPTRY                 = $0094         ; [word]
+;OBJID                   = $0096
+;FILLCOLOR               = $0097
+;VRTXCOUNT               = $0098
+;LB_                     = $0099
+;SCANMODE                = $009B
+;MEMBTM                  = $009C         ; [word]
+;MIDBTM                  = $009E         ; [word]
+;MIDTOP                  = $00A0         ; [word]
+;MIDY                    = $00A2
+;COLOR                   = $00A3
+;CX_                     = $00A4
+;EDITMODE                = $00A5
+;OBJ2                    = $00A6
+;MINX                    = $00AA
+;MINY                    = $00AB
+;LFTSTOP                 = $00AC
+;MINPT                   = $00AC
+;RTSTOP                  = $00AD
+;MINDIST                 = $00AD
+;TOPSTOP                 = $00AE
+;MINPOLY                 = $00AE
+;BTMSTOP                 = $00AF
+;DELX                    = $00B0
+;DELY                    = $00B1
+;DRAGX                   = $00B2
+;DRAGY                   = $00B3
+;PARAM                   = $00C0         ; [6-bytes]
+;TEMP                    = $00C7
+;XTEMP                   = $00C8
+;YTEMP                   = $00C9
+;B1_                     = $00D0
+;VERTA                   = $00D4
+;D8A                     = $00D5
+;M8A                     = $00D6
+;VERTB                   = $00D7
+;D8B                     = $00DA
+;M8B                     = $00DB
+;BYTE2                   = $00DC
 
-COLBW                   = $00F0
-SLB                     = $00F0
-GRIDON                  = $00F1
-MCOLOR                  = $00F2
-SLOLD                   = $00F2
-XDIR                    = $00F3
-SLNEW                   = $00F3
-YDIR                    = $00F4
+;COLBW                   = $00F0
+;SLB                     = $00F0
+;GRIDON                  = $00F1
+;MCOLOR                  = $00F2
+;SLOLD                   = $00F2
+;XDIR                    = $00F3
+;SLNEW                   = $00F3
+;YDIR                    = $00F4
 
-VR                      = $00F5
-VRY                     = $00F5
-VRXD8                   = $00F6
-VRXM8                   = $00F7
+;VR                      = $00F5
+;VRY                     = $00F5
+;VRXD8                   = $00F6
+;VRXM8                   = $00F7
 
 
 
