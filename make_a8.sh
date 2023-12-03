@@ -20,8 +20,8 @@ mkdir -p obj/
 64tass  --m65xx \
         --atari-xex \
         --nostart \
-        -o obj/empty138.bin \
-        data/empty138.inc
+        -o obj/empty59.bin \
+        data/empty59.inc
 
 64tass  --m65xx \
         --atari-xex \
@@ -43,7 +43,35 @@ mkdir -p obj/
         -o obj/BITMAPS.bin \
         data/BITMAPS.inc
 
+64tass  --m65xx \
+        --atari-xex \
+        --nostart \
+        -o obj/DLIST.bin \
+        data/DLIST.inc
+
+64tass  --m65xx \
+        --atari-xex \
+        --nostart \
+        -o obj/TITLE.bin \
+        data/TITLE.inc
+
 # -------------------------------------
+
+64tass  --m65xx \
+        --atari-xex \
+        --nostart \
+        -o obj/boot2.bin \
+        --list=obj/boot2_a8.lst \
+        --labels=obj/boot2_a8.lbl \
+        boot2.asm
+
+64tass  --m65xx \
+        --atari-xex \
+        --nostart \
+        -o obj/cdraw.bin \
+        --list=obj/cdraw_a8.lst \
+        --labels=obj/cdraw_a8.lbl \
+        cdraw.asm
 
 64tass  --m65xx \
         --atari-xex \
@@ -60,6 +88,14 @@ mkdir -p obj/
         --list=obj/edit_a8.lst \
         --labels=obj/edit_a8.lbl \
         edit.asm
+
+64tass  --m65xx \
+        --atari-xex \
+        --nostart \
+        -o obj/platform_a8.bin \
+        --list=obj/platform_a8.lst \
+        --labels=obj/platform_a8.lbl \
+        platform_a8.asm
 
 64tass  --m65xx \
         --atari-xex \
@@ -88,6 +124,22 @@ mkdir -p obj/
 64tass  --m65xx \
         --atari-xex \
         --nostart \
+        -o obj/swap.bin \
+        --list=obj/swap_a8.lst \
+        --labels=obj/swap_a8.lbl \
+        swap.asm
+
+64tass  --m65xx \
+        --atari-xex \
+        --nostart \
+        -o obj/tst.bin \
+        --list=obj/tst_a8.lst \
+        --labels=obj/tst_a8.lbl \
+        tst.asm
+
+64tass  --m65xx \
+        --atari-xex \
+        --nostart \
         -o obj/wire.bin \
         --list=obj/wire_a8.lst \
         --labels=obj/wire_a8.lbl \
@@ -98,7 +150,14 @@ mkdir -p obj/
 
 
 cat     obj/atr_header.bin \
-                        obj/empty138.bin \
+        obj/boot2.bin \
+                        obj/empty59.bin \
+        obj/cdraw.bin \
+        obj/TITLE.bin \
+        obj/DLIST.bin \
+        obj/platform_a8.bin \
+        obj/swap.bin \
+        obj/tst.bin \
                         obj/empty53.bin \
         obj/BITMAPS.bin \
         obj/run.bin \

@@ -7,4 +7,4 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
-                .fill 138*128,$00
+                .fill 59*128,$00
