@@ -871,7 +871,8 @@ _3              php
                 sta CHARBUF+5,Y
                 lda #$9B
                 sta CHARBUF+6,Y
-                stz CHARBUF+7,Y
+                lda #$00
+                sta CHARBUF+7,Y
 
                 plp
                 bcs _XIT
