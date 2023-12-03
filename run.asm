@@ -7,6 +7,9 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/zeropage.equ"
+
+
 ;--------------------------------------
 ; System equates
 ;--------------------------------------
@@ -27,60 +30,60 @@ PORTA           = $D300
 ; Zero-page equates
 ;--------------------------------------
 
-NOBJ                    = $0090
-OBJC                    = $0091
-OBJID                   = $0096
-LB_                     = $0099
-MIDTOP                  = $00A0
-RUNLEN                  = $00A8
-PDL0                    = $00A9
-BTN0                    = $00AB
-BTN1                    = $00AC
-PTM1                    = $00AD
-PTM2                    = $00AE
-T__                     = $00C7
-XT_                     = $00C8
-YT_                     = $00C9
-T2_                     = $00CA
-B1_                     = $00D0
-B2_                     = $00D2
-B3_                     = $00D4
-KICK                    = $00D6
-FLIPR                   = $00D7
-FRAME                   = $00D8
-LEFTX                   = $00D9
-FDIR                    = $00DA
-FX1                     = $00DB
-FX2                     = $00DC
-FWIDTH                  = $00DD
-SERIES                  = $00E0
-SLICE                   = $00E1
-ST_                     = $00E2
-DSCORE                  = $00E3
-DBONUS                  = $00E4
-BMULT                   = $00E5
-INITMODE                = $00E6
-SCB                     = $00E7
-BSTAT                   = $00E9
-X1_                     = $00EA
-Y1_                     = $00EB
-X2_                     = $00EC
-Y2_                     = $00ED
-BDX                     = $00EE
-BDY                     = $00EF
-BXACC                   = $00F0
-BYACC                   = $00F1
-BMOVE                   = $00F2
-MIDX                    = $00F3
-HCNT                    = $00F4
-HT                      = $00F5
-HVAL                    = $00F6
-P1_                     = $00F7
-P2_                     = $00F8
-RTTTA                   = $00F9
-LFTTA                   = $00FA
-HTCNT                   = $00FB
-LASTY                   = $00FC
+;NOBJ                    = $0090
+;OBJC                    = $0091
+;OBJID                   = $0096
+;LB_                     = $0099
+;MIDTOP                  = $00A0
+;RUNLEN                  = $00A8
+;PDL0                    = $00A9
+;BTN0                    = $00AB
+;BTN1                    = $00AC
+;PTM1                    = $00AD
+;PTM2                    = $00AE
+;T__                     = $00C7
+;XT_                     = $00C8
+;YT_                     = $00C9
+;T2_                     = $00CA
+;B1_                     = $00D0
+;B2_                     = $00D2
+;B3_                     = $00D4
+;KICK                    = $00D6
+;FLIPR                   = $00D7
+;FRAME                   = $00D8
+;LEFTX                   = $00D9
+;FDIR                    = $00DA
+;FX1                     = $00DB
+;FX2                     = $00DC
+;FWIDTH                  = $00DD
+;SERIES                  = $00E0
+;SLICE                   = $00E1
+;ST_                     = $00E2
+;DSCORE                  = $00E3
+;DBONUS                  = $00E4
+;BMULT                   = $00E5
+;INITMODE                = $00E6
+;SCB                     = $00E7
+;BSTAT                   = $00E9
+;X1_                     = $00EA
+;Y1_                     = $00EB
+;X2_                     = $00EC
+;Y2_                     = $00ED
+;BDX                     = $00EE
+;BDY                     = $00EF
+;BXACC                   = $00F0
+;BYACC                   = $00F1
+;BMOVE                   = $00F2
+;MIDX                    = $00F3
+;HCNT                    = $00F4
+;HT                      = $00F5
+;HVAL                    = $00F6
+;P1_                     = $00F7
+;P2_                     = $00F8
+;RTTTA                   = $00F9
+;LFTTA                   = $00FA
+;HTCNT                   = $00FB
+;LASTY                   = $00FC
 
 
 ;--------------------------------------
