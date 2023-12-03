@@ -176,8 +176,9 @@ cat     obj/atr_header.bin \
         data/VTOC.dat \
         data/DEMO1.dat \
         data/DEMO2.dat \
-        data/DEMO3.dat \
+        data/DEMO3a.dat \
         data/DEMO4.dat \
         data/DEMO5.dat \
+        data/DEMO3b.dat \
                         obj/empty279_fill.bin \
         >obj/pinballCS.atr
