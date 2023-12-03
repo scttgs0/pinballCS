@@ -40,10 +40,9 @@ VBLCURSOR               = $2A5B
 ;======================================
 ; INIT ATARI 800
 ;======================================
-INIT_ATARI      lda #$00
-                sta STKX
-                sta STKX+1
-                sta STKY
+INIT_ATARI      stz STKX
+                stz STKX+1
+                stz STKY
 
                 lda VVBLKI
                 sta NMICONT

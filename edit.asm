@@ -1795,8 +1795,7 @@ _3              lda #<MCMDB
                 jsr CINR
                 bcc _next2
 
-                lda #$00
-                sta LASTITEM+1
+                stz LASTITEM+1
                 jmp _4
 
 _4              lda #<MCMDMENU

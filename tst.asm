@@ -63,9 +63,8 @@ GOATARI         lda #<dlistMain
                 sta COLOR1
                 sta COLPF1
 
-                lda #$00
-                sta COLOR2
-                sta COLPF2
+                stz COLOR2
+                stz COLPF2
 
                 lda #$44
                 sta COLOR4

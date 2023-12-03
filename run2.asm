@@ -244,9 +244,7 @@ _next3          sty PLAYER
                 jsr DOBALL
                 jsr TALLY
 
-                lda #$00
-                sta BMULT
-
+                stz BMULT
                 jsr PRBMULT
 
                 ldy PLAYER
@@ -423,9 +421,7 @@ _next1          sta SCORE1,Y
 
                 jsr INITSOUND
 
-                lda #$00
-                sta INITMODE
-
+                stz INITMODE
                 jsr INITOBJS
 
                 ldx #$00
@@ -504,8 +500,7 @@ MAKETBLS        lda #>SHFRSLT
                 lda #$01
                 sta SHIFTCOUNT
 
-_next1          lda #$00
-                sta SHIFTOUT
+_next1          stz SHIFTOUT
 
                 tya
                 ldx SHIFTCOUNT
@@ -751,9 +746,7 @@ _next1          sty YTEMP
                 jsr PRCHAR
 
                 dec CHAR+3
-
-                lda #$00
-                sta CHAR+4
+                stz CHAR+4
 
                 ldy YTEMP
                 dey
@@ -789,9 +782,8 @@ SCORE           ldx PLAYER
                 ldy #$05
                 jsr DOSCORE._ENTRY1
 
-                lda #$00
-                sta DSCORE
-                sta DBONUS
+                stz DSCORE
+                stz DBONUS
 
                 rts
 
@@ -866,8 +858,7 @@ PRINTPLAYER     lda SCVERT,Y
 
                 lda #$15
                 sta CHAR+3
-                lda #$00
-                sta CHAR+4
+                stz CHAR+4
 
                 lda PMSGLO,Y
                 ldx PMSGHI,Y
@@ -910,9 +901,7 @@ DOSOUND         cmp SERIES
                 bmi _XIT
 
                 sta SERIES
-
-                lda #$00
-                sta SLICE
+                stz SLICE
 
 _XIT            rts
 
@@ -1122,15 +1111,13 @@ _setAddr1       jmp $FFFF               ; [smc]
 DOBALL          lda #$AA
                 sta CASINI
 
-                lda #$00
-                sta INITMODE
+                stz INITMODE
                 jsr INITOBJS
 
                 ldx PLAYER
                 jsr RESTOREPLAYER
 
-_next1          lda #$00
-                sta LIVEBALLS
+_next1          stz LIVEBALLS
 
                 jsr GETSELECT
                 bne _1
@@ -1149,8 +1136,7 @@ _1              jsr PLAY
                 lda LIVEBALLS
                 bne _next1
 
-                lda #$00
-                sta PTIMER1
+                stz PTIMER1
 
 _next2          jsr PLAY
 
@@ -1645,9 +1631,8 @@ _6              ldy NEXTOBJ
 ;======================================
 ;
 ;======================================
-PBASES          lda #$00
-                sta PBASE1
-                sta PBASE3
+PBASES          stz PBASE1
+                stz PBASE3
 
                 lda #$80
                 sta PBASE2
@@ -1716,9 +1701,8 @@ GOATARI         lda #<DLIST
                 sta COLOR1
                 sta COLPF1
 
-                lda #$00
-                sta COLOR2
-                sta COLPF2
+                stz COLOR2
+                stz COLPF2
 
                 lda #$44
                 sta COLOR4

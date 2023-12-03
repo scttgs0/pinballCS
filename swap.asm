@@ -81,9 +81,8 @@ RELOAD          pha
 
                 jsr PCSINSERTED
 
-                lda #$00
-                sta DBUFLO
-                sta DAUX2
+                stz DBUFLO
+                stz DAUX2
 
                 lda #$7B
                 ldx #$C0
@@ -115,9 +114,7 @@ SWAPSECTORS     txa
 
                 pla
                 tax
-                lda #$00
-                sta DBUFLO
-
+                stz DBUFLO
                 lda SECTORHI,X
                 sta DAUX2
 
@@ -145,9 +142,8 @@ ADDRHI          .byte $A0,$A0,$A0,$90
 ;======================================
 ;
 ;======================================
-PCSINSERTED     lda #$00
-                sta DBUFLO
-                sta DAUX2
+PCSINSERTED     stz DBUFLO
+                stz DAUX2
 
                 lda #$BF
                 ldx #$C0

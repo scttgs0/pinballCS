@@ -112,15 +112,14 @@ START           lda #$80
 
                 jsr DRAWPOLYS
 
-                lda #$00
-                sta CURSORY
-                sta CURSORXDIV8
-                sta CURSORXMOD8
+                stz CURSORY
+                stz CURSORXDIV8
+                stz CURSORXMOD8
 
-                sta EDITMODE
-                sta SLCTMODE
+                stz EDITMODE
+                stz SLCTMODE
 
-                sta CURNOISE
+                stz CURNOISE
                 jsr INITSOUND
 
                 ldy #$02
@@ -201,8 +200,7 @@ _main           inc ETIMER
                 jsr CRSRINRECT
                 bcc _1
 
-                lda #$00
-                sta LASTITEM+1
+                stz LASTITEM+1
 
                 lda #<CMDMENU
                 ldx #>CMDMENU
@@ -394,8 +392,7 @@ _1              lda #<NOTEB
                 lda CURNOISE
                 jsr HLNOISE
 
-                lda #$00
-                sta LASTITEM+1
+                stz LASTITEM+1
 
                 lda #<NOTEMENU
                 ldx #>NOTEMENU
@@ -411,8 +408,7 @@ _1              lda #<NOTEB
                 jsr HLNOISE
                 jmp FIXOBJ
 
-_2              lda #$00
-                sta CURNOISE
+_2              stz CURNOISE
 
                 jmp FIXOBJ
 
@@ -467,8 +463,7 @@ SOBJ4           lda SLCTMODE
                 ldx #>BMULTBOX
                 jsr DRAWRECT
 
-_1              lda #$00
-                sta LASTITEM+1
+_1              stz LASTITEM+1
 
                 lda #<BMULTMENU
                 ldx #>BMULTMENU
@@ -481,8 +476,7 @@ _1              lda #$00
 
                 jmp FIXOBJ
 
-_2              lda #$00
-                sta BMULT
+_2              stz BMULT
 
                 jmp FIXOBJ
 
@@ -549,8 +543,7 @@ SOBJ5           lda #<SCOREB
                 lda CURSCORE
                 jsr HLSCORE
 
-                lda #$00
-                sta LASTITEM+1
+                stz LASTITEM+1
 
                 lda #<SCOREMENU
                 ldx #>SCOREMENU
@@ -565,8 +558,7 @@ SOBJ5           lda #<SCOREB
 
                 jmp FIXOBJ
 
-_1              lda #$00
-                sta CURSCORE
+_1              stz CURSCORE
 
                 jmp FIXOBJ
 

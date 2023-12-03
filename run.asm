@@ -608,8 +608,7 @@ _20             cpx #$80
 _21             lda #$00
 _22             sta KICK
 
-                lda #$00
-                sta B3_+1
+                stz B3_+1
 
                 jsr BOUNCE
                 jmp PUTSP
@@ -1185,8 +1184,7 @@ CATCH1HIT       bit BMOVE
                 ora #$80
                 sta (B2_),Y
 
-                lda #$00
-                sta BDX
+                stz BDX
 
                 lda #$20
                 sta BSTAT
@@ -1265,8 +1263,7 @@ _5              lda YT_
                 lda #$00
 _6              sta (B2_),Y
 
-                lda #$00
-                sta BSTAT
+                stz BSTAT
 
                 clc
                 rts
@@ -1591,9 +1588,8 @@ FIXQ5           eor #$FF
 ;======================================
 ;
 ;======================================
-PBOUNCE         lda #$00
-                sta KICK
-                sta B3_+1
+PBOUNCE         stz KICK
+                stz B3_+1
 
                 ;[fall-through]
 
@@ -1763,9 +1759,7 @@ DOSOUND         cmp SERIES
                 bmi _XIT
 
                 sta SERIES
-
-                lda #$00
-                sta SLICE
+                stz SLICE
 
 _XIT            rts
 
@@ -1845,8 +1839,7 @@ MOVEBALL        ldy #$10
                 adc BDY
                 sta BYACC
 
-                lda #$00
-                sta HTCNT
+                stz HTCNT
 
                 lda PTM1
 _setValue1      and #$07                ; [smc]
@@ -1903,8 +1896,7 @@ _4              sbc #$20
                 ldy Y1_
                 dey
 
-                lda #$00
-                sta BMOVE
+                stz BMOVE
 
                 jsr CHECKVERT
                 bcs _5
@@ -2273,8 +2265,7 @@ _4              iny
                 clc
                 rts
 
-_5              lda #$00
-                sta P1_
+_5              stz P1_
 
                 lda #$08
                 sta LFTTA
@@ -2561,9 +2552,8 @@ SCORE           lda #$B0
                 ldy #$05
                 jsr DOSCORE._ENTRY1
 
-                lda #$00
-                sta DSCORE
-                sta DBONUS
+                stz DSCORE
+                stz DBONUS
 
                 rts
 
@@ -2678,9 +2668,7 @@ _next1          sty YT_
                 jsr PRCHAR
 
                 dec CHAR+3
-
-                lda #$00
-                sta CHAR+4
+                stz CHAR+4
 
                 ldy YT_
                 dey
