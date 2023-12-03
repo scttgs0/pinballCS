@@ -1,4 +1,12 @@
 
+; SPDX-PackageSummary: Pinball Construction Set (for 8-bit systems)
+; SPDX-PackageOriginator: BudgeCo: Bill Budge
+; SPDX-PackageCopyrightText: Copyright (c) 1982 Bill Budge
+; SPDX-License-Identifier: MIT
+
+; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
+
+
 ;--------------------------------------
 ; System equates
 ;--------------------------------------
@@ -1239,9 +1247,40 @@ CRSRUP          ror ITEMP
 
 
 ;--------------------------------------
-;--------------------------------------
-                ldy #$2A
-                jmp (CRSRRT._XIT+1)
+;--------------------------------------     junk
 
-;;HACK:
-                .fill 36,$00
+;   ldy #$2A
+;   jmp (CRSRRT._XIT+1)
+
+;   ror
+;   cpx #$FF
+;   beq $2ACB
+
+;   inx
+;   bne $2ACB
+
+;   cpx #$00
+;   beq $2ACB
+
+;   dex
+;   bcs $2ACB
+
+;   ror
+;   cpy #$FF
+;   beq $2AD3
+
+;   iny
+;   bne $2AD3
+
+;   cpy #$00
+;   beq $2AD3
+
+;   dey
+;   bcs $2AD3
+
+                .byte $A0,$2A,$6C,$B8,$2A,$6A,$E0,$FF
+                .byte $F0,$EA,$E8,$D0,$E7,$E0,$00,$F0
+                .byte $E3,$CA,$B0,$E0,$6A,$C0,$FF,$F0
+                .byte $E3,$C8,$D0,$E0,$C0,$00,$F0,$DC
+                .byte $88,$B0,$D9,$F7,$22,$02,$8D,$B8
+                .byte $2A
