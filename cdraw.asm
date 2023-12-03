@@ -162,7 +162,7 @@ _next1          lda (BASE1),Y
 
 ;--------------------------------------
 ;--------------------------------------
-CLR             ; alias
+CLR_            ; alias
 OR_             ; alias
 
 XOR
@@ -195,7 +195,7 @@ SETMODE         lda PTBL1,Y                 ; Y=pen mode
 PTBL1           .byte <STORE
                 .byte <GRAB
                 .byte <XOR
-                .byte <CLR
+                .byte <CLR_
                 .byte <OR_
 PTBL2           .byte <STORE2
                 .byte <GRAB2
