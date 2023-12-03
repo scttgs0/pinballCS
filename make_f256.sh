@@ -14,6 +14,38 @@ mkdir -p obj/
 64tass  --m65c02 \
         --flat \
         --nostart \
+        -o obj/DEMO1.PB \
+        data/DEMO1.inc
+
+64tass  --m65c02 \
+        --flat \
+        --nostart \
+        -o obj/DEMO2.PB \
+        data/DEMO2.inc
+
+64tass  --m65c02 \
+        --flat \
+        --nostart \
+        -o obj/DEMO3.PB \
+        data/DEMO3.inc
+
+64tass  --m65c02 \
+        --flat \
+        --nostart \
+        -o obj/DEMO4.PB \
+        data/DEMO4.inc
+
+64tass  --m65c02 \
+        --flat \
+        --nostart \
+        -o obj/DEMO5.PB \
+        data/DEMO5.inc
+
+# -------------------------------------
+
+64tass  --m65c02 \
+        --flat \
+        --nostart \
         -o obj/BITMAPS.bin \
         data/BITMAPS.inc
 
@@ -41,32 +73,32 @@ mkdir -p obj/
         --flat \
         --nostart \
         -o obj/boot2.bin \
-        --list=obj/boot2_a8.lst \
-        --labels=obj/boot2_a8.lbl \
+        --list=obj/boot2.lst \
+        --labels=obj/boot2.lbl \
         boot2.asm
 
 64tass  --m65c02 \
         --flat \
         --nostart \
         -o obj/cdraw.bin \
-        --list=obj/cdraw_a8.lst \
-        --labels=obj/cdraw_a8.lbl \
+        --list=obj/cdraw.lst \
+        --labels=obj/cdraw.lbl \
         cdraw.asm
 
 64tass  --m65c02 \
         --flat \
         --nostart \
         -o obj/disk.bin \
-        --list=obj/disk_a8.lst \
-        --labels=obj/disk_a8.lbl \
+        --list=obj/disk.lst \
+        --labels=obj/disk.lbl \
         disk.asm
 
 64tass  --m65c02 \
         --flat \
         --nostart \
         -o obj/edit.bin \
-        --list=obj/edit_a8.lst \
-        --labels=obj/edit_a8.lbl \
+        --list=obj/edit.lst \
+        --labels=obj/edit.lbl \
         edit.asm
 
 64tass  --m65c02 \
@@ -81,48 +113,48 @@ mkdir -p obj/
         --flat \
         --nostart \
         -o obj/ppak.bin \
-        --list=obj/ppak_a8.lst \
-        --labels=obj/ppak_a8.lbl \
+        --list=obj/ppak.lst \
+        --labels=obj/ppak.lbl \
         ppak.asm
 
 64tass  --m65c02 \
         --flat \
         --nostart \
         -o obj/run.bin \
-        --list=obj/run_a8.lst \
-        --labels=obj/run_a8.lbl \
+        --list=obj/run.lst \
+        --labels=obj/run.lbl \
         run.asm
 
 64tass  --m65c02 \
         --flat \
         --nostart \
         -o obj/run2.bin \
-        --list=obj/run2_a8.lst \
-        --labels=obj/run2_a8.lbl \
+        --list=obj/run2.lst \
+        --labels=obj/run2.lbl \
         run2.asm
 
 64tass  --m65c02 \
         --flat \
         --nostart \
         -o obj/swap.bin \
-        --list=obj/swap_a8.lst \
-        --labels=obj/swap_a8.lbl \
+        --list=obj/swap.lst \
+        --labels=obj/swap.lbl \
         swap.asm
 
 64tass  --m65c02 \
         --flat \
         --nostart \
         -o obj/tst.bin \
-        --list=obj/tst_a8.lst \
-        --labels=obj/tst_a8.lbl \
+        --list=obj/tst.lst \
+        --labels=obj/tst.lbl \
         tst.asm
 
 64tass  --m65c02 \
         --flat \
         --nostart \
         -o obj/wire.bin \
-        --list=obj/wire_a8.lst \
-        --labels=obj/wire_a8.lbl \
+        --list=obj/wire.lst \
+        --labels=obj/wire.lbl \
         wire.asm
 
 
@@ -144,11 +176,9 @@ cat     obj/boot2.bin \
         obj/wire.bin \
         obj/disk.bin \
         obj/run2.bin \
-        data/VTOC.dat \
-        data/DEMO1.dat \
-        data/DEMO2.dat \
-        data/DEMO3a.dat \
-        data/DEMO4.dat \
-        data/DEMO5.dat \
-        data/DEMO3b.dat \
+        obj/DEMO1.PB \
+        obj/DEMO2.PB \
+        obj/DEMO3.PB \
+        obj/DEMO4.PB \
+        obj/DEMO5.PB \
         >obj/pinballCS.bin
