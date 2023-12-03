@@ -1,4 +1,12 @@
 
+; SPDX-PackageSummary: Pinball Construction Set (for 8-bit systems)
+; SPDX-PackageOriginator: BudgeCo: Bill Budge
+; SPDX-PackageCopyrightText: Copyright (c) 1982 Bill Budge
+; SPDX-License-Identifier: MIT
+
+; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
+
+
 CHARBITS        .byte $00,$00,$00,$00,$00
 
                 .byte $07,$01           ; height,width
