@@ -63,8 +63,8 @@ PORTA           = $D300
 ;LBASE                   = $0099         ; [word]
 ;RUNLEN                  = $00A8
 ;PDL0                    = $00A9
-;BUTN0                   = $00AB
-;BUTN1                   = $00AC
+;BTN0                    = $00AB
+;BTN1                    = $00AC
 ;PTIMER1                 = $00AD
 ;PTIMER2                 = $00AE
 ;PARAM                   = $00C0         ; [4-bytes]
@@ -1173,13 +1173,13 @@ _2              lda TRIG0
                 eor #$FF
                 ror
                 ror
-                sta BUTN0
+                sta BTN0
 
                 lda TRIG1
                 eor #$FF
                 ror
                 ror
-                sta BUTN1
+                sta BTN1
 
                 lda PORTA
                 eor #$FF
@@ -1189,13 +1189,13 @@ _2              lda TRIG0
                 asl
                 pha
 
-                ora BUTN1
-                sta BUTN1
+                ora BTN1
+                sta BTN1
 
                 pla
                 asl
-                ora BUTN0
-                sta BUTN0
+                ora BTN0
+                sta BTN0
 
 _setValue1      lda #$10                ; [smc]
                 jsr WAIT_
@@ -1553,8 +1553,8 @@ _XIT            rts
 RESTOREPLAYER   jsr PBASES
 
                 lda #$80
-                sta BUTN0
-                sta BUTN1
+                sta BTN0
+                sta BTN1
 
                 ldy #$00
 _next1          cpy RUNLEN

@@ -30,24 +30,24 @@ PORTA           = $D300
 ; Zero-page equates
 ;--------------------------------------
 
-;NOBJ                    = $0090
-;OBJC                    = $0091
+;NEXTOBJ                 = $0090
+;OBJCOUNT                = $0091
 ;OBJID                   = $0096
-;LB_                     = $0099
+;LBASE                   = $0099
 ;MIDTOP                  = $00A0
 ;RUNLEN                  = $00A8
 ;PDL0                    = $00A9
 ;BTN0                    = $00AB
 ;BTN1                    = $00AC
-;PTM1                    = $00AD
-;PTM2                    = $00AE
-;T__                     = $00C7
-;XT_                     = $00C8
-;YT_                     = $00C9
-;T2_                     = $00CA
-;B1_                     = $00D0
-;B2_                     = $00D2
-;B3_                     = $00D4
+;PTIMER1                 = $00AD
+;PTIMER2                 = $00AE
+;TEMP                    = $00C7
+;XTEMP                   = $00C8
+;YTEMP                   = $00C9
+;TEMP2                   = $00CA
+;BASE1                   = $00D0
+;BASE2                   = $00D2
+;BASE3                   = $00D4
 ;KICK                    = $00D6
 ;FLIPR                   = $00D7
 ;FRAME                   = $00D8
@@ -58,12 +58,12 @@ PORTA           = $D300
 ;FWIDTH                  = $00DD
 ;SERIES                  = $00E0
 ;SLICE                   = $00E1
-;ST_                     = $00E2
+;STEMP                   = $00E2
 ;DSCORE                  = $00E3
 ;DBONUS                  = $00E4
 ;BMULT                   = $00E5
 ;INITMODE                = $00E6
-;SCB                     = $00E7
+;SCBASE                  = $00E7
 ;BSTAT                   = $00E9
 ;X1_                     = $00EA
 ;Y1_                     = $00EB
@@ -196,11 +196,11 @@ LAUNCHRUN       bit BTN0
                 lsr
 
                 ldy #$08
-                cmp (LB_),Y
+                cmp (LBASE),Y
                 bcc _XIT1
                 beq _XIT
 
-                lda (LB_),Y
+                lda (LBASE),Y
                 cmp #$05
                 bcs _XIT
 
@@ -211,7 +211,7 @@ _XIT1           jmp RETREAT
 _XIT            rts
 
 _1              ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 beq _XIT
 
                 jmp RETREAT
@@ -221,7 +221,7 @@ _1              ldy #$08
 
                 lda Y2_
                 ldy #$02
-                cmp (B2_),Y
+                cmp (BASE2),Y
                 bcs _XIT2
 
                 lda PDL0
@@ -250,10 +250,10 @@ _1              ldx #$00
 
                 lda #$00
 _2              ldx #$01
-_3              sta T__
+_3              sta TEMP
 
                 ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
 
                 ldy BTN0,X
                 bpl _4
@@ -261,26 +261,26 @@ _3              sta T__
                 cmp #$07
                 bcs _XIT
 
-                adc T__
-                sta XT_
+                adc TEMP
+                sta XTEMP
                 tax
 
                 ldy #$02
-                lda (LB_),Y
+                lda (LBASE),Y
                 clc
                 adc FXDVERT+1,X
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ldy #$05
                 lda FXHEIGHT+1,X
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 jsr ADVANCE
 
-                ldx XT_
+                ldx XTEMP
                 ldy #$07
                 lda FXLEN+1,X
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 rts
 
@@ -297,26 +297,26 @@ _4              cmp #$00
 ;
 ;======================================
 FLPRUN4         clc
-                adc T__
-                sta XT_
+                adc TEMP
+                sta XTEMP
                 tax
 
                 ldy #$07
                 lda FXLEN-1,X
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 jsr RETREAT
 
-                ldx XT_
+                ldx XTEMP
                 ldy #$02
-                lda (LB_),Y
+                lda (LBASE),Y
                 sec
                 sbc FXDVERT,X
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ldy #$05
                 lda FXHEIGHT-1,X
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 rts
 
@@ -328,10 +328,10 @@ FLIP2INIT       lda #$08
                 bne _1
 
                 lda #$00
-_1              sta T__
+_1              sta TEMP
 
 _next1          ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 beq LFLIP2RUN._XIT
 
                 jsr FLPRUN4
@@ -381,7 +381,7 @@ LFLIP2HIT       lda #$08
                 bne _1
 
                 lda #$00
-_1              sta T__
+_1              sta TEMP
 
                 ldx BTN0
                 lda #$00
@@ -394,7 +394,7 @@ _1              sta T__
                 ldx #$13
                 lda #$00
 _2              stx FWIDTH
-                sta T__
+                sta TEMP
 
                 ldx BTN1
                 lda #$80
@@ -442,80 +442,80 @@ _8              sty FX1
 
 _9              ldy Y1_
                 dey
-_10             sty YT_
+_10             sty YTEMP
 
                 ldy #$08
-                lda (B2_),Y
+                lda (BASE2),Y
                 sta FRAME
 
                 clc
-                adc T__
+                adc TEMP
                 tax
 
                 ldy #$02
-                lda (B2_),Y
+                lda (BASE2),Y
                 clc
                 adc FDDVERT,X
-                sta T__
+                sta TEMP
 
-                cmp YT_
+                cmp YTEMP
                 bcc _11
                 bne _XIT
 
 _11             clc
                 adc FHEIGHT,X
-                cmp YT_
+                cmp YTEMP
                 bcc _XIT
 
-                dec B2_+1
+                dec BASE2+1
 
                 ldy #$FB
-                lda (B2_),Y
+                lda (BASE2),Y
                 sta LEFTX
 
-                inc B2_+1
+                inc BASE2+1
 
                 lda FTBLO,X
-                sta B3_
+                sta BASE3
                 lda FTBHI,X
-                sta B3_+1
+                sta BASE3+1
 
-                lda YT_
-                sbc T__                 ; C=1
+                lda YTEMP
+                sbc TEMP                 ; C=1
                 asl
                 tay
 
                 bit FLIPR
                 bmi _14
 
-                lda (B3_),Y
+                lda (BASE3),Y
                 adc LEFTX               ; C=0
                 cmp FX2
                 bcc _12
                 bne _XIT
 
 _12             iny
-                lda (B3_),Y
+                lda (BASE3),Y
                 clc
                 adc LEFTX
                 cmp FX1
                 bcc _XIT
 
-                sta T__
+                sta TEMP
 
                 lda FX2
                 sbc LEFTX
-                sta YT_
+                sta YTEMP
 
                 lda FTTA,X
-                sta B3_
+                sta BASE3
 
                 bit BMOVE
                 bmi _13
                 bvs _next1
                 bvc _17                 ; [unc]
 
-_13             lda T__
+_13             lda TEMP
                 cmp FX2
                 bcc _next1
                 bcs _17                 ; [unc]
@@ -526,7 +526,7 @@ _XIT            clc
 _14             lda FWIDTH
                 sec
                 iny
-                sbc (B3_),Y
+                sbc (BASE3),Y
                 adc LEFTX
                 cmp FX2
                 bcc _15
@@ -535,31 +535,31 @@ _14             lda FWIDTH
 _15             dey
                 lda FWIDTH
                 sec
-                sbc (B3_),Y
+                sbc (BASE3),Y
                 clc
                 adc LEFTX
                 cmp FX1
                 bcc _XIT
 
-                sta T__
+                sta TEMP
 
                 lda FWIDTH
                 sbc FX1
                 clc
                 adc LEFTX
-                sta YT_
+                sta YTEMP
 
                 lda #$20
                 sec
                 sbc FTTA,X
-                sta B3_
+                sta BASE3
 
                 bit BMOVE
                 bmi _16
                 bvs _next1
                 bvc _17                 ; [unc]
 
-_16             lda T__
+_16             lda TEMP
                 cmp FX2
                 bcc _17
                 bcs _next1              ; [unc]
@@ -569,7 +569,7 @@ _16             lda T__
                 bcs _17
 
 _next1          ldx #$00
-                lda B3_
+                lda BASE3
                 bpl _19
 
                 lda FRAME
@@ -579,14 +579,14 @@ _next1          ldx #$00
 _17             ldx #$80
                 lda #$10
                 clc
-                adc B3_
+                adc BASE3
                 cmp #$20
                 bcc _18
 
                 sbc #$20
-_18             sta B3_
+_18             sta BASE3
 
-_19             ldy YT_
+_19             ldy YTEMP
                 lda FLPVCTR,Y
                 ldy FRAME
                 beq _21
@@ -611,7 +611,7 @@ _20             cpx #$80
 _21             lda #$00
 _22             sta KICK
 
-                stz B3_+1
+                stz BASE3+1
 
                 jsr BOUNCE
                 jmp PUTSP
@@ -665,12 +665,12 @@ SFRAME8         .byte $07,$0C,$04,$0C,$02,$0B,$01,$09
 INITBALL        bit INITMODE
                 bpl INITB2
 
-                lda LB_
-                ldx LB_+1
+                lda LBASE
+                ldx LBASE+1
                 jsr XOFFDRAW
 
                 ldy #$10
-                lda (LB_),Y
+                lda (LBASE),Y
                 bmi INITB3
 
 
@@ -678,11 +678,11 @@ INITBALL        bit INITMODE
 ;
 ;======================================
 DRAWBALL        ldy #$12
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta IBALL+2
                 dey
 
-                lda (LB_),Y
+                lda (LBASE),Y
                 tax
                 lda DIV8,X
                 sta IBALL+3
@@ -704,31 +704,31 @@ IBALL           .word $878B
 ;
 ;--------------------------------------
 INITB2          ldy #$02
-                lda (LB_),Y
+                lda (LBASE),Y
                 ldy #$12
-                sta (LB_),Y
+                sta (LBASE),Y
 
-                dec LB_+1
+                dec LBASE+1
 
                 ldy #$FB
-                lda (LB_),Y
-                inc LB_+1
+                lda (LBASE),Y
+                inc LBASE+1
 
                 ldy #$11
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 lda #$00
                 ldy #$07
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ldy #$10
-                sta (LB_),Y
+                sta (LBASE),Y
                 ldy #$13
-                sta (LB_),Y
+                sta (LBASE),Y
                 iny
 
                 lda #$FF
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ;[fall-through]
 
@@ -743,11 +743,11 @@ INITB3          rts
 ;
 ;--------------------------------------
 BUMPRUN         ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 bpl _1
 
                 lda #$00
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 jmp ADVANCE
 
@@ -761,11 +761,11 @@ _XIT            rts
 ;
 ;======================================
 TSET            ldy #$08
-                lda (B2_),Y
+                lda (BASE2),Y
                 bne _XIT
 
                 lda #$80
-                sta (B2_),Y
+                sta (BASE2),Y
 
 _XIT            rts
 
@@ -785,7 +785,7 @@ BUMPHIT         jsr TSET
                 sta KICK
 
                 lda #$80
-                sta B3_+1
+                sta BASE3+1
 
                 jsr BOUNCE
                 jmp PUTSP
@@ -795,16 +795,16 @@ BUMPHIT         jsr TSET
 ;
 ;--------------------------------------
 BUMPINIT        ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 bmi _1
                 jmp INITB
 
 _1              and #$7F
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 jmp INITB
 
-                lda B3_
+                lda BASE3
                 cmp #$04
                 beq BUMPHIT
 
@@ -817,7 +817,7 @@ _1              and #$7F
 ;
 ;======================================
 KNOCKRUN        ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 bpl _2
 
                 cmp #$82
@@ -825,7 +825,7 @@ KNOCKRUN        ldy #$08
                 jmp ADVANCE
 
 _1              lda #$02
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 rts
 
@@ -875,7 +875,7 @@ _2              sta BDX
                 bne KNOCK1HIT._next1
 
                 ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 bpl _3
 
                 cmp #$80
@@ -947,22 +947,22 @@ DROP1RUN        ldx #$00
                 beq _1
 
                 ldx #$80
-_1              stx T2_
+_1              stx TEMP2
 
                 ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 and #$0F
                 cmp #$0F
                 beq _3
 
                 eor #$0F
                 ldy #$10
-                and (LB_),Y
+                and (LBASE),Y
                 tax
 
                 ldy #$08
-                ora (LB_),Y
-                sta (LB_),Y
+                ora (LBASE),Y
+                sta (LBASE),Y
                 txa
 
                 ldx #$03
@@ -984,11 +984,11 @@ _next2          jsr DRAWTARG
 
                 lda #$80
 _ENTRY1         ldy #$08
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 lda #$00
                 ldy #$10
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 rts
 
@@ -996,21 +996,21 @@ _ENTRY1         ldy #$08
 ;======================================
 ;
 ;======================================
-DRAWTARG        sta T__
-                stx XT_
+DRAWTARG        sta TEMP
+                stx XTEMP
 
                 txa
                 asl
                 asl
                 asl
-                bit T2_
+                bit TEMP2
                 bmi _1
 
-                dec LB_+1
+                dec LBASE+1
 
                 ldy #$FB
                 clc
-                adc (LB_),Y
+                adc (LBASE),Y
                 tax
 
                 lda DIV8,X
@@ -1018,10 +1018,10 @@ DRAWTARG        sta T__
                 lda MOD8,X
                 sta DROPTXB+4
 
-                inc LB_+1
+                inc LBASE+1
 
                 ldy #$02
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta DROPTXB+2
 
                 lda #<DROPTXB
@@ -1030,16 +1030,16 @@ DRAWTARG        sta T__
 
 _1              ldy #$02
                 clc
-                adc (LB_),Y
+                adc (LBASE),Y
                 sta DROPTYB+2
 
-                dec LB_+1
+                dec LBASE+1
 
                 ldy #$FB
-                lda (LB_),Y
+                lda (LBASE),Y
                 tax
 
-                inc LB_+1
+                inc LBASE+1
 
                 lda DIV8,X
                 sta DROPTYB+3
@@ -1050,8 +1050,8 @@ _1              ldy #$02
                 ldx #>DROPTYB
 _2              jsr XOFFDRAW
 
-                lda T__
-                ldx XT_
+                lda TEMP
+                ldx XTEMP
 
                 rts
 
@@ -1070,22 +1070,22 @@ DROPTYB         .word $8935
 ;--------------------------------------
 ;--------------------------------------
 ;;$893C
-DROP1HIT        dec B2_+1
+DROP1HIT        dec BASE2+1
                 ldy #$FB
                 lda X2_
                 sec
-                sbc (B2_),Y
+                sbc (BASE2),Y
 
-                inc B2_+1
+                inc BASE2+1
 
                 ldx #$03
                 ldy #$01
-                sty T__
+                sty TEMP
 
 _next1          cmp DHITTBL,X
                 bcs _1
 
-                asl T__
+                asl TEMP
 
                 dex
                 bpl _next1
@@ -1093,9 +1093,9 @@ _next1          cmp DHITTBL,X
                 rts
 
 _1              ldy #$10
-                lda (B2_),Y
-                ora T__
-                sta (B2_),Y
+                lda (BASE2),Y
+                ora TEMP
+                sta (BASE2),Y
 
 _ENTRY1         jsr PBOUNCE
                 jmp PUTSP
@@ -1110,16 +1110,16 @@ DHITTBL         .byte $02,$0A,$12,$1A
 DROP2HIT        ldy #$02
                 lda Y2_
                 sec
-                sbc (B2_),Y
+                sbc (BASE2),Y
 
                 ldx #$03
                 ldy #$01
-                sty T__
+                sty TEMP
 
 _next1          cmp DHITTBL,X
                 bcs _1
 
-                asl T__
+                asl TEMP
 
                 dex
                 bpl _next1
@@ -1127,19 +1127,19 @@ _next1          cmp DHITTBL,X
                 rts
 
 _1              ldy #$10
-                lda (B2_),Y
-                ora T__
-                sta (B2_),Y
+                lda (BASE2),Y
+                ora TEMP
+                sta (BASE2),Y
                 bpl DROP1HIT._ENTRY1
 
                 ldx #$00
                 beq _2
 
                 ldx #$80
-_2              stx T2_
+_2              stx TEMP2
 
                 ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 and #$0F
 
                 ldx #$03
@@ -1160,12 +1160,12 @@ CATCH1HIT       bit BMOVE
                 bmi _1
                 bvc _1
 
-                dec B2_+1
+                dec BASE2+1
 
                 ldy #$F9
-                lda (B2_),Y
+                lda (BASE2),Y
 
-                inc B2_+1
+                inc BASE2+1
 
                 clc
                 adc #$03
@@ -1173,19 +1173,19 @@ CATCH1HIT       bit BMOVE
                 bne _1
 
                 ldy #$02
-                lda (B2_),Y
-                sta YT_
+                lda (BASE2),Y
+                sta YTEMP
 
                 ldy #$10
-                lda (B2_),Y
-                sta T__
+                lda (BASE2),Y
+                sta TEMP
 
                 bmi _3
                 bit BSTAT
                 bvs _XIT3
 
                 ora #$80
-                sta (B2_),Y
+                sta (BASE2),Y
 
                 stz BDX
 
@@ -1197,7 +1197,7 @@ CATCH1HIT       bit BMOVE
 _XIT1           clc
                 rts
 
-_1              lda B3_
+_1              lda BASE3
                 bne _XIT2
 
                 lda #$01
@@ -1218,17 +1218,17 @@ _3              rol
                 and #$20
                 beq _XIT3
 
-                lda T__
+                lda TEMP
                 and #$7F
                 tax
 
-                lda YT_
+                lda YTEMP
                 adc CATCHSTOP,X         ; C=1
                 cmp Y2_
                 bne _XIT1
 
-                inc T__
-                lda T__
+                inc TEMP
+                lda TEMP
                 and #$7F
 
                 ldx #$40
@@ -1238,13 +1238,13 @@ _3              rol
                 ldx #$00
                 lda #$C2
 _4              ldy #$10
-                sta (B2_),Y
+                sta (BASE2),Y
                 stx BSTAT
 
 _XIT3           sec
                 rts
 
-_5              lda YT_
+_5              lda YTEMP
                 clc
                 adc #$10
 
@@ -1253,18 +1253,18 @@ _5              lda YT_
                 bit BSTAT
                 bvc _XIT1
 
-                dec T__
-                lda T__
+                dec TEMP
+                lda TEMP
                 cmp #$C0
                 bne _6
 
                 lda #$00
                 ldy #$08
-                sta (B2_),Y
+                sta (BASE2),Y
 
                 ldy #$10
                 lda #$00
-_6              sta (B2_),Y
+_6              sta (BASE2),Y
 
                 stz BSTAT
 
@@ -1281,10 +1281,10 @@ CATCHSTOP       .byte $03,$09,$0F
 ;;$8A4C
 CATCH1INIT      lda #$00
                 ldy #$08
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ldy #$10
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 rts
 
@@ -1292,7 +1292,7 @@ CATCH1INIT      lda #$00
 ;--------------------------------------
 ;--------------------------------------
 CATCH2RUN       ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 bpl _XIT
 
                 cmp #$84
@@ -1301,15 +1301,15 @@ CATCH2RUN       ldy #$08
                 jmp ADVANCE
 
 _1              lda #$00
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ldy #$00
                 lda #<CATCH2B
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 lda #>CATCH2B
                 iny
-                sta (LB_),Y
+                sta (LBASE),Y
 
 _XIT            rts
 
@@ -1330,20 +1330,20 @@ CATCH2HIT       jsr TSET
 SPINRUN         jsr KNOCKRUN
 
                 ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 bne _XIT
 
                 ldy #$10
-                lda (LB_),Y
+                lda (LBASE),Y
                 beq _XIT
 
                 sec
                 sbc #$01
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 lda #$80
                 ldy #$08
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 inc DSCORE
                 bne _XIT
@@ -1358,7 +1358,7 @@ _XIT            rts
 ;--------------------------------------
 SPININIT        lda #$00
                 ldy #$10
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 jmp BUMPINIT
 
@@ -1372,7 +1372,7 @@ SPINHIT         lda BDY
 _1              lsr
 
                 ldy #$10
-                sta (B2_),Y
+                sta (BASE2),Y
 
                 jsr TSET
 
@@ -1427,12 +1427,12 @@ CTBL2HI         .byte >C84375
 ;======================================
 ;
 ;======================================
-ROTATE          sta T__
+ROTATE          sta TEMP
 
                 lsr
                 lsr
                 lsr
-                sta XT_
+                sta XTEMP
 
                 txa
                 bpl _2
@@ -1460,7 +1460,7 @@ _2              tya
 
 _3              lda #$00
 _4              clc
-                adc XT_
+                adc XTEMP
 
                 cmp #$04
                 bcc _5
@@ -1476,11 +1476,11 @@ _6              cpx #$40
                 bcc _7
 
                 ldx #$3F
-_7              lda T__
+_7              lda TEMP
                 and #$07
                 beq _9
 
-                stx XT_
+                stx XTEMP
 
                 tax
                 lda CTBL1LO-1,X
@@ -1499,7 +1499,7 @@ _7              lda T__
                 sta _setAddr2+2
                 sta _setAddr3+2
 
-                ldx XT_
+                ldx XTEMP
 _setAddr1       lda C225,X              ; [smc]
                 sec
 _setAddr2       sbc C225,Y              ; [smc]
@@ -1510,7 +1510,7 @@ _setAddr2       sbc C225,Y              ; [smc]
 
                 ror
                 eor #$C0
-                sta T__
+                sta TEMP
 
 _setAddr3       lda C225,X              ; [smc]
                 clc
@@ -1522,7 +1522,7 @@ _setAddr4       adc C225,Y              ; [smc]
 _8              lsr
                 tay
 
-                ldx T__
+                ldx TEMP
 _9              pla
                 ror
                 ror
@@ -1535,7 +1535,7 @@ _9              pla
 ;======================================
 ;
 ;======================================
-QUAD1           stx YT_
+QUAD1           stx YTEMP
 
                 tya
                 eor #$FF
@@ -1543,7 +1543,7 @@ QUAD1           stx YT_
                 adc #$01
 
                 tax
-                ldy YT_
+                ldy YTEMP
 
                 rts
 
@@ -1570,9 +1570,9 @@ QUAD2           txa
 ;======================================
 ;
 ;======================================
-QUAD3           sty YT_
+QUAD3           sty YTEMP
                 txa
-                ldx YT_
+                ldx YTEMP
 
                 ;[fall-through]
 
@@ -1592,7 +1592,7 @@ FIXQ5           eor #$FF
 ;
 ;======================================
 PBOUNCE         stz KICK
-                stz B3_+1
+                stz BASE3+1
 
                 ;[fall-through]
 
@@ -1602,7 +1602,7 @@ PBOUNCE         stz KICK
 ;======================================
 BOUNCE          ldy BDY
                 ldx BDX
-                lda B3_
+                lda BASE3
                 jsr ROTATE
 
                 tya
@@ -1613,7 +1613,7 @@ BOUNCE          ldy BDY
                 adc #$01
                 tay
 
-                bit B3_+1
+                bit BASE3+1
                 bmi _1
 
 _setAddr1       lda C675,Y              ; [smc]
@@ -1634,7 +1634,7 @@ _2              tay
 
                 lda #$20
                 sec
-                sbc B3_
+                sbc BASE3
 
                 jsr ROTATE
 
@@ -1649,54 +1649,54 @@ _XIT            sec
 ;
 ;======================================
 ADVANCE         ldy #$07
-                lda (LB_),Y
+                lda (LBASE),Y
                 clc
 
                 ldy #$00
-                adc (LB_),Y
-                sta (LB_),Y
+                adc (LBASE),Y
+                sta (LBASE),Y
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 adc #$00
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 adc #$01
-                sta (LB_),Y
+                sta (LBASE),Y
 
-                lda LB_
-                ldx LB_+1
+                lda LBASE
+                ldx LBASE+1
                 jmp XOFFDRAW
 
 
 ;======================================
 ;
 ;======================================
-RETREAT         lda LB_
-                ldx LB_+1
+RETREAT         lda LBASE
+                ldx LBASE+1
                 jsr XOFFDRAW
 
                 ldy #$00
-                lda (LB_),Y
+                lda (LBASE),Y
 
                 sec
                 ldy #$07
-                sbc (LB_),Y
+                sbc (LBASE),Y
 
                 ldy #$00
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sbc #$00
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 sbc #$01
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 rts
 
@@ -1705,7 +1705,7 @@ RETREAT         lda LB_
 ;
 ;--------------------------------------
 INITB           ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 beq INITQUIT
 
                 jsr RETREAT
@@ -1728,7 +1728,7 @@ PUTSP           bcc _XIT
 _ENTRY1         php
 
                 ldy #$09
-                lda (B2_),Y
+                lda (BASE2),Y
                 and #$0F
                 tax
 
@@ -1740,7 +1740,7 @@ _ENTRY1         php
                 lda #$FF
 _1              sta DSCORE
 
-                lda (B2_),Y
+                lda (BASE2),Y
                 lsr
                 lsr
                 lsr
@@ -1781,13 +1781,13 @@ SOUNDTBL        .byte $00,$04,$0C,$14
 ;--------------------------------------
 ;--------------------------------------
 MOVEBALL        ldy #$10
-                lda (LB_),Y
+                lda (LBASE),Y
                 bmi INITQUIT
 
                 sta BSTAT
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 tax
                 sta X1_
 
@@ -1807,7 +1807,7 @@ MOVEBALL        ldy #$10
                 sta VBALL+4
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta HBALL+2
                 sta VBALL+2
                 sta Y1_
@@ -1817,19 +1817,19 @@ MOVEBALL        ldy #$10
                 sta Y2_
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta BDX
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta BDY
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta BXACC
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta BYACC
 
                 lda BXACC
@@ -1844,7 +1844,7 @@ MOVEBALL        ldy #$10
 
                 stz HTCNT
 
-                lda PTM1
+                lda PTIMER1
 _setValue1      and #$07                ; [smc]
                 bne _next1
 
@@ -1965,7 +1965,7 @@ _7              clc
 _8              jmp _next1
 
 _9              ldy #$07
-                lda (LB_),Y
+                lda (LBASE),Y
                 clc
                 adc #$01
 
@@ -1985,35 +1985,35 @@ _9              ldy #$07
 
 _10             lda #$00
 _11             ldy #$07
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 ldy #$10
                 lda BSTAT
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 iny
                 lda X1_
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 iny
                 lda Y1_
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 iny
                 lda BDX
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 iny
                 lda BDY
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 iny
                 lda BXACC
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 iny
                 lda BYACC
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 bit BSTAT
                 bpl _XIT
@@ -2037,17 +2037,17 @@ DOHIT           inc HTCNT
                 jsr PBOUNCE
                 jmp _2
 
-_1              sta B2_+1
+_1              sta BASE2+1
 
                 lda VLO,Y
-                sta B2_
+                sta BASE2
 
                 ldy #$0E
-                lda (B2_),Y
+                lda (BASE2),Y
                 sta _setAddr1+1
 
                 iny
-                lda (B2_),Y
+                lda (BASE2),Y
                 sta _setAddr1+2
 
 _setAddr1       jsr $FFFF               ; [smc]
@@ -2064,17 +2064,17 @@ _2              lda HVAL
 CHECKHORIZ      sta HVAL
 
                 lda PTLO,Y
-                sta B1_
+                sta BASE1
 
                 lda PTHI,Y
-                sta B1_+1
+                sta BASE1+1
 
                 lda PBDX,Y
                 sta HCNT
 
                 lda HVAL
                 ldy #$00
-_next1          cmp (B1_),Y
+_next1          cmp (BASE1),Y
                 bne _1
 
                 jsr HITLEFT
@@ -2085,7 +2085,7 @@ _1              iny
                 iny
                 bcc _3
 
-                cmp (B1_),Y
+                cmp (BASE1),Y
                 bcc _2
                 bne _3
 
@@ -2094,7 +2094,7 @@ _next2          jsr HITRIGHT
                 bcs FIXRIGHT            ; [unc]
 
 _2              dey
-                lda (B1_),Y
+                lda (BASE1),Y
                 iny
 
                 tax
@@ -2114,14 +2114,14 @@ _4              iny
 ;
 ;======================================
 HITLEFT         iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 sta OBJID
 
                 iny
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 and #$0F
-                sta B3_
+                sta BASE3
 
                 lda OBJID
                 bne _ENTRY2
@@ -2131,8 +2131,8 @@ _ENTRY1         lda #$10
 
 _ENTRY2         lda #$20
 _1              sec
-                sbc B3_
-                sta B3_
+                sbc BASE3
+                sta BASE3
 
                 jmp DOHIT
 
@@ -2141,17 +2141,17 @@ _1              sec
 ;
 ;======================================
 HITRIGHT        dey
-                lda (B1_),Y
+                lda (BASE1),Y
                 sta OBJID
 
                 iny
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 lsr
                 lsr
                 lsr
                 lsr
-                sta B3_
+                sta BASE3
 
                 lda OBJID
                 bne HITLEFT._ENTRY1
@@ -2198,7 +2198,7 @@ OFFBOARD        lda #$00
                 bvs _1
 
                 lda #$10
-_1              sta B3_
+_1              sta BASE3
 
                 jmp PBOUNCE
 
@@ -2207,10 +2207,10 @@ _1              sta B3_
 ;
 ;======================================
 CHECKVERT       lda PTLO,Y
-                sta B1_
+                sta BASE1
 
                 lda PTHI,Y
-                sta B1_+1
+                sta BASE1+1
 
                 lda PBDX,Y
                 beq OFFBOARD
@@ -2219,11 +2219,11 @@ CHECKVERT       lda PTLO,Y
 
                 ldy #$01
 _next1          dey
-_next2          lda (B1_),Y
+_next2          lda (BASE1),Y
                 tax
 
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 sta OBJID
                 beq _5
 
@@ -2234,14 +2234,14 @@ _next2          lda (B1_),Y
 _1              stx P1_
 
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 cmp X1_
                 bcc _3
 
                 sta P2_
 
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 sta LFTTA
 
                 lsr
@@ -2274,11 +2274,11 @@ _5              stz P1_
                 sta LFTTA
                 bne _6
 
-_next4          lda (B1_),Y
+_next4          lda (BASE1),Y
                 tax
 
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 bne _8
 
                 sta OBJID
@@ -2294,7 +2294,7 @@ _6              lda X2_
 
                 iny
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 and #$0F
                 sta RTTTA
 
@@ -2304,11 +2304,11 @@ _6              lda X2_
                 bcs _next3
 
 _7              iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 sta P1_
 
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 lsr
                 lsr
                 lsr
@@ -2373,7 +2373,7 @@ DOVHIT          lda P2_
 _1              lda #$20
                 sec
                 sbc LFTTA
-_2              sta B3_
+_2              sta BASE3
 
                 jsr DOHIT
                 bcc _XIT
@@ -2394,7 +2394,7 @@ _3              lda RTTTA
 _4              lda #$10
                 sec
                 sbc RTTTA
-_5              sta B3_
+_5              sta BASE3
 
                 jsr DOHIT
                 bcc _XIT2
@@ -2547,9 +2547,9 @@ SCORE           lda #$B0
                 sta CHAR+2
 
                 lda #<BONUS
-                sta SCB
+                sta SCBASE
                 lda #>BONUS
-                sta SCB+1
+                sta SCBASE+1
 
                 lda DBONUS
                 ldy #$05
@@ -2564,19 +2564,19 @@ SCORE           lda #$B0
 ;======================================
 ;
 ;======================================
-DOSCORE         sty SCB
-                stx SCB+1
+DOSCORE         sty SCBASE
+                stx SCBASE+1
                 ldy #$07
 
 _ENTRY1         clc
-                adc (SCB),Y
+                adc (SCBASE),Y
                 bcc _1
 
                 lda #$FF
-_1              sta (SCB),Y
+_1              sta (SCBASE),Y
 
 _next1          ldx #$00
-                lda (SCB),Y
+                lda (SCBASE),Y
 _next2          cmp #$0A
                 bcc _2
 
@@ -2585,12 +2585,12 @@ _next2          cmp #$0A
                 inx
                 bcs _next2
 
-_2              sta (SCB),Y
+_2              sta (SCBASE),Y
 
                 txa
                 dey
-                adc (SCB),Y
-                sta (SCB),Y
+                adc (SCBASE),Y
+                sta (SCBASE),Y
 
                 tya
                 bne _next1
@@ -2653,8 +2653,8 @@ _next1          sta SCORE1,Y
 ;======================================
 ;
 ;======================================
-PRSCORE         sty SCB
-                stx SCB+1
+PRSCORE         sty SCBASE
+                stx SCBASE+1
 
 _ENTRY1         ldy #$00
                 jsr SETMODE
@@ -2665,15 +2665,15 @@ _ENTRY1         ldy #$00
                 jsr CHARTO
 
                 ldy #$08
-_next1          sty YT_
+_next1          sty YTEMP
 
-                lda (SCB),Y
+                lda (SCBASE),Y
                 jsr PRCHAR
 
                 dec CHAR+3
                 stz CHAR+4
 
-                ldy YT_
+                ldy YTEMP
                 dey
                 bne _next1
 
@@ -2730,7 +2730,7 @@ SOUND           lda SERIES
                 clc
                 adc SLICE
                 tax
-                stx ST_
+                stx STEMP
 
                 ldy EFFECTS,X
 _next1          ldx NOTES-12,Y
@@ -2745,7 +2745,7 @@ _next1          ldx NOTES-12,Y
 
 _1              inc SLICE
 
-                ldx ST_
+                ldx STEMP
                 lda EFFECTS+1,X
                 bne INITSOUND._XIT
 
@@ -2789,8 +2789,8 @@ NOTES           .byte $28,$48,$28,$48,$28,$48,$28,$48,$28,$48,$28,$00
 ;======================================
 WIRING          ldx #$00
 _next1          lda #$00
-                sta T__
-                stx XT_
+                sta TEMP
+                stx XTEMP
 
                 jsr GETST
                 bpl _4
@@ -2804,13 +2804,13 @@ _next1          lda #$00
                 bpl _4
 
                 inx
-                stx XT_
+                stx XTEMP
 
-                lda T__
+                lda TEMP
                 beq _4
 
                 lda LOGIC,X
-                sta YT_
+                sta YTEMP
 
                 and #$0F
                 tay
@@ -2823,12 +2823,12 @@ _next1          lda #$00
                 lda #$FF
 _1              sta DBONUS
 
-                lda YT_
+                lda YTEMP
                 bpl _2
 
                 jsr PRBMULT
 
-_2              lda YT_
+_2              lda YTEMP
                 and #$70
                 lsr
                 lsr
@@ -2840,16 +2840,16 @@ _2              lda YT_
                 lda SOUNDTBL-1,X
                 jsr DOSOUND
 
-_3              dec XT_
+_3              dec XTEMP
                 jsr TURNOFF
 
-                dec XT_
+                dec XTEMP
                 jsr TURNOFF
 
-                dec XT_
+                dec XTEMP
                 jsr TURNOFF
 
-_4              lda XT_
+_4              lda XTEMP
                 and #$FC
                 clc
                 adc #$04
@@ -2874,16 +2874,16 @@ BONUSTBL        .byte $00,$01,$02,$03
 GETST           lda LOGIC,X
                 beq _1
 
-                inc T__
+                inc TEMP
 
                 tay
                 lda VLO,Y
-                sta B1_
+                sta BASE1
                 lda VHI,Y
-                sta B1_+1
+                sta BASE1+1
 
                 ldy #$08
-                lda (B1_),Y
+                lda (BASE1),Y
 
                 rts
 
@@ -2894,21 +2894,21 @@ _XIT            rts
 ;======================================
 ;
 ;======================================
-TURNOFF         ldx XT_
+TURNOFF         ldx XTEMP
                 lda LOGIC,X
                 beq GETST._XIT
 
                 tay
                 lda VLO,Y
-                sta LB_
+                sta LBASE
                 lda VHI,Y
-                sta LB_+1
+                sta LBASE+1
 
                 ldy #$0C
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta _setAddr1+1
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta _setAddr1+2
 
 _setAddr1       jmp $FFFF               ; [smc]
@@ -2962,17 +2962,17 @@ _next1          lda OBJID
                 cmp #$03
                 bne _1
 
-                ldx NOBJ
-                lda LB_
+                ldx NEXTOBJ
+                lda LBASE
                 sta VLO,X
-                lda LB_+1
+                lda LBASE+1
                 sta VHI,X
 
                 ldy #$08
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta TIME,X
                 lda #$00
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 txa
                 ldx RUNLEN
@@ -2982,17 +2982,17 @@ _next1          lda OBJID
 
                 jmp _2
 
-_1              ldx NOBJ
+_1              ldx NEXTOBJ
                 lda #$00
                 sta VLO,X
                 sta VHI,X
 
-_2              inc NOBJ
-                ldy NOBJ
+_2              inc NEXTOBJ
+                ldy NEXTOBJ
                 jsr GETNOBJ
 
-                ldy NOBJ
-                cpy OBJC
+                ldy NEXTOBJ
+                cpy OBJCOUNT
                 bne _next1
 
                 sty INITMODE
@@ -3032,12 +3032,12 @@ _next3          dey
 
                 sty LASTY
 
-_next4          inc PTM1
+_next4          inc PTIMER1
                 bne _4
 
-                inc PTM2
+                inc PTIMER2
 
-_4              lda PTM1
+_4              lda PTIMER1
                 and #$1F
                 bne _5
 
@@ -3079,34 +3079,34 @@ _setValue1      lda #$18                ; [smc]
 _next5          cpy RUNLEN
                 bcs _7
 
-                sty NOBJ
+                sty NEXTOBJ
 
                 ldx RCN,Y
                 lda TIME,X
-                and PTM1
+                and PTIMER1
                 bne _6
 
                 lda VLO,X
-                sta LB_
+                sta LBASE
                 lda VHI,X
-                sta LB_+1
+                sta LBASE+1
 
                 ldy #$0A
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta _setAddr1+1
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta _setAddr1+2
 
 _setAddr1       jsr $FFFF               ; [smc]
 
-                ldy NOBJ
+                ldy NEXTOBJ
                 ldx RCN,Y
                 lda TIME,X
                 bne _6
 
                 ldy #$10
-                lda (LB_),Y
+                lda (LBASE),Y
                 rol
                 bcs _6
                 bmi _6
@@ -3116,27 +3116,27 @@ _setAddr1       jsr $FFFF               ; [smc]
                 bne _6
 
                 lda #$80
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 jsr DRAWBALL
 
-_6              ldy NOBJ
+_6              ldy NEXTOBJ
                 iny
                 bne _next5
 
-_7              lda PTM1
+_7              lda PTIMER1
                 and #$1F
                 bne _8
 
                 jsr SCORE
 
-_8              lda PTM1
+_8              lda PTIMER1
                 and #$07
                 bne _9
 
                 jsr SOUND
 
-_9              lda PTM1
+_9              lda PTIMER1
                 and #$03
                 bne _10
 
@@ -3161,19 +3161,19 @@ INITOBJS        ldy #$00
 _next1          cpy RUNLEN
                 beq _XIT
 
-                sty NOBJ
+                sty NEXTOBJ
 
                 ldx RCN,Y
                 lda VLO,X
-                sta LB_
+                sta LBASE
                 lda VHI,X
-                sta LB_+1
+                sta LBASE+1
 
                 ldy #$0C
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta _setAddr1+1
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 sta _setAddr1+2
 
 _setAddr1       jsr $FFFF               ; [smc]
@@ -3181,14 +3181,14 @@ _setAddr1       jsr $FFFF               ; [smc]
                 bit INITMODE
                 bpl _1
 
-                ldy NOBJ
+                ldy NEXTOBJ
                 ldx RCN,Y
                 lda TIME,X
 
                 ldy #$08
-                sta (LB_),Y
+                sta (LBASE),Y
 
-_1              ldy NOBJ
+_1              ldy NEXTOBJ
                 iny
                 bne _next1
 

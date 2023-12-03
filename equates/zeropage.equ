@@ -16,15 +16,12 @@ CURSOR                  = $0080         ; [word]
 PLAYERCNT               = $0081
 
 CURSORY                 = $0082
-CY_                     = $0082
 BALLS                   = $0082
 
 CURSORXDIV8             = $0083
-CXD8                    = $0083
 SLEEPCNT                = $0083
 
 CURSORXMOD8             = $0084
-CXM8                    = $0084
 PBASE1                  = $0084         ; [word]
 
 CURSORHEIGHT            = $0085
@@ -46,15 +43,10 @@ LASTITEM                = $008C         ; [word]
 LASTY_                  = $008C
 
 LIVEBALLS               = $008D
-
 OBJ                     = $008E         ; [word]
 
 NEXTOBJ                 = $0090
-NOBJ                    = $0090
-
 OBJCOUNT                = $0091
-OBJC                    = $0091
-
 PLYPTRX                 = $0092         ; [word]
 PLYPTRY                 = $0094         ; [word]
 OBJID                   = $0096
@@ -62,8 +54,6 @@ FILLCOLOR               = $0097
 VRTXCOUNT               = $0098
 
 LBASE                   = $0099         ; [word]
-LB_                     = $0099
-
 SCANMODE                = $009B
 MEMBTM                  = $009C         ; [word]
 MIDBTM                  = $009E         ; [word]
@@ -92,21 +82,17 @@ MINX                    = $00AA
 BSPARM                  = $00AB         ; [4-bytes]
 MINY                    = $00AB
 BTN0                    = $00AB
-BUTN0                   = $00AB
 
 LFTSTOP                 = $00AC
 MINPT                   = $00AC
 BTN1                    = $00AC
-BUTN1                   = $00AC
 
 RTSTOP                  = $00AD
 MINDIST                 = $00AD
-PTM1                    = $00AD
 PTIMER1                 = $00AD
 
 TOPSTOP                 = $00AE
 MINPOLY                 = $00AE
-PTM2                    = $00AE
 PTIMER2                 = $00AE
 
 BTMSTOP                 = $00AF
@@ -120,31 +106,23 @@ DRAGY                   = $00B3
 PARAM                   = $00C0         ; [6-bytes]
 
 TEMP                    = $00C7
-T__                     = $00C7
-
 XTEMP                   = $00C8
-XT_                     = $00C8
-
 YTEMP                   = $00C9
-YT_                     = $00C9
-
-T2_                     = $00CA
+TEMP2                   = $00CA
 
 BASE1                   = $00D0         ; [word]
 SBEGIN                  = $00D0         ; [word]
-B1_                     = $00D0
 
 BASE2                   = $00D2         ; [word]
 SEND                    = $00D2         ; [word]
 TEMPRECT                = $00D2
-B2_                     = $00D2
 
+BASE3                   = $00D4
 TEMPBITS                = $00D4
 TOP                     = $00D4
 DBEGIN                  = $00D4
 DEND                    = $00D4
 VERTA                   = $00D4
-B3_                     = $00D4
 SHIFTOUT                = $00D4
 
 LFTDIV8                 = $00D5
@@ -190,7 +168,6 @@ SERIES                  = $00E0
 SLICE                   = $00E1
 
 STEMP                   = $00E2
-ST_                     = $00E2
 
 DSCORE                  = $00E3
 DBONUS                  = $00E4
@@ -198,7 +175,6 @@ BMULT                   = $00E5
 INITMODE                = $00E6
 
 SCBASE                  = $00E7         ; [word]
-SCB                     = $00E7
 
 BSTAT                   = $00E9
 X1_                     = $00EA

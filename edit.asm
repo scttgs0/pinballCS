@@ -19,9 +19,9 @@ LIBOBJ          = 3
 ; Zero-page equates
 ;--------------------------------------
 
-;CY_                     = $0082
-;CXD8                    = $0083
-;CXM8                    = $0084
+;CURSORY                 = $0082
+;CURSORXDIV8             = $0083
+;CURSORXMOD8             = $0084
 ;LASTITEM                = $008C
 ;OBJ                     = $008E         ; [word]
 ;NEXTOBJ                 = $0090
@@ -31,7 +31,7 @@ LIBOBJ          = 3
 ;OBJID                   = $0096
 ;FILLCOLOR               = $0097
 ;VRTXCOUNT               = $0098
-;LB_                     = $0099
+;LBASE                   = $0099
 ;SCANMODE                = $009B
 ;MEMBTM                  = $009C         ; [word]
 ;MIDBTM                  = $009E         ; [word]
@@ -58,7 +58,7 @@ LIBOBJ          = 3
 ;TEMP                    = $00C7
 ;XTEMP                   = $00C8
 ;YTEMP                   = $00C9
-;B1_                     = $00D0
+;BASE1                   = $00D0
 ;VERTA                   = $00D4
 ;D8A                     = $00D5
 ;M8A                     = $00D6
@@ -205,9 +205,9 @@ GETBOUNDS               = $9FBC
 ;--------------------------------------
 START           jsr INIT
 
-                stz CY_
-                stz CXD8
-                stz CXM8
+                stz CURSORY
+                stz CURSORXDIV8
+                stz CURSORXMOD8
                 stz SCANMODE
 
                 jsr DRAWDISPLAY
@@ -600,9 +600,9 @@ _ENTRY1         jsr XDRAWC
 
                 ldx PARAM+3
                 lda D8_,X
-                sta CXD8
+                sta CURSORXDIV8
                 lda M8_,X
-                sta CXM8
+                sta CURSORXMOD8
 
                 jsr XDRAWC
 
@@ -656,7 +656,7 @@ _5              iny
                 sbc #$01
                 sta RTSTOP
 
-                lda CY_
+                lda CURSORY
                 sta DRAGY
                 sec
                 sbc TOPSTOP
@@ -668,7 +668,7 @@ _5              iny
                 sec
                 sbc BTMSTOP
                 clc
-                adc CY_
+                adc CURSORY
                 sec
                 sbc #$01
                 sta BTMSTOP
@@ -696,7 +696,7 @@ _7              tax
 _8              sta DELX
                 stx DRAGX
 
-                lda CY_
+                lda CURSORY
                 cmp TOPSTOP
                 bcs _9
 
@@ -731,28 +731,28 @@ _next3          lda (PLYPTRX),Y
                 bcc _11
 
                 ldy #$02
-                lda (LB_),Y
+                lda (LBASE),Y
                 clc
                 adc DELY
-                sta (LB_),Y
+                sta (LBASE),Y
 
                 iny
-                lda (LB_),Y
+                lda (LBASE),Y
                 asl
                 asl
                 asl
                 iny
                 clc
-                adc (LB_),Y
+                adc (LBASE),Y
                 clc
                 adc DELX
 
                 tax
                 lda M8_,X
-                sta (LB_),Y
+                sta (LBASE),Y
                 dey
                 lda D8_,X
-                sta (LB_),Y
+                sta (LBASE),Y
 
 _11             jsr GETB
                 bpl _12
@@ -842,27 +842,27 @@ DELETEOBJ       ldy NEXTOBJ
                 jsr MAKEHOLE
 
                 lda MIDTOP
-                sta B1_
+                sta BASE1
                 lda MIDTOP+1
-                sta B1_+1
+                sta BASE1+1
 
                 ldy #$01
-_next1          lda (B1_),Y
+_next1          lda (BASE1),Y
                 cmp NEXTOBJ
                 bcc _1
 
                 sbc #$01
-                sta (B1_),Y
+                sta (BASE1),Y
 
-_1              ldx B1_+1
-                lda B1_
+_1              ldx BASE1+1
+                lda BASE1
                 clc
                 adc #$04
-                sta B1_
+                sta BASE1
                 bcc _2
 
                 inx
-_2              stx B1_+1
+_2              stx BASE1+1
                 cmp #<PBDX
                 bne _next1
 
@@ -1035,7 +1035,7 @@ _2              cmp #$9E                ; 22*7-2
                 lda #$9E
 _3              sta (PLYPTRX),Y
 
-                lda CY_
+                lda CURSORY
                 bne _4
 
                 lda #$01
@@ -1405,7 +1405,7 @@ _4              cmp #$08
 
                 lda YTEMP
                 sec
-                sbc CY_
+                sbc CURSORY
                 bpl _5
 
                 eor #$FF
@@ -1927,7 +1927,7 @@ _4              jsr UPDATEC
 ;======================================
 DISPLAYPLOT     jsr XDRAWC
 
-                lda CY_
+                lda CURSORY
                 sec
                 sbc #$47
 
@@ -1982,9 +1982,9 @@ INMAG           stx PARAM+3
 ;
 ;======================================
 HPLOT           lda LO_,Y
-                sta B1_
+                sta BASE1
                 lda HI_,Y
-                sta B1_+1
+                sta BASE1+1
 
                 bit COLBW
                 bpl _2
@@ -1993,16 +1993,16 @@ HPLOT           lda LO_,Y
                 tay
                 ldx TEMP
                 lda COLOR
-                eor (B1_),Y
+                eor (BASE1),Y
                 and MASK,X
-                eor (B1_),Y
+                eor (BASE1),Y
 
-                cmp (B1_),Y
+                cmp (BASE1),Y
                 sec
                 bne _1
 
                 clc
-_1              sta (B1_),Y
+_1              sta (BASE1),Y
 
                 rts
 
@@ -2013,16 +2013,16 @@ _2              txa
                 tax
 
                 lda COLOR
-                eor (B1_),Y
+                eor (BASE1),Y
                 and CLRMASK,X
-                eor (B1_),Y
+                eor (BASE1),Y
 
-                cmp (B1_),Y
+                cmp (BASE1),Y
                 sec
                 bne _3
 
                 clc
-_3              sta (B1_),Y
+_3              sta (BASE1),Y
 
                 rts
 
@@ -2180,7 +2180,7 @@ INSQR           lda #<MAG
 
                 php
 
-                lda CY_
+                lda CURSORY
                 sec
                 sbc #$47
 
@@ -2197,7 +2197,7 @@ _1              tya
                 adc VRY
                 tay
 
-                lda CXD8
+                lda CURSORXDIV8
                 sec
                 sbc #$15
                 clc
@@ -2330,19 +2330,19 @@ DRAG            jsr XDRAWC
 _next1          jsr DRAWVIEWR
                 jsr DOCX
 
-                stx CXD8
-                sta CXM8
+                stx CURSORXDIV8
+                sta CURSORXMOD8
                 jsr DOCY
 
-                sta CY_
+                sta CURSORY
                 cmp #$B2
                 bcc _1
 
                 lda #$B2
 _1              sta VRY
 
-                ldx CXD8
-                lda CXM8
+                ldx CURSORXDIV8
+                lda CURSORXMOD8
                 and #$FE
                 cpx #$26
                 bcc _3
@@ -2407,9 +2407,9 @@ _next1          jsr DOROW
 ;======================================
 DOROW           ldy VERTA
                 lda LO_,Y
-                sta B1_
+                sta BASE1
                 lda HI_,Y
-                sta B1_+1
+                sta BASE1+1
 
                 ldy VERTB
                 ldx #$00
@@ -2444,7 +2444,7 @@ _next2          php
                 lda #$08
                 sta BYTE2
 
-                lda (B1_),Y
+                lda (BASE1),Y
 _1              bcc _2
 
                 plp
@@ -2503,7 +2503,7 @@ _next4          php
                 lda #$08
                 sta BYTE2
 
-                lda (B1_),Y
+                lda (BASE1),Y
 _3              php
 
                 rol
@@ -2514,7 +2514,7 @@ _3              php
                 lda #$08
                 sta BYTE2
 
-                lda (B1_),Y
+                lda (BASE1),Y
 _4              bcc _8
 
                 plp
@@ -2538,7 +2538,7 @@ _5              plp
                 bne _6
 
                 iny
-                lda (B1_),Y
+                lda (BASE1),Y
                 rol
 
                 dey
@@ -2624,20 +2624,20 @@ INITROW         ldy D8A
                 dey
                 bmi _1
 
-                lda (B1_),Y
+                lda (BASE1),Y
                 ror
 
 _1              iny
                 lda #$08
                 sta BYTE2
 
-                lda (B1_),Y
+                lda (BASE1),Y
                 rts
 
 _2              lda #$08
                 sta BYTE2
 
-                lda (B1_),Y
+                lda (BASE1),Y
 _next1          rol
 
                 dec BYTE2
@@ -2769,7 +2769,7 @@ DOSLIDE         lda SLIDESLO,Y
 _next1          lda WSET,Y
                 sta SLOLD
 
-                lda CY_
+                lda CURSORY
                 sec
                 ldy #$02
                 sbc (SLB),Y
