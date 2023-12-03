@@ -753,8 +753,7 @@ _next2          lda (PARAM),Y
                 lda LASTITEM
                 jsr DRAWRECT            ; PENMODE=XOR
 
-                lda #$00
-                sta LASTITEM+1
+                stz LASTITEM+1
 
 _1              jsr UPDATECRSR
                 jsr GETBUTNS
@@ -1151,8 +1150,7 @@ VBLCURSOR       inc STKTIMER
                 sta ITEMP
                 bne _1
 
-                lda #$00
-                sta STKTIMER
+                stz STKTIMER
 
                 lda CONSOL
                 and #$01
@@ -1161,9 +1159,8 @@ VBLCURSOR       inc STKTIMER
                 jsr GETBUTNS
                 bpl _2
 
-_1              lda #$00
-                sta RTCLOK+1
-                sta ATRACT
+_1              stz RTCLOK+1
+                stz ATRACT
 
 _2              ldx #$01
 

@@ -133,8 +133,7 @@ _next1          sty XTEMP
 
                 lda #$15
                 sta CHAR+3
-                lda #$00
-                sta CHAR+4
+                stz CHAR+4
 
                 lda TXTLO,Y
                 ldx TXTHI,Y
@@ -173,8 +172,7 @@ _wait1          jsr UPDATECRSR
                 jsr CRSRINRECT
                 bcc _3
 
-                lda #$00
-                sta LASTITEM+1
+                stz LASTITEM+1
 
                 lda #<DISKMENU
                 ldx #>DISKMENU
@@ -245,8 +243,7 @@ PLAYBOX         .byte $93,$14,$04,$14,$04,$02
 LOAD            jsr GETNAME
                 jsr INPROMPT1
 
-                lda #$00
-                sta DISKCMD
+                stz DISKCMD
 
                 ldx #$10                ; filename
                 lda #<CHARBUF
@@ -374,8 +371,7 @@ _7              jsr INIT
                 jsr GETOBJ
                 jsr DECOMPRESS
 
-                lda #$00
-                sta SCANMODE
+                stz SCANMODE
 
                 jsr DRAWDISPLAY
 
@@ -419,8 +415,7 @@ SAVE_           jsr GETNAME
 
                 jsr BSAVE
 
-                lda #$00
-                sta SCANMODE
+                stz SCANMODE
 
                 jsr DRAWDISPLAY
                 jmp RESETUP
@@ -876,8 +871,7 @@ _3              php
                 sta CHARBUF+5,Y
                 lda #$9B
                 sta CHARBUF+6,Y
-                lda #$00
-                sta CHARBUF+7,Y
+                stz CHARBUF+7,Y
 
                 plp
                 bcs _XIT

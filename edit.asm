@@ -202,11 +202,10 @@ GETBOUNDS               = $9FBC
 ;--------------------------------------
 START           jsr INIT
 
-                lda #$00
-                sta CY_
-                sta CXD8
-                sta CXM8
-                sta SCANMODE
+                stz CY_
+                stz CXD8
+                stz CXM8
+                stz SCANMODE
 
                 jsr DRAWDISPLAY
                 jsr SAVELOGO
@@ -307,8 +306,7 @@ MAIN2           lda #<TOOLB
                 jsr CINR
                 bcc _1
 
-                lda #$00
-                sta LASTITEM+1
+                stz LASTITEM+1
 
                 jmp _3
 
@@ -2092,17 +2090,15 @@ INITMAG         ldy #$04
                 ldx #>MBAR4
                 jsr DRAWR
 
-                lda #$00
-                sta COLBW
-                sta GRIDON
+                stz COLBW
+                stz GRIDON
 
                 ldy #$FF
                 sty MCOLOR
 
-                lda #$00
-                sta VRY
-                sta VRXD8
-                sta VRXM8
+                stz VRY
+                stz VRXD8
+                stz VRXM8
 
                 lda #$0D
                 sta VR+3
@@ -2221,9 +2217,8 @@ _XIT            plp
 ;======================================
 ;
 ;======================================
-SLIDEMAG        lda #$00
-                sta XDIR
-                sta YDIR
+SLIDEMAG        stz XDIR
+                stz YDIR
 
                 lda #<MBAR1
                 ldx #>MBAR1
@@ -2570,8 +2565,7 @@ _8              plp
                 bcc _9
 
                 clc
-                lda #$00
-                sta D8B
+                stz D8B
 
                 lda #$FF
                 bne _setAddr2
@@ -2745,8 +2739,7 @@ _1              iny
                 jsr CINR
                 bcc _next2
 
-                lda #$00
-                sta LASTITEM+1
+                stz LASTITEM+1
 
                 jmp _2
 
@@ -2814,8 +2807,7 @@ INITSLIDE       lda SLIDESLO,Y
                 lda SLIDESHI,Y
                 sta SLB+1
 
-                lda #$00
-                sta SLOLD
+                stz SLOLD
 
                 lda WSET,Y
                 sta SLNEW

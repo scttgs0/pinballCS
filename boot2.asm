@@ -55,9 +55,8 @@ EDITOR                  = $A000
 DISK_INIT       jsr GOATARI
                 jsr INTERRUPTS
 
-                lda #$00
-                sta DAUX2
-                sta DBUFLO
+                stz DAUX2
+                stz DBUFLO
 
 ;   load bitmaps, run, ppak, and edit
                 lda #>PIECE2
