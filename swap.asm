@@ -7,6 +7,10 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/boot2.equ"
+                .include "equates/cdraw.equ"
+
+
 ;--------------------------------------
 ; System equates
 ;--------------------------------------
@@ -22,16 +26,7 @@ DAUX2           = $030B
 ; Code equates
 ;--------------------------------------
 
-GetSectors              = $06A0
-
-SETMODE                 = $24CF
-DRAWBITS                = $24F4
-FRAMERECT               = $265A
 FRAMERECT_ENTRY1        = $265D
-DRAWRECT                = $2682
-
-CHARTO                  = $28D8
-PRINT_                  = $291A
 
 PIECE2                  = $7B00
 

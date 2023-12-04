@@ -8,6 +8,10 @@
 
 
                 .include "equates/zeropage.equ"
+                .include "equates/gpak.equ"
+                .include "equates/ppak.equ"
+                .include "equates/cdraw.equ"
+                .include "equates/edit.equ"
 
 
 ;--------------------------------------
@@ -90,27 +94,12 @@ PORTA           = $D300
 ; Code equates
 ;--------------------------------------
 
-DIV8                    = $2100
-MOD8                    = $2200
-SETMODE                 = $24CF
-XOFFDRAW                = $2535
-DOCRSRY                 = $272A
-WAIT_                   = $272D
-CHARTO                  = $28D8
-PRCHAR                  = $28E2
-PRINT_                  = $291A
 CHAR                    = $2933
 
 LOGIC                   = $4B00
-WSET                    = $4B18
+WSET                    = $4B18         ; [4-bytes]
 
 PBDX                    = $7A40
-
-CATCH2B                 = $8178
-
-GETOBJ                  = $995E
-GETNOBJ                 = $996A
-MAKEHOLE                = $9E9A
 
 PTLO                    = $B400
 PTHI                    = $B4C0

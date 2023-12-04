@@ -1,0 +1,18 @@
+
+; SPDX-PackageSummary: Pinball Construction Set (for 8-bit systems)
+; SPDX-PackageOriginator: BudgeCo: Bill Budge
+; SPDX-PackageCopyrightText: Copyright (c) 1982 Bill Budge
+; SPDX-License-Identifier: MIT
+
+; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
+
+
+;--------------------------------------
+; Code equates
+;--------------------------------------
+
+SWAPWIRE                = $4A00
+SWAPDISK                = $4A08
+SWAPUSER                = $4A10
+
+RELOAD                  = $4A14

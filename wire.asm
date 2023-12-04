@@ -7,6 +7,11 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/gpak.equ"
+                .include "equates/ppak.equ"
+                .include "equates/cdraw.equ"
+
+
 ;--------------------------------------
 ; System equates
 ;--------------------------------------
@@ -16,7 +21,7 @@ AUDC1           = $D201
 
 
 ;--------------------------------------
-; Code equates
+; Zero-page equates
 ;--------------------------------------
 
 ;   Main Program
@@ -64,37 +69,17 @@ LFTDIV8                 = $00D5
 LFTMOD8                 = $00D6
 BOTTOM                  = $00D9
 
+
+;--------------------------------------
+; Code equates
+;--------------------------------------
+
 ;   Externals
-DIV8                    = $2100
-MOD8                    = $2200
-SETMODE                 = $24CF
-XOFFDRAW                = $2535
-GETRECT                 = $2590
-HLINE                   = $25E2
-VLINE                   = $2602
-DRAWRECT                = $2682
-GETBUTNS                = $26BF
-INITCRSR                = $26CA
-XDRAWCRSR               = $26DE
-UPDATECRSR              = $26E5
-CRSRINRECT              = $2739
-DOMENU                  = $274C
-CHARTO                  = $28D8
-PRCHAR                  = $28E2
-PRINT_                  = $291A
 CHAR                    = $2933
 
 
 ;   PBDB
 LOGIC                   = $4B00
-
-
-;   PPAK
-GETOBJ                  = $995E
-GETNEXTOBJ              = $996A
-DRAWOBJ                 = $99C3
-SELECTPOLY              = $9EE4
-GETBOUNDS               = $9FBC
 
 
 ;--------------------------------------

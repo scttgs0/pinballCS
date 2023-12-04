@@ -11,6 +11,10 @@
 ; LOW LEVEL
 
 
+                .include "equates/gpak.equ"
+                .include "equates/cdraw.equ"
+
+
 ; CONSTANTS
 
 POLYGON         = 1
@@ -125,38 +129,35 @@ PBDX            = $7A40
 
 ; EXTERNAL CALLS AND ADDRESSES
 
-DIV8            = $2100
-MOD8            = DIV8+$100
 LO              = MOD8+$100
 HI              = LO+$C0
-SETMODE         = HI+$10F
-DRAWBITS        = SETMODE+$25
-XOFFDRAW        = DRAWBITS+$41
-MASKS           = XOFFDRAW+$9C
-HLINE           = MASKS+$11
-VLINE           = HLINE+$20
-FRAMERECT       = VLINE+$58
-DRAWRECT        = FRAMERECT+$28
-INRECT          = DRAWRECT+$10
-GETBUTNS        = INRECT+$2D
-INITCRSR        = GETBUTNS+$B
-XDRAWCRSR       = INITCRSR+$14
-UPDATECRSR      = XDRAWCRSR+$7
-DOCRSRX         = UPDATECRSR+$1E
-GETCURSORX      = DOCRSRX+$17
-DOCRSRY         = GETCURSORX+$10
-WAIT            = DOCRSRY+$3
-CRSRINRECT      = WAIT+$C
-DOMENU          = CRSRINRECT+$13
-SELECT          = DOMENU+$54
-INIT            = SELECT+$40
-MOVEUP          = INIT+$35
-MOVEDOWN        = MOVEUP+$3B
-ADDIYX          = MOVEDOWN+$39
-ADDYX           = ADDIYX+$E
-SUBIYX          = ADDYX+$10
-SUBYX           = SUBIYX+$12
-CMPYX           = SUBYX+$10
+;DRAWBITS        = SETMODE+$25
+;XOFFDRAW        = DRAWBITS+$41
+;MASKS           = XOFFDRAW+$9C
+;HLINE           = MASKS+$11
+;VLINE           = HLINE+$20
+;FRAMERECT       = VLINE+$58
+;DRAWRECT        = FRAMERECT+$28
+;INRECT          = DRAWRECT+$10
+;GETBUTNS        = INRECT+$2D
+;INITCRSR        = GETBUTNS+$B
+;XDRAWCRSR       = INITCRSR+$14
+;UPDATECRSR      = XDRAWCRSR+$7
+;DOCRSRX         = UPDATECRSR+$1E
+;GETCURSORX      = DOCRSRX+$17
+;DOCRSRY         = GETCURSORX+$10
+;WAIT            = DOCRSRY+$3
+;CRSRINRECT      = WAIT+$C
+;DOMENU          = CRSRINRECT+$13
+;SELECT          = DOMENU+$54
+;INIT            = SELECT+$40
+;MOVEUP          = INIT+$35
+;MOVEDOWN        = MOVEUP+$3B
+;ADDIYX          = MOVEDOWN+$39
+;ADDYX           = ADDIYX+$E
+;SUBIYX          = ADDYX+$10
+;SUBYX           = SUBIYX+$12
+;CMPYX           = SUBYX+$10
 
 
 ;--------------------------------------

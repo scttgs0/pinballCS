@@ -8,6 +8,10 @@
 
 
                 .include "equates/zeropage.equ"
+                .include "equates/ppak.equ"
+                .include "equates/cdraw.equ"
+                .include "equates/run2.equ"
+                .include "equates/swap.equ"
 
 
 ;--------------------------------------
@@ -60,25 +64,6 @@ CIOV            = $E456
 
 FMINIT                  = $0788
 
-SETMODE                 = $24CF
-DRAWBITS                = $24F4
-XOFFDRAW                = $2535
-FRAMERECT               = $265A
-DRAWRECT                = $2682
-
-GETBUTNS                = $26BF
-
-INITCRSR                = $26CA
-XDRAWCRSR               = $26DE
-UPDATECRSR              = $26E5
-CRSRINRECT              = $2739
-
-DOMENU                  = $274C
-INIT                    = $27E0
-
-CHARTO                  = $28D8
-PRCHAR                  = $28E2
-PRINT_                  = $291A
 CHAR                    = $2933
 
 GAMEBTM                 = $2B00
@@ -86,18 +71,11 @@ HIRES                   = $2B00
 
 HTOP                    = $490F
 
-SWAPUSER                = $4A10
-RELOAD                  = $4A14
-
 PBBASE                  = $4B00
 PBDATA                  = $4B1C
 
 GAMESTART               = $9048
 PLAYGAME                = $9062
-DRAWDISPLAY             = $9920
-GETOBJ                  = $995E
-PATCH                   = $99B5
-MAKEHOLE                = $9E9A
 
 GAMETOP                 = $A100
 

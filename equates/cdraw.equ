@@ -1,0 +1,80 @@
+
+; SPDX-PackageSummary: Pinball Construction Set (for 8-bit systems)
+; SPDX-PackageOriginator: BudgeCo: Bill Budge
+; SPDX-PackageCopyrightText: Copyright (c) 1982 Bill Budge
+; SPDX-License-Identifier: MIT
+
+; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
+
+
+;--------------------------------------
+; Code equates
+;--------------------------------------
+
+SETMODE                 = $24CF
+
+DRAWBITS                = $24F4
+DRAWB                   = $24F4
+
+XOFFDRAW                = $2535
+
+GETRECT                 = $2590
+
+MASKS                   = $25D1
+
+HLINE                   = $25E2
+VLINE                   = $2602
+
+FRAMERECT               = $265A
+FRAMER                  = $265A
+
+DRAWRECT                = $2682
+DRAWR                   = $2682
+
+INRECT                  = $2692
+INR                     = $2692
+
+GETBUTNS                = $26BF
+GETB                    = $26BF
+
+INITCRSR                = $26CA
+INITC                   = $26CA
+
+XDRAWCRSR               = $26DE
+XDRAWC                  = $26DE
+
+UPDATECRSR              = $26E5
+UPDATEC                 = $26E5
+
+DOCRSRX                 = $2703
+DOCX                    = $2703
+
+GETCURSORX              = $271A
+GETCX                   = $271A
+
+DOCRSRY                 = $272A
+DOCY                    = $272A
+
+WAIT_                   = $272D
+
+CRSRINRECT              = $2739
+CINR                    = $2739
+
+DOMENU                  = $274C
+SELECT                  = $27A0
+
+INIT                    = $27E0
+
+MOVEUP                  = $2815
+MOVEDOWN                = $2850
+
+ADDIYX                  = $2889
+ADDYX                   = $2897
+SUBIYX                  = $28A7
+SUBYX                   = $28B9
+
+CHARTO                  = $28D8
+PRCHAR                  = $28E2
+PRINT_                  = $291A
+
+VBLCURSOR               = $2A5B

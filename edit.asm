@@ -8,6 +8,11 @@
 
 
                 .include "equates/zeropage.equ"
+                .include "equates/gpak.equ"
+                .include "equates/ppak.equ"
+                .include "equates/cdraw.equ"
+                .include "equates/run.equ"
+                .include "equates/swap.equ"
 
 
 POLYGON         = 1
@@ -87,112 +92,16 @@ LIBOBJ          = 3
 ; Code equates
 ;--------------------------------------
 
-D8_                     = $2100
-M8_                     = $2200
-LO_                     = $2300
-HI_                     = $23C0
-
-SETMODE                 = $24CF
-DRAWB                   = $24F4
-XOFFDRAW                = $2535
-FRAMER                  = $265A
-DRAWR                   = $2682
-INR                     = $2692
-GETB                    = $26BF
-INITC                   = $26CA
-XDRAWC                  = $26DE
-UPDATEC                 = $26E5
-DOCX                    = $2703
-GETCX                   = $271A
-DOCY                    = $272A
-WAIT_                   = $272D
-CINR                    = $2739
-DOMENU                  = $274C
-INIT                    = $27E0
-MOVEUP                  = $2815
-MOVEDOWN                = $2850
-ADDIYX                  = $2889
-SUBIYX                  = $28A7
-CHARTO                  = $28D8
-PRINT_                  = $291A
-
-SWAPWIRE                = $4A00
-SWAPDISK                = $4A08
-
 LOGIC                   = $4B00
-WSET                    = $4B18
+WSET                    = $4B18         ; [4-bytes]
 PBDATA                  = $4B1C
 OBJDX                   = $4B1D
 
 PBDX                    = $7A40
 
 PLAYSTART               = $9355
-POLY                    = $94CA
-LAUNCHER                = $94D5
-LEFTFLIPPER             = $94F0
-RIGHTFLIPPER            = $950B
-BALL                    = $9526
 
-BMP1                    = $9541
-BMP2                    = $9564
-BMP3                    = $9587
-BMP4                    = $95A2
-BMP5                    = $95BD
-BMP6                    = $95D8
-
-LKICK                   = $95F3
-RKICK                   = $9610
-KICK1                   = $962D
-KICK2                   = $9648
-
-ROLL1                   = $9663
-ROLL2                   = $967E
-ROLL3                   = $9699
-
-TARG1                   = $96B4
-TARG2                   = $96CF
-TARG3                   = $96EA
-TARG4                   = $9705
-TARG5                   = $9720
-TARG6                   = $973B
-
-LFLIP2                  = $9756
-RFLIP2                  = $9771
-
-POLY1                   = $978C
-POLY2                   = $9797
-POLY3                   = $97A2
-POLY4                   = $97AD
-
-LANE1                   = $97B8
-LANE2                   = $97D3
-LANE3                   = $97EE
-
-GATE1                   = $9809
-GATE2                   = $9824
-GATE3                   = $983F
-GATE4                   = $985A
-
-DROP1                   = $9875
-DROP2                   = $9891
-CATCH1                  = $98AD
-CATCH2                  = $98CA
-
-SPIN                    = $98E5
-MGNT                    = $9900
-
-DRAWDISPLAY             = $9920
-GETOBJ                  = $995E
-GETNEXTOBJ              = $996A
 GETINFO                 = $9985
-DRAWOBJ                 = $99C3
-
-ALIGNPOLY               = $9E0A
-MAKEHOLE                = $9E9A
-SELECTPOLY              = $9EE4
-POLYPOINTS              = $9F17
-REMOVEPOLY              = $9F4E
-GETBOUNDS               = $9FBC
 
 
 ;--------------------------------------

@@ -7,6 +7,9 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "../equates/title.equ"
+
+
 ;--------------------------------------
 ; System equates
 ;--------------------------------------
@@ -15,15 +18,6 @@ AVB             = $40
 ALMS            = $40
 AJMP            = $01
 AEMPTY8         = $70
-
-
-;--------------------------------------
-; Code equates
-;--------------------------------------
-
-gfxTitleTop             = $2B00
-gfxTitle_Bndry          = $3000
-gfxTitleBottom          = $4000
 
 
 ;--------------------------------------
@@ -48,7 +42,7 @@ dlistMain       .byte AEMPTY8,AEMPTY8,AEMPTY8
                 .byte $0F
 
                 .byte $0F+ALMS
-                    .addr gfxTitle_Bndry
+                    .addr gfxTitleXBoundary
                 .byte $0F,$0F,$0F
                 .byte $0F,$0F,$0F
                 .byte $0F,$0F,$0F

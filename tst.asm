@@ -7,6 +7,9 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/dlist.equ"
+
+
 ;--------------------------------------
 ; System equates
 ;--------------------------------------
@@ -24,13 +27,6 @@ COLBK           = $D01A
 
 DLISTL          = $D402
 DLISTH          = $D403
-
-
-;--------------------------------------
-; Code equates
-;--------------------------------------
-
-dlistMain               = $4910
 
 
 ;--------------------------------------
