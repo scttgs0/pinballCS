@@ -206,9 +206,9 @@ GETBOUNDS               = $9FBC
 START           jsr INIT
 
                 lda #$00
-                sta CY_
-                sta CXD8
-                sta CXM8
+                sta CURSORY
+                sta CURSORXDIV8
+                sta CURSORXMOD8
                 sta SCANMODE
 
                 jsr DRAWDISPLAY

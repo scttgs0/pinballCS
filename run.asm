@@ -612,7 +612,7 @@ _21             lda #$00
 _22             sta KICK
 
                 lda #$00
-                sta B3_+1
+                sta BASE3+1
 
                 jsr BOUNCE
                 jmp PUTSP
@@ -1596,7 +1596,7 @@ FIXQ5           eor #$FF
 ;======================================
 PBOUNCE         lda #$00
                 sta KICK
-                sta B3_+1
+                sta BASE3+1
 
                 ;[fall-through]
 
