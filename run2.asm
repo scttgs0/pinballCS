@@ -9,6 +9,12 @@
 
                 .include "equates/zeropage.equ"
 
+                .include "equates/platform_a8.equ"
+                .include "equates/dlist.equ"
+                .include "equates/gpak.equ"
+                .include "equates/cdraw.equ"
+                .include "equates/run.equ"
+
 
 LIBOBJ          = $03
 
@@ -93,37 +99,16 @@ PORTA           = $D300
 ; Code equates
 ;--------------------------------------
 
-SHFRSLT                 = $1300
-SHFOUT                  = $1A00
-
-DIV8                    = $2100
-MOD8                    = $2200
-LO_                     = $2300
-HI_                     = $23C0
-
-SETMODE                 = $24CF
-
-XOFFDRAW                = $2535
-DOCRSRY                 = $272A
-WAIT_                   = $272D
-CHARTO                  = $28D8
-PRCHAR                  = $28E2
-PRINT_                  = $291A
 CHAR                    = $2933
 
 HIRES1                  = $2B00
 
-DLIST                   = $4910
-INTERRUPTS              = $49DC
 LOGIC                   = $4B00
 WSET                    = $4B18         ; [4-bytes]
 PBDATA                  = $4B1C
 PBDX                    = $7A40
-DRAWBALL                = $8766
-INITBALL                = $8790
 WMOD3                   = $87D6
 WMOD2                   = $8BBC         ; [word]
-ADVANCE                 = $8BDE
 WMOD4                   = $8CDA
 
 P1STATE                 = $A000
@@ -195,7 +180,7 @@ L903F           .byte $00,$06,$01,$70,$88,$00,$00,$88,$70
 ;======================================
 ;======================================
 MAIN            jsr MAKEPATCH
-                jsr INTERRUPTS
+                jsr INIT_ATARI
                 jsr GOATARI
 
                 lda #$FF
@@ -1695,9 +1680,9 @@ ELASTHI         .byte $83,$83,$83,$83,$82,$82,$82,$82
 ;======================================
 ;
 ;======================================
-GOATARI         lda #<DLIST
+GOATARI         lda #<dlistMain
                 sta SDLSTL
-                lda #>DLIST
+                lda #>dlistMain
                 sta SDLSTH
 
                 lda #$0F

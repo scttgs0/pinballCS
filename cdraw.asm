@@ -8,6 +8,8 @@
 
 
                 .include "equates/zeropage.equ"
+                .include "equates/dlist.equ"
+                .include "equates/gpak.equ"
 
 
 ;--------------------------------------
@@ -84,14 +86,7 @@ PORTA           = $D300
 ; Code equates
 ;--------------------------------------
 
-SHFRSLT                 = $1300
-SHFOUT                  = $1A00
-
-LO_                     = $2300
-HI_                     = $23C0
-
 HIRES                   = $2B00
-DLIST                   = $4910
 
 
 ;--------------------------------------
@@ -866,7 +861,7 @@ _next2          sta (BASE1),Y
 
                 inc BASE1+1
                 lda BASE1+1
-                cmp #>DLIST             ; end reached yet?
+                cmp #>dlistMain         ; end reached yet?
                 bcc _next1              ;   no
 
                 rts

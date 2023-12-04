@@ -7,6 +7,10 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/platform_a8.equ"
+                .include "equates/run2.equ"
+
+
 ;--------------------------------------
 ; System equates
 ;--------------------------------------
@@ -25,9 +29,6 @@ DSKINV          = $E453
 ;--------------------------------------
 ; Code equates
 ;--------------------------------------
-
-INTERRUPTS              = $49DC
-GOATARI                 = $4B45
 
 PIECE2                  = $7B00
 
@@ -53,7 +54,7 @@ EDITOR                  = $A000
 ;--------------------------------------
 ;--------------------------------------
 DISK_INIT       jsr GOATARI
-                jsr INTERRUPTS
+                jsr INIT_ATARI
 
                 stz DAUX2
                 stz DBUFLO

@@ -1,0 +1,26 @@
+
+; SPDX-PackageSummary: Pinball Construction Set (for 8-bit systems)
+; SPDX-PackageOriginator: BudgeCo: Bill Budge
+; SPDX-PackageCopyrightText: Copyright (c) 1982 Bill Budge
+; SPDX-License-Identifier: MIT
+
+; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
+
+
+;--------------------------------------
+; Code equates
+;--------------------------------------
+
+DRAWDISPLAY             = $9920
+
+GETOBJ                  = $995E
+GETNEXTOBJ              = $996A
+GETNOBJ                 = $996A
+DRAWOBJ                 = $99C3
+
+ALIGNPOLY               = $9E0A
+MAKEHOLE                = $9E9A
+SELECTPOLY              = $9EE4
+POLYPOINTS              = $9F17
+REMOVEPOLY              = $9F4E
+GETBOUNDS               = $9FBC

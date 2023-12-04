@@ -1,0 +1,75 @@
+
+; SPDX-PackageSummary: Pinball Construction Set (for 8-bit systems)
+; SPDX-PackageOriginator: BudgeCo: Bill Budge
+; SPDX-PackageCopyrightText: Copyright (c) 1982 Bill Budge
+; SPDX-License-Identifier: MIT
+
+; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
+
+
+;--------------------------------------
+; Code equates
+;--------------------------------------
+
+DRAWBALL                = $8766
+INITBALL                = $8790
+
+ADVANCE                 = $8BDE
+
+POLY                    = $94CA
+LAUNCHER                = $94D5
+LEFTFLIPPER             = $94F0
+RIGHTFLIPPER            = $950B
+BALL                    = $9526
+
+BMP1                    = $9541
+BMP2                    = $9564
+BMP3                    = $9587
+BMP4                    = $95A2
+BMP5                    = $95BD
+BMP6                    = $95D8
+
+LKICK                   = $95F3
+RKICK                   = $9610
+KICK1                   = $962D
+KICK2                   = $9648
+
+ROLL1                   = $9663
+ROLL2                   = $967E
+ROLL3                   = $9699
+
+TARG1                   = $96B4
+TARG2                   = $96CF
+TARG3                   = $96EA
+TARG4                   = $9705
+TARG5                   = $9720
+TARG6                   = $973B
+
+LFLIPPER2               = $9756
+LFLIP2                  = $9756
+RFLIPPER2               = $9771
+RFLIP2                  = $9771
+
+POLY1                   = $978C
+POLY2                   = $9797
+POLY3                   = $97A2
+POLY4                   = $97AD
+
+LANE1                   = $97B8
+LANE2                   = $97D3
+LANE3                   = $97EE
+
+GATE1                   = $9809
+GATE2                   = $9824
+GATE3                   = $983F
+GATE4                   = $985A
+
+DROP1                   = $9875
+DROP2                   = $9891
+CATCH1                  = $98AD
+CATCH2                  = $98CA
+
+SPIN1                   = $98E5
+SPIN                    = $98E5
+MGNT1                   = $9900
+MGNT                    = $9900
