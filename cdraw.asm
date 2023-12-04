@@ -138,7 +138,7 @@ GETBITS         sta TEMPBITS
 ;--------------------------------------
 ; PEN MODE ROUTINES
 ;--------------------------------------
-STORE
+STORE1
 _next1          lda (BASE2),Y
                 sta (BASE1),Y
 
@@ -148,8 +148,9 @@ _next1          lda (BASE2),Y
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-GRAB
+GRAB1
 _next1          lda (BASE1),Y
                 sta (BASE2),Y
 
@@ -159,11 +160,12 @@ _next1          lda (BASE1),Y
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-CLR             ; alias
-OR_             ; alias
+CLR1            ; alias
+OR1             ; alias
 
-XOR
+XOR1
 _next1          lda (BASE2),Y
                 eor (BASE1),Y
                 sta (BASE1),Y
@@ -190,11 +192,11 @@ SETMODE         lda PTBL1,Y                 ; Y=pen mode
 
 ;--------------------------------------
 
-PTBL1           .byte <STORE
-                .byte <GRAB
-                .byte <XOR
-                .byte <CLR
-                .byte <OR_
+PTBL1           .byte <STORE1
+                .byte <GRAB1
+                .byte <XOR1
+                .byte <CLR1
+                .byte <OR1
 PTBL2           .byte <STORE2
                 .byte <GRAB2
                 .byte <XOR2
@@ -226,7 +228,7 @@ _ENTRY1         ldy VERT                ; get base address
                 sta BASE1+1
 
                 ldy WIDTH               ; blast out a scan line
-_pmpatch1       jmp STORE               ; [smc] off to appropriate mode
+_pmpatch1       jmp STORE1              ; [smc] off to appropriate mode
 
 _ENTRY2         dec HEIGHT              ; any more?
                 beq _XIT                ;   no
