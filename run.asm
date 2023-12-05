@@ -8,10 +8,10 @@
 
 
                 .include "equates/zeropage.equ"
+                .include "equates/bitmaps.equ"
                 .include "equates/gpak.equ"
                 .include "equates/ppak.equ"
                 .include "equates/cdraw.equ"
-                .include "equates/edit.equ"
 
 
 ;--------------------------------------
@@ -173,6 +173,7 @@ C84375          .byte $00,$00,$01,$01,$02,$02,$02,$03   ; 84.375
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 LAUNCHRUN       bit BTN0
                 bmi _1
@@ -205,41 +206,79 @@ _1              ldy #$08
 
                 jmp RETREAT
 
-                lda BTN0
-                bpl _XIT2
+
+;--------------------------------------
+;
+;--------------------------------------
+LAUNCHHIT       lda BTN0
+                bpl LNCHHIT2
 
                 lda Y2_
                 ldy #$02
                 cmp (BASE2),Y
-                bcs _XIT2
+                bcs LNCHHIT2
 
                 lda PDL0
                 lsr
                 lsr
                 sta BDY         ; [00:3F]
 
-                clc
-                rts
-
-_XIT2           jmp PBOUNCE
+                ;[fall-through]
 
 
 ;--------------------------------------
 ;
 ;--------------------------------------
+NULLBOUNCE      clc
+
+
+;--------------------------------------
+;
+;--------------------------------------
+NULL_           rts
+
+
+;--------------------------------------
+;
+;--------------------------------------
+LNCHHIT2        jmp PBOUNCE
+
+
+;--------------------------------------
+; RUN THE FLIPPERS
+;--------------------------------------
 LFLIP2RUN       lda #$08
-                bne _1
+                bne LFLIPRUN._1         ; [unc]
 
-                lda #$08
-                bne _2
 
-                lda #$00
+;--------------------------------------
+;
+;--------------------------------------
+RFLIP2RUN       lda #$08
+                bne RFLIPRUN._1         ; [unc]
+
+
+;--------------------------------------
+;
+;--------------------------------------
+LFLIPRUN        lda #$00
 _1              ldx #$00
-                beq _3
+                beq FLIPRUN             ; [unc]
 
-                lda #$00
-_2              ldx #$01
-_3              sta TEMP
+
+;--------------------------------------
+;
+;--------------------------------------
+RFLIPRUN        lda #$00
+_1              ldx #$01
+
+                ;[fall-through]
+
+
+;--------------------------------------
+;
+;--------------------------------------
+FLIPRUN         sta TEMP
 
                 ldy #$08
                 lda (LBASE),Y
@@ -311,17 +350,21 @@ FLPRUN4         clc
 
 
 ;--------------------------------------
-;--------------------------------------
-;;$8470
-FLIP2INIT       lda #$08
-                bne _1
 
-                lda #$00
+;--------------------------------------
+FLIP2INIT       lda #$08
+                bne FLIPINIT._1         ; [unc]
+
+
+;--------------------------------------
+
+;--------------------------------------
+FLIPINIT        lda #$00
 _1              sta TEMP
 
 _next1          ldy #$08
                 lda (LBASE),Y
-                beq LFLIP2RUN._XIT
+                beq FLIPRUN._XIT
 
                 jsr FLPRUN4
                 jmp _next1
@@ -364,30 +407,49 @@ FTBHI           .byte >FFRAME1,>FFRAME2,>FFRAME3,>FFRAME4
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$8504
 LFLIP2HIT       lda #$08
-                bne _1
+                bne LFLIPHIT._1         ; [unc]
 
-                lda #$00
+
+;--------------------------------------
+;
+;--------------------------------------
+LFLIPHIT        lda #$00
 _1              sta TEMP
 
                 ldx BTN0
                 lda #$00
-                beq _3
+                beq FLIPHIT             ; [unc]
 
-                ldx #$0D
+
+;--------------------------------------
+;
+;--------------------------------------
+RFLIP2HIT       ldx #$0D
                 lda #$08
-                bne _2
+                bne RFLIPHIT._1         ; [unc]
 
-                ldx #$13
+
+;--------------------------------------
+;
+;--------------------------------------
+RFLIPHIT        ldx #$13
                 lda #$00
-_2              stx FWIDTH
+_1              stx FWIDTH
                 sta TEMP
 
                 ldx BTN1
                 lda #$80
-_3              stx FDIR
+
+                ;[fall-through]
+
+
+;--------------------------------------
+;
+;--------------------------------------
+FLIPHIT         stx FDIR
                 sta FLIPR
 
                 bit BMOVE
@@ -650,6 +712,7 @@ SFRAME8         .byte $07,$0C,$04,$0C,$02,$0B,$01,$09
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 INITBALL        bit INITMODE
                 bpl INITB2
@@ -684,7 +747,7 @@ DRAWBALL        ldy #$12
 
 ;--------------------------------------
 
-IBALL           .word $878B
+IBALL           .addr IBALL+7
                 .byte $00,$00,$00,$05,$01
                 .byte $70,$F8,$F8,$F8,$70
 
@@ -793,7 +856,11 @@ _1              and #$7F
 
                 jmp INITB
 
-                lda BASE3
+
+;--------------------------------------
+;
+;--------------------------------------
+KICKHIT         lda BASE3
                 cmp #$04
                 beq BUMPHIT
 
@@ -827,7 +894,6 @@ _XIT            rts
 ;--------------------------------------
 ;
 ;--------------------------------------
-;;$881E
 KNOCK1HIT       bit BMOVE
                 bmi _XIT
                 bvc _1
@@ -850,7 +916,6 @@ _XIT            jmp PBOUNCE
 ;--------------------------------------
 ;
 ;--------------------------------------
-;;$883A
 KNOCK2HIT       bit BMOVE
                 bpl KNOCK1HIT._XIT
                 bvs _1
@@ -863,32 +928,38 @@ _1              lda WKICK
 _2              sta BDX
                 bne KNOCK1HIT._next1
 
-                ldy #$08
+                ;[fall-through]
+
+
+;--------------------------------------
+;
+;--------------------------------------
+FLASHRUN        ldy #$08
                 lda (LBASE),Y
-                bpl _3
+                bpl _1
 
                 cmp #$80
-                bne _4
+                bne _2
 
                 jmp ADVANCE
 
-_3              beq _XIT
-_4              jmp RETREAT
+_1              beq _XIT
+_2              jmp RETREAT
 
 _XIT            rts
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$8861
 FLASHHIT        jsr TSET
                 jsr PBOUNCE
                 jmp PUTSP
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$886A
 ROLLHIT         jsr TSET
 
                 clc
@@ -896,8 +967,8 @@ ROLLHIT         jsr TSET
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$8871
 GATEHIT         bit BMOVE
                 bmi _next1
                 bvc _1
@@ -910,8 +981,8 @@ _1              clc
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$887F
 GATE2HIT        bit BDX
                 bmi GATEHIT._next1
 
@@ -920,8 +991,8 @@ GATE2HIT        bit BDX
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$8885
 GATE3HIT        bit BDX
                 bpl GATEHIT._next1
 
@@ -930,12 +1001,16 @@ GATE3HIT        bit BDX
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$888B
 DROP1RUN        ldx #$00
-                beq _1
+                beq DROP2RUN._1         ; [unc]
 
-                ldx #$80
+
+;--------------------------------------
+;
+;--------------------------------------
+DROP2RUN        ldx #$80
 _1              stx TEMP2
 
                 ldy #$08
@@ -1046,19 +1121,18 @@ _2              jsr XOFFDRAW
 
 ;--------------------------------------
 
-DROPTXB         .word $892B
-                .byte $00,$00,$00,$03
-                .byte $01,$00,$54,$54
+DROPTXB         .addr DROPTXB+7
+                .byte $00,$00,$00,$03,$01
+                .byte $00,$54,$54
 
-DROPTYB         .word $8935
-                .byte $00,$00,$00,$07
-                .byte $01,$00,$A0,$A0
-                .byte $A0,$A0,$A0,$A0
+DROPTYB         .addr DROPTYB+7
+                .byte $00,$00,$00,$07,$01
+                .byte $00,$A0,$A0,$A0,$A0,$A0,$A0
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$893C
 DROP1HIT        dec BASE2+1
                 ldy #$FB
                 lda X2_
@@ -1095,6 +1169,7 @@ DHITTBL         .byte $02,$0A,$12,$1A
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 DROP2HIT        ldy #$02
                 lda Y2_
@@ -1121,11 +1196,19 @@ _1              ldy #$10
                 sta (BASE2),Y
                 bpl DROP1HIT._ENTRY1
 
-                ldx #$00
-                beq _2
 
-                ldx #$80
-_2              stx TEMP2
+;--------------------------------------
+;
+;--------------------------------------
+DROP1INIT       ldx #$00
+                beq DROP2INIT._1        ; [unc]
+
+
+;--------------------------------------
+;
+;--------------------------------------
+DROP2INIT       ldx #$80
+_1              stx TEMP2
 
                 ldy #$08
                 lda (LBASE),Y
@@ -1133,17 +1216,18 @@ _2              stx TEMP2
 
                 ldx #$03
 _next2          lsr
-                bcc _3
+                bcc _2
                 jsr DRAWTARG
 
-_3              dex
+_2              dex
                 bpl _next2
 
                 lda #$00
-                jmp DROP1RUN._ENTRY1
+                jmp DROP2RUN._ENTRY1
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 CATCH1HIT       bit BMOVE
                 bmi _1
@@ -1266,8 +1350,8 @@ CATCHSTOP       .byte $03,$09,$0F
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
-;;$8A4C
 CATCH1INIT      lda #$00
                 ldy #$08
                 sta (LBASE),Y
@@ -1279,6 +1363,7 @@ CATCH1INIT      lda #$00
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 CATCH2RUN       ldy #$08
                 lda (LBASE),Y
@@ -1293,10 +1378,10 @@ _1              lda #$00
                 sta (LBASE),Y
 
                 ldy #$00
-                lda #<CATCH2B
+                lda #<gfxCatch2
                 sta (LBASE),Y
 
-                lda #>CATCH2B
+                lda #>gfxCatch2
                 iny
                 sta (LBASE),Y
 
@@ -1304,6 +1389,7 @@ _XIT            rts
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 CATCH2HIT       jsr TSET
 
@@ -1315,6 +1401,7 @@ CATCH2HIT       jsr TSET
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 SPINRUN         jsr KNOCKRUN
 
@@ -1344,6 +1431,7 @@ _XIT            rts
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 SPININIT        lda #$00
                 ldy #$10
@@ -1353,6 +1441,7 @@ SPININIT        lda #$00
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 SPINHIT         lda BDY
                 bpl _1
@@ -1370,6 +1459,7 @@ _1              lsr
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 MAGHIT          bit BMOVE
                 bmi _1
@@ -1768,6 +1858,7 @@ SOUNDTBL        .byte $00,$04,$0C,$14
 
 
 ;--------------------------------------
+;
 ;--------------------------------------
 MOVEBALL        ldy #$10
                 lda (LBASE),Y
@@ -2509,15 +2600,13 @@ BALLLEFT        lda X1_
 
 ;--------------------------------------
 
-HBALL           .word $9036
-                .byte $00,$00,$00,$05
-                .byte $01,$48,$84,$84
-                .byte $84,$48
+HBALL           .addr HBALL+7
+                .byte $00,$00,$00,$05,$01
+                .byte $48,$84,$84,$84,$48
 
-VBALL           .word $9042
-                .byte $00,$00,$00,$06
-                .byte $01,$70,$88,$00
-                .byte $00,$88,$70
+VBALL           .addr VBALL+7
+                .byte $00,$00,$00,$06,$01
+                .byte $70,$88,$00,$00,$88,$70
 
 
 ;======================================
@@ -2912,7 +3001,7 @@ INITWORLD       ldx WSET
 
                 ldx WSET+1
                 lda TIMETBL,X
-                sta PLAY._setValue1+1
+                sta PLAYSTART._setValue1+1
 
                 ldx WSET+2
                 lda KICKTBL,X
@@ -2940,9 +3029,10 @@ ELASTHI         .byte $83,$83,$83,$83
                 .byte $82,$82,$82,$82
 
 
-;--------------------------------------
-;--------------------------------------
-PLAY            ldy #$00
+;======================================
+;
+;======================================
+PLAYSTART       ldy #$00
                 sty RUNLEN
 
                 jsr GETOBJ
@@ -3191,203 +3281,203 @@ POLY            .byte $01,$00,$04
 LAUNCHER        .byte $03,$00,$04
                 .byte $F6,$F6,$F0,$F0
                 .byte $49,$54,$54,$49
-                .word $7B00
+                .addr gfxLauncher
                 .byte $49,$1E,$00,$0C,$01,$0C,$07,$80
-                .word $83C0
-                .word $8C23
-                .word $83E9
+                .addr LAUNCHRUN
+                .addr INITB
+                .addr LAUNCHHIT
 LEFTFLIPPER     .byte $03,$00,$04
                 .byte $DC,$DC,$CA,$CA
                 .byte $02,$11,$11,$02
-                .word $7B48
+                .addr gfxLeftFlipper
                 .byte $05,$19,$02,$0C,$03,$24,$03,$80
-                .word $8408
-                .word $8474
-                .word $8508
+                .addr LFLIPRUN
+                .addr FLIPINIT
+                .addr LFLIPHIT
 RIGHTFLIPPER    .byte $03,$00,$04
                 .byte $EC,$EC,$DA,$DA
                 .byte $02,$11,$11,$02
-                .word $7C17
+                .addr gfxRightFlipper
                 .byte $05,$1B,$02,$0C,$03,$24,$03,$80
-                .word $840E
-                .word $8474
-                .word $8518
+                .addr RFLIPRUN
+                .addr FLIPINIT
+                .addr RFLIPHIT
 BALL            .byte $03,$00,$04
                 .byte $F9,$F9,$F5,$F5
                 .byte $05,$09,$09,$05
-                .word $81EF
+                .addr gfxBall
                 .byte $05,$1E,$05,$05,$01,$05,$00,$80
-                .word $8C78
-                .word $8755
-                .word $83FB
+                .addr MOVEBALL
+                .addr INITBALL
+                .addr NULLBOUNCE
 BMP1            .byte $03,$00,$08
                 .byte $B2,$B7,$B7,$B2,$AB,$A6,$A6,$AB
                 .byte $30,$34,$39,$3D,$3D,$39,$34,$30
-                .word $7CE6
+                .addr gfxBumper1
                 .byte $30,$14,$06,$0E,$03,$2A,$0F,$11
-                .word $87B8
-                .word $87E9
-                .word $87D7
+                .addr BUMPRUN
+                .addr BUMPINIT
+                .addr BUMPHIT
 BMP2            .byte $03,$00,$08
                 .byte $C1,$C5,$C5,$C1,$BC,$B8,$B8,$BC
                 .byte $31,$34,$38,$3B,$3B,$38,$34,$31
-                .word $7D3A
+                .addr gfxBumper2
                 .byte $31,$17,$00,$0B,$02,$16,$0F,$11
-                .word $87B8
-                .word $87E9
-                .word $87D7
+                .addr BUMPRUN
+                .addr BUMPINIT
+                .addr BUMPHIT
 BMP3            .byte $03,$00,$04
                 .byte $CC,$CC,$C8,$C8
                 .byte $30,$3F,$3F,$30
-                .word $7D66
+                .addr gfxBumper3
                 .byte $2F,$18,$07,$10,$01,$10,$0F,$11
-                .word $87B8
-                .word $87E9
-                .word $87D7
+                .addr BUMPRUN
+                .addr BUMPINIT
+                .addr BUMPHIT
 BMP4            .byte $03,$00,$04
                 .byte $E1,$E1,$CF,$CF
                 .byte $35,$39,$39,$35
-                .word $7D86
+                .addr gfxBumper4
                 .byte $34,$19,$05,$07,$03,$15,$0F,$11
-                .word $87B8
-                .word $87E9
-                .word $87D7
+                .addr BUMPRUN
+                .addr BUMPINIT
+                .addr BUMPHIT
 BMP5            .byte $03,$00,$04
                 .byte $E6,$EF,$EC,$E3
                 .byte $30,$39,$3C,$33
-                .word $7DB0
+                .addr gfxBumper5
                 .byte $2F,$1C,$02,$0D,$02,$1A,$0F,$11
-                .word $87B8
-                .word $87E9
-                .word $87D7
+                .addr BUMPRUN
+                .addr BUMPINIT
+                .addr BUMPHIT
 BMP6            .byte $03,$00,$04
                 .byte $FA,$FD,$F4,$F1
                 .byte $30,$33,$3C,$39
-                .word $7DE4
+                .addr gfxBumper6
                 .byte $2F,$1E,$00,$0D,$02,$1A,$0F,$11
-                .word $87B8
-                .word $87E9
-                .word $87D7
+                .addr BUMPRUN
+                .addr BUMPINIT
+                .addr BUMPHIT
 LKICK           .byte $03,$00,$05
                 .byte $AA,$B8,$B8,$A6,$A6
                 .byte $44,$5A,$5D,$59,$44
-                .word $7E18
+                .addr gfxLeftKicker
                 .byte $43,$14,$06,$1B,$03,$51,$0F,$22
-                .word $87B8
-                .word $87E9
-                .word $87F9
+                .addr BUMPRUN
+                .addr BUMPINIT
+                .addr KICKHIT
 RKICK           .byte $03,$00,$05
                 .byte $D1,$D1,$BE,$BE,$CE
                 .byte $44,$59,$5D,$5A,$44
-                .word $7EBA
+                .addr gfxRightKicker
                 .byte $43,$17,$04,$1B,$03,$51,$0F,$22
-                .word $87B8
-                .word $87E9
-                .word $87F9
+                .addr BUMPRUN
+                .addr BUMPINIT
+                .addr KICKHIT
 KICK1           .byte $03,$00,$04
                 .byte $DA,$DA,$D5,$D5
                 .byte $4A,$53,$53,$4A
-                .word $7F5C
+                .addr gfxKnock1
                 .byte $48,$1A,$05,$10,$01,$10,$0F,$33
-                .word $8806
-                .word $87E9
-                .word $881E
+                .addr KNOCKRUN
+                .addr BUMPINIT
+                .addr KNOCK1HIT
 KICK2           .byte $03,$00,$04
                 .byte $EB,$EB,$DF,$DF
                 .byte $4E,$53,$53,$4E
-                .word $7F8C
+                .addr gfxKnock2
                 .byte $4E,$1B,$06,$06,$03,$12,$0F,$33
-                .word $8806
-                .word $87E9
-                .word $883A
+                .addr KNOCKRUN
+                .addr BUMPINIT
+                .addr KNOCK2HIT
 ROLL1           .byte $03,$00,$04
                 .byte $AD,$AD,$A9,$A9
                 .byte $A0,$A4,$A4,$A0
-                .word $7FC2
+                .addr gfxRoll
                 .byte $A0,$15,$01,$05,$01,$05,$3F,$44
-                .word $884E
-                .word $87E9
-                .word $886A
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr ROLLHIT
 ROLL2           .byte $03,$00,$04
                 .byte $B4,$B4,$B0,$B0
                 .byte $A0,$A4,$A4,$A0
-                .word $7FCC
+                .addr gfxRoll+10
                 .byte $A0,$16,$00,$05,$01,$05,$3F,$44
-                .word $884E
-                .word $87E9
-                .word $886A
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr ROLLHIT
 ROLL3           .byte $03,$00,$04
                 .byte $BB,$BB,$B7,$B7
                 .byte $A0,$A4,$A4,$A0
-                .word $7FD6
+                .addr gfxRoll+20
                 .byte $A0,$16,$07,$05,$01,$05,$3F,$44
-                .word $884E
-                .word $87E9
-                .word $886A
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr ROLLHIT
 TARG1           .byte $03,$00,$04
                 .byte $C6,$C6,$C0,$C0
                 .byte $A0,$A2,$A2,$A0
-                .word $7FE0
+                .addr gfxRoll+30
                 .byte $A0,$18,$00,$03,$01,$03,$3F,$55
-                .word $884E
-                .word $87E9
-                .word $8861
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr FLASHHIT
 TARG2           .byte $03,$00,$04
                 .byte $D1,$D1,$CB,$CB
                 .byte $A0,$A2,$A2,$A0
-                .word $7FE6
+                .addr gfxRoll+36
                 .byte $A0,$19,$03,$03,$01,$03,$3F,$55
-                .word $884E
-                .word $87E9
-                .word $8861
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr FLASHHIT
 TARG3           .byte $03,$00,$04
                 .byte $DC,$DC,$D6,$D6
                 .byte $A0,$A2,$A2,$A0
-                .word $7FEC
+                .addr gfxRoll+42
                 .byte $A0,$1A,$06,$03,$01,$03,$3F,$55
-                .word $884E
-                .word $87E9
-                .word $8861
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr FLASHHIT
 TARG4           .byte $03,$00,$04
                 .byte $E5,$E5,$E3,$E3
                 .byte $A0,$A6,$A6,$A0
-                .word $7FF2
+                .addr gfxRoll+48
                 .byte $A0,$1C,$03,$07,$01,$07,$3F,$55
-                .word $884E
-                .word $87E9
-                .word $8861
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr FLASHHIT
 TARG5           .byte $03,$00,$04
                 .byte $EC,$EC,$EA,$EA
                 .byte $A0,$A6,$A6,$A0
-                .word $8000
+                .addr gfxRoll+62
                 .byte $A0,$1D,$02,$07,$01,$07,$3F,$55
-                .word $884E
-                .word $87E9
-                .word $8861
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr FLASHHIT
 TARG6           .byte $03,$00,$04
                 .byte $F3,$F3,$F1,$F1
                 .byte $A0,$A6,$A6,$A0
-                .word $800E
+                .addr gfxRoll+76
                 .byte $A0,$1E,$01,$07,$01,$07,$3F,$55
-                .word $884E
-                .word $87E9
-                .word $8861
+                .addr FLASHRUN
+                .addr BUMPINIT
+                .addr FLASHHIT
 LFLIPPER2       .byte $03,$00,$04
                 .byte $B2,$B2,$A6,$A6
                 .byte $05,$0E,$0E,$05
-                .word $801C
+                .addr gfxLeftFlip2
                 .byte $07,$14,$06,$08,$02,$10,$03,$80
-                .word $8400
-                .word $8470
-                .word $8504
+                .addr LFLIP2RUN
+                .addr FLIP2INIT
+                .addr LFLIP2HIT
 RFLIPPER2       .byte $03,$00,$04
                 .byte $BF,$BF,$B3,$B3
                 .byte $05,$0E,$0E,$05
-                .word $8078
+                .addr gfxRightFlip2
                 .byte $07,$16,$03,$08,$02,$10,$03,$80
-                .word $8404
-                .word $8470
-                .word $8512
+                .addr RFLIP2RUN
+                .addr FLIP2INIT
+                .addr RFLIP2HIT
 POLY1           .byte $01,$FF,$04
                 .byte $C7,$C7,$C6,$C6
                 .byte $1B,$2C,$2C,$1B
@@ -3403,109 +3493,109 @@ POLY4           .byte $01,$FF,$04
 LANE1           .byte $03,$00,$04
                 .byte $AD,$AD,$A9,$A9
                 .byte $90,$99,$99,$90
-                .word $80D4
+                .addr gfxLane
                 .byte $90,$15,$01,$0A,$01,$0A,$FF,$80
-                .word $83FC
-                .word $83FC
-                .word $8B9F
+                .addr NULL_
+                .addr NULL_
+                .addr PBOUNCE
 LANE2           .byte $03,$00,$04
                 .byte $B7,$B7,$B3,$B3
                 .byte $90,$97,$97,$90
-                .word $80DE
+                .addr gfxLane+10
                 .byte $90,$16,$03,$08,$01,$08,$FF,$80
-                .word $83FC
-                .word $83FC
-                .word $8B9F
+                .addr NULL_
+                .addr NULL_
+                .addr PBOUNCE
 LANE3           .byte $03,$00,$04
                 .byte $C1,$C1,$BD,$BD
                 .byte $90,$94,$94,$90
-                .word $80E6
+                .addr gfxLane+18
                 .byte $90,$17,$05,$05,$01,$05,$FF,$80
-                .word $83FC
-                .word $83FC
-                .word $8B9F
+                .addr NULL_
+                .addr NULL_
+                .addr PBOUNCE
 GATE1           .byte $03,$00,$04
                 .byte $CF,$CF,$C9,$C9
                 .byte $90,$98,$98,$95
-                .word $80EB
+                .addr gfxLane+23
                 .byte $90,$19,$01,$09,$01,$09,$FF,$80
-                .word $83FC
-                .word $83FC
-                .word $8871
+                .addr NULL_
+                .addr NULL_
+                .addr GATEHIT
 GATE2           .byte $03,$00,$04
                 .byte $DD,$DD,$D7,$D7
                 .byte $95,$98,$98,$90
-                .word $80F4
+                .addr gfxLane+32
                 .byte $90,$1A,$07,$09,$01,$09,$FF,$80
-                .word $83FC
-                .word $83FC
-                .word $8871
+                .addr NULL_
+                .addr NULL_
+                .addr GATEHIT
 GATE3           .byte $03,$00,$04
                 .byte $EB,$EB,$E5,$E5
                 .byte $90,$98,$98,$90
-                .word $80FD
+                .addr gfxLane+41
                 .byte $90,$1C,$05,$09,$01,$09,$FF,$80
-                .word $83FC
-                .word $83FC
-                .word $887F
+                .addr NULL_
+                .addr NULL_
+                .addr GATE2HIT
 GATE4           .byte $03,$00,$04
                 .byte $F9,$F9,$F3,$F3
                 .byte $90,$98,$98,$90
-                .word $8106
+                .addr gfxLane+50
                 .byte $90,$1E,$03,$09,$01,$09,$FF,$80
-                .word $83FC
-                .word $83FC
-                .word $8885
+                .addr NULL_
+                .addr NULL_
+                .addr GATE3HIT
 DROP1           .byte $03,$00,$04
                 .byte $D5,$D5,$B6,$B6
                 .byte $64,$67,$67,$64
-                .word $810F
+                .addr gfxDrop1
                 .byte $64,$16,$06,$04,$05,$14,$1F,$55
-                .word $888B
-                .word $898C
-                .word $893C
+                .addr DROP1RUN
+                .addr DROP1INIT
+                .addr DROP1HIT
                 .byte $00
 DROP2           .byte $03,$00,$04
                 .byte $AC,$AC,$A9,$A9
                 .byte $64,$83,$83,$64
-                .word $8132
+                .addr gfxDrop2
                 .byte $64,$15,$00,$20,$01,$20,$1F,$55
-                .word $888F
-                .word $8990
-                .word $896A
+                .addr DROP2RUN
+                .addr DROP2INIT
+                .addr DROP2HIT
                 .byte $00
 CATCH1          .byte $03,$00,$05
                 .byte $C4,$C4,$BA,$BA,$BF
                 .byte $6C,$7E,$7E,$6C,$6E
-                .word $8152
+                .addr gfxCatch1
                 .byte $6C,$17,$02,$13,$02,$26,$0F,$55
-                .word $83FC
-                .word $8A4C
-                .word $89AA
+                .addr NULL_
+                .addr CATCH1INIT
+                .addr CATCH1HIT
 CATCH2          .byte $03,$00,$04
                 .byte $D5,$D5,$CB,$CB
                 .byte $70,$78,$78,$70
-                .word $8178
+                .addr gfxCatch2
                 .byte $70,$19,$03,$09,$02,$12,$0F,$05
-                .word $8A57
-                .word $87E9
-                .word $8A74
+                .addr CATCH2RUN
+                .addr BUMPINIT
+                .addr CATCH2HIT
 SPIN1           .byte $03,$00,$04
                 .byte $EC,$EC,$E6,$E6
                 .byte $64,$68,$68,$64
-                .word $81D2
+                .addr gfxSpinner
                 .byte $64,$1C,$06,$05,$01,$05,$07,$11
-                .word $8A7F
-                .word $8AA2
-                .word $8AAB
+                .addr SPINRUN
+                .addr SPININIT
+                .addr SPINHIT
 MAG1            .byte $03,$00,$04
                 .byte $EF,$EF,$E6,$E6
                 .byte $74,$7A,$7A,$74
-                .word $81E1
+                .addr gfxMagnet
                 .byte $74,$1C,$04,$07,$02,$0E,$0F,$B3
-                .word $83FC
-                .word $83FC
-                .word $8ABD
+                .addr NULL_
+                .addr NULL_
+                .addr MAGHIT
 
 
 ;--------------------------------------

@@ -1,0 +1,39 @@
+
+; SPDX-PackageSummary: Pinball Construction Set (for 8-bit systems)
+; SPDX-PackageOriginator: BudgeCo: Bill Budge
+; SPDX-PackageCopyrightText: Copyright (c) 1982 Bill Budge
+; SPDX-License-Identifier: MIT
+
+; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
+
+
+;--------------------------------------
+; Code equates
+;--------------------------------------
+
+BITMAPS                 = $7B00
+
+gfxLauncher             = $7B00
+gfxLeftFlipper          = $7B48
+gfxRightFlipper         = $7C17
+gfxBumper1              = $7CE6
+gfxBumper2              = $7D3A
+gfxBumper3              = $7D66
+gfxBumper4              = $7D86
+gfxBumper5              = $7DB0
+gfxBumper6              = $7DE4
+gfxLeftKicker           = $7E18
+gfxRightKicker          = $7EBA
+gfxKnock1               = $7F5C
+gfxKnock2               = $7F8C
+gfxRoll                 = $7FC2
+gfxLeftFlip2            = $801C
+gfxRightFlip2           = $8078
+gfxLane                 = $80D4
+gfxDrop1                = $810F
+gfxDrop2                = $8132
+gfxCatch1               = $8152
+gfxCatch2               = $8178
+gfxSpinner              = $81D2
+gfxMagnet               = $81E1
+gfxBall                 = $81EF
