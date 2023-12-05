@@ -7,6 +7,8 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/system_atari8.equ"
+
                 .include "equates/boot2.equ"
                 .include "equates/cdraw.equ"
 
@@ -15,11 +17,11 @@
 ; System equates
 ;--------------------------------------
 
-CH_             = $02FC
+; CH_             = $02FC
 
-DSTATS          = $0303
-DBUFLO          = $0304
-DAUX2           = $030B
+; DSTATS          = $0303
+; DBUFLO          = $0304
+; DAUX2           = $030B
 
 
 ;--------------------------------------

@@ -7,6 +7,8 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/system_atari8.equ"
+
                 .include "equates/dlist.equ"
 
 
@@ -14,19 +16,19 @@
 ; System equates
 ;--------------------------------------
 
-SDLSTL          = $0230
-SDLSTH          = $0231
+; SDLSTL          = $0230
+; SDLSTH          = $0231
 
-COLOR1          = $02C5
-COLOR2          = $02C6
-COLOR4          = $02C8
+; COLOR1          = $02C5
+; COLOR2          = $02C6
+; COLOR4          = $02C8
 
-COLPF1          = $D017
-COLPF2          = $D018
-COLBK           = $D01A
+; COLPF1          = $D017
+; COLPF2          = $D018
+; COLBK           = $D01A
 
-DLISTL          = $D402
-DLISTH          = $D403
+; DLISTL          = $D402
+; DLISTH          = $D403
 
 
 ;--------------------------------------

@@ -1,0 +1,61 @@
+
+; SPDX-PackageSummary: Pinball Construction Set (for 8-bit systems)
+; SPDX-PackageOriginator: BudgeCo: Bill Budge
+; SPDX-PackageCopyrightText: Copyright (c) 1982 Bill Budge
+; SPDX-License-Identifier: MIT
+
+; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
+
+
+;--------------------------------------
+; System equates
+;--------------------------------------
+
+ICCOM           = $02
+ICBAL           = $04
+ICBAH           = $05
+ICBLL           = $08
+ICBLH           = $09
+ICAX1           = $0A
+
+CASINI          = $0002
+CMCMD           = $0007
+RTCLOK          = $0012
+ATRACT          = $004D
+
+VVBLKI          = $0222
+SDLSTL          = $0230
+SDLSTH          = $0231
+SHFLOC          = $02BE
+COLOR1          = $02C5
+COLOR2          = $02C6
+COLOR4          = $02C8
+RUNAD           = $02E0
+CH_             = $02FC
+
+DUNIT           = $0301
+DCOMND          = $0302
+DSTATS          = $0303
+DBUFLO          = $0304
+DBUFHI          = $0305
+DAUX1           = $030A
+DAUX2           = $030B
+IOCB0           = $0340
+
+TRIG0           = $D010
+TRIG1           = $D011
+COLPF1          = $D017
+COLPF2          = $D018
+COLBK           = $D01A
+CONSOL          = $D01F
+
+AUDF1           = $D200
+AUDC1           = $D201
+
+PORTA           = $D300
+
+DLISTL          = $D402
+DLISTH          = $D403
+
+DSKINV          = $E453
+CIOV            = $E456

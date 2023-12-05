@@ -8,8 +8,10 @@
 
 
                 .include "equates/zeropage.equ"
+
                 .include "equates/gpak.equ"
                 .include "equates/ppak.equ"
+
                 .include "equates/cdraw.equ"
                 .include "equates/run.equ"
                 .include "equates/swap.equ"

@@ -7,7 +7,9 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/system_atari8.equ"
                 .include "equates/zeropage.equ"
+
                 .include "equates/dlist.equ"
                 .include "equates/gpak.equ"
 
@@ -16,15 +18,15 @@
 ; System equates
 ;--------------------------------------
 
-CMCMD           = $0007
-RTCLOK          = $0012
-ATRACT          = $004D
+; CMCMD           = $0007
+; RTCLOK          = $0012
+; ATRACT          = $004D
 
-TRIG0           = $D010
-TRIG1           = $D011
-CONSOL          = $D01F
+; TRIG0           = $D010
+; TRIG1           = $D011
+; CONSOL          = $D01F
 
-PORTA           = $D300
+; PORTA           = $D300
 
 
 ;--------------------------------------
