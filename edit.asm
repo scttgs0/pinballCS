@@ -1445,29 +1445,29 @@ CMDMENU         .addr HANDB
                 .addr DISKIO
                 .byte $00
 
-BOXLO           .byte <POLYB,<LAUNCHERB,<LFLIPB,<RFLIPB
-                .byte <BALLB,<BMP1B,<BMP2B,<BMP3B
-                .byte <BMP4B,<BMP5B,<BMP6B,<LKICKB
-                .byte <RKICKB,<KICK1B,<KICK2B,<ROLL1B
+BOXLO           .byte <POLYB,<gfxLauncher,<gfxLeftFlipper,<gfxRightFlipper
+                .byte <gfxBall,<gfxBumper1,<gfxBumper2,<gfxBumper3
+                .byte <gfxBumper4,<gfxBumper5,<gfxBumper6,<gfxLeftKicker
+                .byte <gfxRightKicker,<KICK1B,<KICK2B,<ROLL1B
                 .byte <ROLL2B,<ROLL3B,<TARG1B,<TARG2B
                 .byte <TARG3B,<TARG4B,<TARG5B,<TARG6B
-                .byte <LFLIP2B,<RFLIP2B,<POLY1B,<POLY2B
+                .byte <gfxLeftFlip2,<gfxRightFlip2,<POLY1B,<POLY2B
                 .byte <POLY3B,<POLY4B,<LANE1B,<LANE2B
                 .byte <LANE3B,<GATE1B,<GATE2B,<GATE3B
-                .byte <GATE4B,<DROP1B,<DROP2B,<CATCH1B
-                .byte <CATCH2B,<SPINB,<MGNTB
+                .byte <GATE4B,<gfxDrop1,<gfxDrop2,<gfxCatch1
+                .byte <gfxCatch2,<gfxSpinner,<MGNTB
 
-BOXHI           .byte >POLYB,>LAUNCHERB,>LFLIPB,>RFLIPB
-                .byte >BALLB,>BMP1B,>BMP2B,>BMP3B
-                .byte >BMP4B,>BMP5B,>BMP6B,>LKICKB
-                .byte >RKICKB,>KICK1B,>KICK2B,>ROLL1B
+BOXHI           .byte >POLYB,>gfxLauncher,>gfxLeftFlipper,>gfxRightFlipper
+                .byte >gfxBall,>gfxBumper1,>gfxBumper2,>gfxBumper3
+                .byte >gfxBumper4,>gfxBumper5,>gfxBumper6,>gfxLeftKicker
+                .byte >gfxRightKicker,>KICK1B,>KICK2B,>ROLL1B
                 .byte >ROLL2B,>ROLL3B,>TARG1B,>TARG2B
                 .byte >TARG3B,>TARG4B,>TARG5B,>TARG6B
-                .byte >LFLIP2B,>RFLIP2B,>POLY1B,>POLY2B
+                .byte >gfxLeftFlip2,>gfxRightFlip2,>POLY1B,>POLY2B
                 .byte >POLY3B,>POLY4B,>LANE1B,>LANE2B
                 .byte >LANE3B,>GATE1B,>GATE2B,>GATE3B
-                .byte >GATE4B,>DROP1B,>DROP2B,>CATCH1B
-                .byte >CATCH2B,>SPINB,>MGNTB
+                .byte >GATE4B,>gfxDrop1,>gfxDrop2,>gfxCatch1
+                .byte >gfxCatch2,>gfxSpinner,>MGNTB
 
 OBJLEN          .byte $0B,$1B,$1B,$1B
                 .byte $22,$23,$23,$1B
@@ -1522,18 +1522,20 @@ WORLDB          .byte $85,$21,$04,$0C,$03,$03
 WIREB           .byte $93,$21,$04,$0C,$03,$03
 DISKB           .byte $A1,$21,$04,$0D,$03,$03
 POLYB           .byte $1B,$14,$06,$10,$02,$00
-LAUNCHERB       .byte $49,$1D,$06,$0C,$00,$06
-LFLIPB          .byte $02,$19,$02,$10,$02,$02
-RFLIPB          .byte $02,$1B,$02,$10,$02,$02
-BALLB           .byte $05,$1E,$05,$05,$00,$05
-BMP1B           .byte $30,$14,$06,$11,$02,$01
-BMP2B           .byte $31,$17,$00,$0A,$01,$05
-BMP3B           .byte $30,$18,$07,$10,$00,$04
-BMP4B           .byte $35,$19,$05,$05,$02,$02
-BMP5B           .byte $30,$1C,$02,$0D,$01,$04
-BMP6B           .byte $30,$1E,$00,$0D,$01,$04
-LKICKB          .byte $44,$14,$06,$1A,$02,$02
-RKICKB          .byte $44,$17,$04,$1A,$02,$02
+
+gfxLauncher     .byte $49,$1D,$06,$0C,$00,$06
+gfxLeftFlipper  .byte $02,$19,$02,$10,$02,$02
+gfxRightFlipper .byte $02,$1B,$02,$10,$02,$02
+gfxBall         .byte $05,$1E,$05,$05,$00,$05
+gfxBumper1      .byte $30,$14,$06,$11,$02,$01
+gfxBumper2      .byte $31,$17,$00,$0A,$01,$05
+gfxBumper3      .byte $30,$18,$07,$10,$00,$04
+gfxBumper4      .byte $35,$19,$05,$05,$02,$02
+gfxBumper5      .byte $30,$1C,$02,$0D,$01,$04
+gfxBumper6      .byte $30,$1E,$00,$0D,$01,$04
+gfxLeftKicker   .byte $44,$14,$06,$1A,$02,$02
+gfxRightKicker  .byte $44,$17,$04,$1A,$02,$02
+
 KICK1B          .byte $4A,$1A,$05,$0D,$00,$05
 KICK2B          .byte $4E,$1B,$06,$06,$01,$03
 ROLL1B          .byte $A0,$15,$01,$05,$00,$04
@@ -1545,8 +1547,8 @@ TARG3B          .byte $A0,$1A,$06,$03,$00,$06
 TARG4B          .byte $A0,$1C,$03,$07,$00,$02
 TARG5B          .byte $A0,$1D,$02,$07,$00,$02
 TARG6B          .byte $A0,$1E,$01,$07,$00,$02
-LFLIP2B         .byte $05,$14,$06,$0A,$01,$04
-RFLIP2B         .byte $05,$16,$03,$0A,$01,$04
+gfxLeftFlip2    .byte $05,$14,$06,$0A,$01,$04
+gfxRightFlip2   .byte $05,$16,$03,$0A,$01,$04
 POLY1B          .byte $1B,$18,$06,$12,$00,$01
 POLY2B          .byte $20,$19,$04,$0D,$00,$01
 POLY3B          .byte $25,$1A,$02,$0A,$04,$01
@@ -1558,11 +1560,12 @@ GATE1B          .byte $90,$19,$01,$09,$00,$06
 GATE2B          .byte $90,$1A,$07,$09,$00,$06
 GATE3B          .byte $90,$1C,$05,$09,$00,$06
 GATE4B          .byte $90,$1E,$03,$09,$00,$06
-DROP1B          .byte $64,$16,$06,$04,$04,$00
-DROP2B          .byte $64,$15,$00,$20,$00,$05
-CATCH1B         .byte $6C,$17,$02,$13,$01,$02
-CATCH2B         .byte $70,$19,$03,$09,$01,$02
-SPINB           .byte $64,$1C,$06,$05,$00,$06
+
+gfxDrop1        .byte $64,$16,$06,$04,$04,$00
+gfxDrop2        .byte $64,$15,$00,$20,$00,$05
+gfxCatch1       .byte $6C,$17,$02,$13,$01,$02
+gfxCatch2       .byte $70,$19,$03,$09,$01,$02
+gfxSpinner      .byte $64,$1C,$06,$05,$00,$06
 MGNTB           .byte $74,$1C,$04,$07,$01,$01
 
 ICONS           .addr HAND
@@ -1691,8 +1694,8 @@ _next1          jsr UPDATEC
 _next2          jsr DRAG
                 jmp _next1
 
-_1              lda #<MAGB
-                ldx #>MAGB
+_1              lda #<gfxMagnet
+                ldx #>gfxMagnet
                 jsr CINR
                 bcc _3
 
@@ -2569,7 +2572,7 @@ _next1          rol
 
 ;--------------------------------------
 
-MAGB            .byte $40,$14,$00,$6F,$11,$07
+gfxMagnet       .byte $40,$14,$00,$6F,$11,$07
 MAG             .byte $47,$15,$00,$61,$0F,$07
 MBAR1           .byte $40,$14,$00,$06,$11,$07
 MBAR2           .byte $40,$14,$00,$6F,$00,$07
