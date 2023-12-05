@@ -6,6 +6,7 @@
 
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
+                .include "equates/system_atari8.equ"
 
                 .include "equates/platform_a8.equ"
                 .include "equates/run2.equ"
@@ -15,15 +16,15 @@
 ; System equates
 ;--------------------------------------
 
-DUNIT           = $0301
-DCOMND          = $0302
-DSTATS          = $0303
-DBUFLO          = $0304
-DBUFHI          = $0305
-DAUX1           = $030A
-DAUX2           = $030B
+; DUNIT           = $0301
+; DCOMND          = $0302
+; DSTATS          = $0303
+; DBUFLO          = $0304
+; DBUFHI          = $0305
+; DAUX1           = $030A
+; DAUX2           = $030B
 
-DSKINV          = $E453
+; DSKINV          = $E453
 
 
 ;--------------------------------------

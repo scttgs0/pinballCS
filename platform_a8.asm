@@ -7,7 +7,9 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/system_atari8.equ"
                 .include "equates/zeropage.equ"
+
                 .include "equates/cdraw.equ"
 
 
@@ -15,9 +17,9 @@
 ; System equates
 ;--------------------------------------
 
-RTCLOK          = $0012
+; RTCLOK          = $0012
 
-VVBLKI          = $0222
+; VVBLKI          = $0222
 
 
 ;--------------------------------------

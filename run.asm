@@ -7,10 +7,13 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/system_atari8.equ"
                 .include "equates/zeropage.equ"
+
                 .include "equates/bitmaps.equ"
                 .include "equates/gpak.equ"
                 .include "equates/ppak.equ"
+
                 .include "equates/cdraw.equ"
 
 
@@ -18,16 +21,16 @@
 ; System equates
 ;--------------------------------------
 
-CASINI          = $0002
+; CASINI          = $0002
 
-TRIG0           = $D010
-TRIG1           = $D011
-CONSOL          = $D01F
+; TRIG0           = $D010
+; TRIG1           = $D011
+; CONSOL          = $D01F
 
-AUDF1           = $D200
-AUDC1           = $D201
+; AUDF1           = $D200
+; AUDC1           = $D201
 
-PORTA           = $D300
+; PORTA           = $D300
 
 
 ;--------------------------------------

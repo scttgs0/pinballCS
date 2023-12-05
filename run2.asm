@@ -7,11 +7,13 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/system_atari8.equ"
                 .include "equates/zeropage.equ"
 
                 .include "equates/platform_a8.equ"
                 .include "equates/dlist.equ"
                 .include "equates/gpak.equ"
+
                 .include "equates/cdraw.equ"
                 .include "equates/run.equ"
 
@@ -23,25 +25,25 @@ LIBOBJ          = $03
 ; System equates
 ;--------------------------------------
 
-CASINI          = $0002
+; CASINI          = $0002
 
-SDLSTL          = $0230
-SDLSTH          = $0231
-COLOR1          = $02C5
-COLOR2          = $02C6
-COLOR4          = $02C8
+; SDLSTL          = $0230
+; SDLSTH          = $0231
+; COLOR1          = $02C5
+; COLOR2          = $02C6
+; COLOR4          = $02C8
 
-TRIG0           = $D010
-TRIG1           = $D011
-COLPF1          = $D017
-COLPF2          = $D018
-COLBK           = $D01A
-CONSOL          = $D01F
+; TRIG0           = $D010
+; TRIG1           = $D011
+; COLPF1          = $D017
+; COLPF2          = $D018
+; COLBK           = $D01A
+; CONSOL          = $D01F
 
-AUDF1           = $D200
-AUDC1           = $D201
+; AUDF1           = $D200
+; AUDC1           = $D201
 
-PORTA           = $D300
+; PORTA           = $D300
 
 
 ;--------------------------------------

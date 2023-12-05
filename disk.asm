@@ -7,8 +7,11 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/system_atari8.equ"
                 .include "equates/zeropage.equ"
+
                 .include "equates/ppak.equ"
+
                 .include "equates/cdraw.equ"
                 .include "equates/run2.equ"
                 .include "equates/swap.equ"
@@ -18,20 +21,20 @@
 ; System equates
 ;--------------------------------------
 
-ICCOM           = $02
-ICBAL           = $04
-ICBAH           = $05
-ICBLL           = $08
-ICBLH           = $09
-ICAX1           = $0A
+; ICCOM           = $02
+; ICBAL           = $04
+; ICBAH           = $05
+; ICBLL           = $08
+; ICBLH           = $09
+; ICAX1           = $0A
 
-SHFLOC          = $02BE
-RUNAD           = $02E0
-CH_             = $02FC
+; SHFLOC          = $02BE
+; RUNAD           = $02E0
+; CH_             = $02FC
 
-IOCB0           = $0340
+; IOCB0           = $0340
 
-CIOV            = $E456
+; CIOV            = $E456
 
 
 ;--------------------------------------

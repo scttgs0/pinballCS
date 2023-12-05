@@ -7,8 +7,11 @@
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
 
+                .include "equates/system_atari8.equ"
+
                 .include "equates/gpak.equ"
                 .include "equates/ppak.equ"
+
                 .include "equates/cdraw.equ"
 
 
@@ -16,8 +19,8 @@
 ; System equates
 ;--------------------------------------
 
-AUDF1           = $D200
-AUDC1           = $D201
+; AUDF1           = $D200
+; AUDC1           = $D201
 
 
 ;--------------------------------------
