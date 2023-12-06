@@ -12,6 +12,29 @@
 
                 .include "equates/dlist.equ"
                 .include "equates/gpak.equ"
+                .include "equates/ppak.equ"
+
+
+;--------------------------------------
+; Zero-page equates (local)
+;--------------------------------------
+
+ITEMP                   = $0007
+
+SBEGIN                  = $00D0         ; [word]
+SEND                    = $00D2         ; [word]
+
+TEMPRECT                = $00D2
+
+DBEGIN                  = $00D4
+DEND                    = $00D4
+
+EXTRA                   = $00D6
+
+LEFTEDGE                = $00D7
+
+RTMOD8                  = $00DB
+TBASE                   = $00DB         ; [word]
 
 
 ;--------------------------------------

@@ -18,6 +18,25 @@
 
 
 ;--------------------------------------
+; Zero-page equates (local)
+;--------------------------------------
+
+CHARINDX                = $00A3
+CHARASCII               = $00A4
+CHCODE                  = $00A5
+
+BOXCURSORON             = $00A6
+
+DTIMER1                 = $00A7
+DTIMER2                 = $00A8
+
+DISKCMD                 = $00A9
+SAVETYPE                = $00AA
+BSPARM                  = $00AB         ; [4-bytes]
+STACKTEMP               = $00AF
+
+
+;--------------------------------------
 ; Code equates
 ;--------------------------------------
 
@@ -25,9 +44,9 @@ FMINIT                  = $0788
 
 CHAR                    = $2933
 
-GAMEBTM                 = $2B00
-HIRES                   = $2B00
+GAMEBTM                 = $2B00         ; <--
 
+HIRES                   = $2B00
 HTOP                    = $490F
 
 PBBASE                  = $4B00
@@ -36,7 +55,7 @@ PBDATA                  = $4B1C
 GAMESTART               = $9048
 PLAYGAME                = $9062
 
-GAMETOP                 = $A100
+GAMETOP                 = $A100         ; <--
 
 
             .enc "atari-inverse"

@@ -8,6 +8,7 @@
 
 
                 .include "equates/system_atari8.equ"
+                ;.include "equates/zeropage.equ"
 
                 .include "equates/gpak.equ"
                 .include "equates/ppak.equ"
@@ -19,22 +20,10 @@
 ; Zero-page equates
 ;--------------------------------------
 
-;   Main Program
-CURSORY                 = $0082
-CURSORXDIV8             = $0083
-CURSORXMOD8             = $0084
-LASTITEM                = $008C
-
-;   Objects
-NEXTOBJ                 = $0090
-OBJCOUNT                = $0091
-OBJID                   = $0096
-LBASE                   = $0099
-SCANMODE                = $009B
-
 ;   Editor
 EDITMODE                = $00A4
 SLCTMODE                = $00A5
+
 CUROBJ                  = $00A6
 CURNOISE                = $00A7
 CURSCORE                = $00A8
