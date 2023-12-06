@@ -22,10 +22,10 @@ FRAMERECT_ENTRY1        = $265D
 PIECE2                  = $7B00
 
 EDITOR                  = $A000
-LA010                   = $A010
-LA013                   = $A013
+EDITOR_RUN              = $A010
+DRAWKIT                 = $A013
 
-LBF00                   = $BF00
+VALIDBUF                = $BF00
 
 
 ;--------------------------------------
@@ -38,7 +38,8 @@ LBF00                   = $BF00
 ;======================================
 SWAPWIRE        ldx #$01
                 jsr SWAPPIECE
-                jmp LA013
+
+                jmp DRAWKIT
 
 
 ;======================================
@@ -46,14 +47,15 @@ SWAPWIRE        ldx #$01
 ;======================================
 SWAPDISK        ldx #$02
                 jsr SWAPPIECE
-                jmp LA010
+
+                jmp EDITOR_RUN
 
 
 ;======================================
 ;
 ;======================================
 SWAPUSER        ldx #$03
-                bne SWAPSECTORS
+                bne SWAPSECTORS         ; unc
 
 
 ;--------------------------------------
@@ -84,6 +86,8 @@ SWAPPIECE       jsr SWAPSECTORS
                 jsr EDITOR
 
                 ldx #$00
+
+                ;[fall-through]
 
 
 ;======================================
@@ -137,7 +141,7 @@ PCSINSERTED     stz DBUFLO
                 bne PCSINSERTED
 
                 ldy #$40
-_next1          lda LBF00,Y
+_next1          lda VALIDBUF,Y
                 cmp PIECE2,Y
                 bne _1
 

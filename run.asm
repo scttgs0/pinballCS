@@ -18,6 +18,41 @@
 
 
 ;--------------------------------------
+; Zero-page equates (local)
+;--------------------------------------
+
+BASE3                   = $00D4
+
+KICK                    = $00D6
+FLIPR                   = $00D7
+
+FRAME                   = $00D8
+LEFTX                   = $00D9
+FDIR                    = $00DA
+FX1                     = $00DB
+FX2                     = $00DC
+FWIDTH                  = $00DD
+
+BDX                     = $00EE
+BDY                     = $00EF
+BXACC                   = $00F0
+BYACC                   = $00F1
+BMOVE                   = $00F2
+
+MIDX                    = $00F3
+HT                      = $00F5
+HVAL                    = $00F6
+
+P1_                     = $00F7
+P2_                     = $00F8
+
+RTTTA                   = $00F9
+LFTTA                   = $00FA
+HTCNT                   = $00FB
+LASTY                   = $00FC
+
+
+;--------------------------------------
 ; Code equates
 ;--------------------------------------
 

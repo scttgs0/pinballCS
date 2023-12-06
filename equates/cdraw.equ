@@ -14,8 +14,6 @@
 SETMODE                 = $24CF
 
 DRAWBITS                = $24F4
-DRAWB                   = $24F4
-
 XOFFDRAW                = $2535
 
 GETRECT                 = $2590

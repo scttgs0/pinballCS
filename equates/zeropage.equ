@@ -8,100 +8,41 @@ STKY                    = $0002         ; [word]
 STKSPEED                = $0003
 STKTIMER                = $0004
 NMICONT                 = $0005
-ITEMP                   = $0007
 
-PLAYER                  = $0080
 CURSOR                  = $0080         ; [word]
 
-PLAYERCNT               = $0081
-
-CURSORY                 = $0082
-BALLS                   = $0082
-
-CURSORXDIV8             = $0083
-SLEEPCNT                = $0083
-
-CURSORXMOD8             = $0084
-PBASE1                  = $0084         ; [word]
-
 CURSORHEIGHT            = $0085
-
 CURSORWIDTH             = $0086
-PBASE2                  = $0086         ; [word]
-
 NEWCURSORXDIV8          = $0087
-
 NEWCURSORXMOD8          = $0088
-PBASE3                  = $0088         ; [word]
-
 NEWCURSORY              = $0089
 
 NEWITEM                 = $008A         ; [word]
-PBASE4                  = $008A         ; [word]
 
-LASTITEM                = $008C         ; [word]
-LASTY_                  = $008C
-
-LIVEBALLS               = $008D
 OBJ                     = $008E         ; [word]
-
-NEXTOBJ                 = $0090
-OBJCOUNT                = $0091
 PLYPTRX                 = $0092         ; [word]
 PLYPTRY                 = $0094         ; [word]
-OBJID                   = $0096
 FILLCOLOR               = $0097
 VRTXCOUNT               = $0098
 
-LBASE                   = $0099         ; [word]
-SCANMODE                = $009B
 MEMBTM                  = $009C         ; [word]
 MIDBTM                  = $009E         ; [word]
-
 MIDTOP                  = $00A0         ; [word]
-MIDY                    = $00A2
-CHARINDX                = $00A3
-COLOR                   = $00A3
-CHARASCII               = $00A4
-CX_                     = $00A4
-CHCODE                  = $00A5
-EDITMODE                = $00A5
-BOXCURSORON             = $00A6
-OBJ2                    = $00A6
-DTIMER1                 = $00A7
 
-DTIMER2                 = $00A8
+COLOR                   = $00A3
+
 RUNLEN                  = $00A8
 
-DISKCMD                 = $00A9
 PDL0                    = $00A9
 
-SAVETYPE                = $00AA
 MINX                    = $00AA
 
-BSPARM                  = $00AB         ; [4-bytes]
 MINY                    = $00AB
 BTN0                    = $00AB
-
-LFTSTOP                 = $00AC
-MINPT                   = $00AC
 BTN1                    = $00AC
 
-RTSTOP                  = $00AD
-MINDIST                 = $00AD
 PTIMER1                 = $00AD
-
-TOPSTOP                 = $00AE
-MINPOLY                 = $00AE
 PTIMER2                 = $00AE
-
-BTMSTOP                 = $00AF
-STACKTEMP               = $00AF
-
-DELX                    = $00B0
-DELY                    = $00B1
-DRAGX                   = $00B2
-DRAGY                   = $00B3
 
 PARAM                   = $00C0         ; [6-bytes]
 
@@ -111,58 +52,27 @@ YTEMP                   = $00C9
 TEMP2                   = $00CA
 
 BASE1                   = $00D0         ; [word]
-SBEGIN                  = $00D0         ; [word]
-
 BASE2                   = $00D2         ; [word]
-SEND                    = $00D2         ; [word]
-TEMPRECT                = $00D2
 
-BASE3                   = $00D4
 TEMPBITS                = $00D4
 TOP                     = $00D4
-DBEGIN                  = $00D4
-DEND                    = $00D4
-VERTA                   = $00D4
-SHIFTOUT                = $00D4
 
 LFTDIV8                 = $00D5
-D8A                     = $00D5
-SHIFTCOUNT              = $00D5
 
 VERT                    = $00D6
 LFTMOD8                 = $00D6
-EXTRA                   = $00D6
-M8A                     = $00D6
-KICK                    = $00D6
 
 HDIV8                   = $00D7
-LEFTEDGE                = $00D7
-VERTB                   = $00D7
-FLIPR                   = $00D7
-
 HMOD8                   = $00D8
 LEFTMASK                = $00D8
-FRAME                   = $00D8
 
 WIDTH                   = $00D9
 BOTTOM                  = $00D9
-LEFTX                   = $00D9
 
 HEIGHT                  = $00DA
 RTDIV8                  = $00DA
-D8B                     = $00DA
-FDIR                    = $00DA
-
-RTMOD8                  = $00DB
-TBASE                   = $00DB         ; [word]
-M8B                     = $00DB
-FX1                     = $00DB
-
-BYTE2                   = $00DC
-FX2                     = $00DC
 
 RIGHTMASK               = $00DD
-FWIDTH                  = $00DD
 
 SERIES                  = $00E0
 SLICE                   = $00E1
@@ -181,36 +91,5 @@ X1_                     = $00EA
 Y1_                     = $00EB
 X2_                     = $00EC
 Y2_                     = $00ED
-BDX                     = $00EE
-BDY                     = $00EF
 
-COLBW                   = $00F0
-SLB                     = $00F0
-GRIDON                  = $00F1
-MCOLOR                  = $00F2
-SLOLD                   = $00F2
-XDIR                    = $00F3
-SLNEW                   = $00F3
-YDIR                    = $00F4
-
-BXACC                   = $00F0
-BYACC                   = $00F1
-BMOVE                   = $00F2
-MIDX                    = $00F3
 HCNT                    = $00F4
-
-VR                      = $00F5
-VRY                     = $00F5
-HT                      = $00F5
-
-VRXD8                   = $00F6
-HVAL                    = $00F6
-
-VRXM8                   = $00F7
-P1_                     = $00F7
-
-P2_                     = $00F8
-RTTTA                   = $00F9
-LFTTA                   = $00FA
-HTCNT                   = $00FB
-LASTY                   = $00FC

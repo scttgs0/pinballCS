@@ -22,17 +22,47 @@ LIBOBJ          = $03
 
 
 ;--------------------------------------
+; Zero-page equates (local)
+;--------------------------------------
+
+PLAYER                  = $0080
+PLAYERCNT               = $0081
+
+BALLS                   = $0082
+LIVEBALLS               = $008D
+
+SLEEPCNT                = $0083
+
+PBASE1                  = $0084         ; [word]
+PBASE2                  = $0086         ; [word]
+PBASE3                  = $0088         ; [word]
+PBASE4                  = $008A         ; [word]
+
+LAST_Y_                 = $008C
+
+OBJCOUNT                = $0091
+OBJID                   = $0096
+NEXTOBJ                 = $0090
+
+LBASE                   = $0099         ; [word]
+
+SHIFTOUT                = $00D4
+SHIFTCOUNT              = $00D5
+
+
+;--------------------------------------
 ; Code equates
 ;--------------------------------------
 
 CHAR                    = $2933
 
-HIRES1                  = $2B00
+HIRES                   = $2B00
 
 LOGIC                   = $4B00
 WSET                    = $4B18         ; [4-bytes]
 PBDATA                  = $4B1C
 PBDX                    = $7A40
+
 WMOD3                   = $87D6
 WMOD2                   = $8BBC         ; [word]
 WMOD4                   = $8CDA
@@ -49,9 +79,12 @@ SLEEPERS                = $AB00
 
 PBTBLO                  = $B400
 PBTBHI                  = $B4C0
+
 VECTLO                  = $B580
 VECTHI                  = $B600
+
 RUNCHN                  = $B680
+
 TIME                    = $B700
 
 
@@ -466,9 +499,9 @@ _1              iny
 ; make HI/LO tables for Atari
 ; HIRES display
 
-                lda #<HIRES1
+                lda #<HIRES
                 sta TEMP
-                ldx #>HIRES1
+                ldx #>HIRES
                 stx TEMP+1
 
                 ldy #$00
@@ -591,7 +624,7 @@ _next8          dey
                 lda PBDX,Y
                 beq _next8
 
-                sty LASTY_
+                sty LAST_Y_
 
 ; init scores
 
@@ -1173,7 +1206,7 @@ _next2          lda (LBASE),Y
                 jmp _4
 
 _3              lda Y2_
-                cmp LASTY_
+                cmp LAST_Y_
                 beq _5
 
 _4              lda #$FF
@@ -1236,7 +1269,7 @@ _setAddr2       jsr $FFFF               ; [smc]
                 bmi _13
 
                 lda Y2_
-                cmp LASTY_
+                cmp LAST_Y_
                 beq _11
 
                 lda #$FF

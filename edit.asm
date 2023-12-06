@@ -23,6 +23,56 @@ LIBOBJ          = 3
 
 
 ;--------------------------------------
+; Zero-page equates (local)
+;--------------------------------------
+
+CX_                     = $00A4
+EDITMODE                = $00A5
+OBJ2                    = $00A6
+
+LFTSTOP                 = $00AC
+RTSTOP                  = $00AD
+TOPSTOP                 = $00AE
+BTMSTOP                 = $00AF
+
+MINPT                   = $00AC
+MINDIST                 = $00AD
+MINPOLY                 = $00AE
+
+DELX                    = $00B0
+DELY                    = $00B1
+DRAGX                   = $00B2
+DRAGY                   = $00B3
+
+VERTA                   = $00D4
+VERTB                   = $00D7
+
+D8A                     = $00D5
+M8A                     = $00D6
+D8B                     = $00DA
+M8B                     = $00DB
+
+BYTE2                   = $00DC
+
+COLBW                   = $00F0
+MCOLOR                  = $00F2
+
+GRIDON                  = $00F1
+
+SLB                     = $00F0
+SLOLD                   = $00F2
+SLNEW                   = $00F3
+
+XDIR                    = $00F3
+YDIR                    = $00F4
+
+VR                      = $00F5
+VRY                     = $00F5
+VRXD8                   = $00F6
+VRXM8                   = $00F7
+
+
+;--------------------------------------
 ; Code equates
 ;--------------------------------------
 
@@ -34,7 +84,6 @@ OBJDX                   = $4B1D
 PBDX                    = $7A40
 
 PLAYSTART               = $9355
-
 GETINFO                 = $9985
 
 
@@ -44,9 +93,9 @@ GETINFO                 = $9985
 ;--------------------------------------
 
 ;--------------------------------------
-;
+; editor initialization
 ;--------------------------------------
-START           jsr INIT
+EDITOR          jsr INIT
 
                 stz CURSORY
                 stz CURSORXDIV8
@@ -54,7 +103,14 @@ START           jsr INIT
                 stz SCANMODE
 
                 jsr DRAWDISPLAY
-                jsr SAVELOGO
+
+                ;[fall-through]
+
+
+;--------------------------------------
+; skip initialization
+;--------------------------------------
+EDITOR_RUN      jsr SAVELOGO
 
 
 ;--------------------------------------
@@ -307,7 +363,7 @@ _ENTRY2         jmp XDRAWC
 ;======================================
 DRAWLOGO        lda #<LOGO
                 ldx #>LOGO
-                jmp DRAWB
+                jmp DRAWBITS
 
 
 ;======================================
@@ -318,7 +374,7 @@ SAVELOGO        ldy #$01
 
                 lda #<LOGO
                 ldx #>LOGO
-                jmp DRAWB
+                jmp DRAWBITS
 
 ;-------------------------------------
 
@@ -2262,6 +2318,7 @@ DOROW           ldy VERTA
                 sta BASE1+1
 
                 ldy VERTB
+
                 ldx #$00
                 bit COLBW
                 bpl _next3
