@@ -14,12 +14,6 @@ mkdir -p obj/
 64tass  --m65xx \
         --atari-xex \
         --nostart \
-        -o obj/empty24.bin \
-        data/empty24.inc
-
-64tass  --m65xx \
-        --atari-xex \
-        --nostart \
         -o obj/empty53.bin \
         data/empty53.inc
 
@@ -157,7 +151,7 @@ mkdir -p obj/
 
 cat     obj/atr_header.bin \
         obj/boot2.bin \
-                        obj/empty24.bin \
+        data/DOS1pb.SYS \
         obj/GPAK.bin \
         obj/cdraw.bin \
         obj/TITLE.bin \
