@@ -18,50 +18,6 @@
 
 
 ;--------------------------------------
-; System equates
-;--------------------------------------
-
-; ICCOM           = $02
-; ICBAL           = $04
-; ICBAH           = $05
-; ICBLL           = $08
-; ICBLH           = $09
-; ICAX1           = $0A
-
-; SHFLOC          = $02BE
-; RUNAD           = $02E0
-; CH_             = $02FC
-
-; IOCB0           = $0340
-
-; CIOV            = $E456
-
-
-;--------------------------------------
-; Zero-page equates
-;--------------------------------------
-
-;LASTITEM                = $008C         ; [word]
-;OBJ                     = $008E         ; [word]
-;SCANMODE                = $009B
-;MIDBTM                  = $009E         ; [word]
-;CHARINDX                = $00A3
-;CHARASCII               = $00A4
-;CHCODE                  = $00A5
-;BOXCURSORON             = $00A6
-;DTIMER1                 = $00A7
-;DTIMER2                 = $00A8
-;DISKCMD                 = $00A9
-;SAVETYPE                = $00AA
-;BSPARM                  = $00AB         ; [4-bytes]
-;STACKTEMP               = $00AF
-;TEMP                    = $00C7
-;XTEMP                   = $00C8
-;BASE1                   = $00D0         ; [word]
-;BASE2                   = $00D2         ; [word]
-
-
-;--------------------------------------
 ; Code equates
 ;--------------------------------------
 
