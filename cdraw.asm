@@ -15,76 +15,6 @@
 
 
 ;--------------------------------------
-; System equates
-;--------------------------------------
-
-; CMCMD           = $0007
-; RTCLOK          = $0012
-; ATRACT          = $004D
-
-; TRIG0           = $D010
-; TRIG1           = $D011
-; CONSOL          = $D01F
-
-; PORTA           = $D300
-
-
-;--------------------------------------
-; Zero-page equates
-;--------------------------------------
-
-; STKX                    = $0000         ; [word]
-; STKY                    = $0002         ; [word]
-; STKSPEED                = $0003
-; STKTIMER                = $0004
-; NMICONT                 = $0005
-; ITEMP                   = $0007
-
-; CURSOR                  = $0080         ; [word]
-; CURSORY                 = $0082
-; CURSORXDIV8             = $0083
-; CURSORXMOD8             = $0084
-; CURSORHEIGHT            = $0085
-; CURSORWIDTH             = $0086
-; NEWCURSORXDIV8          = $0087
-; NEWCURSORXMOD8          = $0088
-; NEWCURSORY              = $0089
-
-; NEWITEM                 = $008A         ; [word]
-; LASTITEM                = $008C         ; [word]
-
-; PARAM                   = $00C0
-; TEMP                    = $00C7
-; YTEMP                   = $00C9
-
-; SBEGIN                  = $00D0         ; [word]
-; SEND                    = $00D2         ; [word]
-; DBEGIN                  = $00D4
-; DEND                    = $00D4
-; EXTRA                   = $00D6
-
-; BASE1                   = $00D0         ; [word]
-; BASE2                   = $00D2         ; [word]
-; TEMPRECT                = $00D2
-; TEMPBITS                = $00D4
-; TOP                     = $00D4
-; LFTDIV8                 = $00D5
-; VERT                    = $00D6
-; LFTMOD8                 = $00D6
-; HDIV8                   = $00D7
-; LEFTEDGE                = $00D7
-; HMOD8                   = $00D8
-; LEFTMASK                = $00D8
-; WIDTH                   = $00D9
-; BOTTOM                  = $00D9
-; HEIGHT                  = $00DA
-; RTDIV8                  = $00DA
-; RTMOD8                  = $00DB
-; TBASE                   = $00DB         ; [word]
-; RIGHTMASK               = $00DD
-
-
-;--------------------------------------
 ; Code equates
 ;--------------------------------------
 
@@ -852,7 +782,7 @@ _XIT            rts
 ;======================================
 INIT            lda #>HIRES
                 sta BASE1+1
-                ldy #$00
+                ldy #<HIRES
                 sty BASE1
 
 _next1          tya                     ; A=0
