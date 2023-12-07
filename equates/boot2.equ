@@ -11,4 +11,4 @@
 ; Code equates
 ;--------------------------------------
 
-GetSectors              = $06A0
+GetSectors              = $069E

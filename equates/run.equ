@@ -11,65 +11,65 @@
 ; Code equates
 ;--------------------------------------
 
-DRAWBALL                = $8766
-INITBALL                = $8790
+DRAWBALL                = $8764
+INITBALL                = $8753
 
-ADVANCE                 = $8BDE
+ADVANCE                 = $8BD6
 
-POLY                    = $94CA
-LAUNCHER                = $94D5
-LEFTFLIPPER             = $94F0
-RIGHTFLIPPER            = $950B
-BALL                    = $9526
+POLY                    = $94B6
+LAUNCHER                = $94C1
+LEFTFLIPPER             = $94DC
+RIGHTFLIPPER            = $94F7
+BALL                    = $9512
 
-BMP1                    = $9541
-BMP2                    = $9564
-BMP3                    = $9587
-BMP4                    = $95A2
-BMP5                    = $95BD
-BMP6                    = $95D8
+BMP1                    = $952D
+BMP2                    = $9550
+BMP3                    = $9573
+BMP4                    = $958E
+BMP5                    = $95A9
+BMP6                    = $95C4
 
-LKICK                   = $95F3
-RKICK                   = $9610
-KICK1                   = $962D
-KICK2                   = $9648
+LKICK                   = $95DF
+RKICK                   = $95FC
+KICK1                   = $9619
+KICK2                   = $9634
 
-ROLL1                   = $9663
-ROLL2                   = $967E
-ROLL3                   = $9699
+ROLL1                   = $964F
+ROLL2                   = $966A
+ROLL3                   = $9685
 
-TARG1                   = $96B4
-TARG2                   = $96CF
-TARG3                   = $96EA
-TARG4                   = $9705
-TARG5                   = $9720
-TARG6                   = $973B
+TARG1                   = $96A0
+TARG2                   = $96BB
+TARG3                   = $96D6
+TARG4                   = $96F1
+TARG5                   = $970C
+TARG6                   = $9727
 
-LFLIPPER2               = $9756
-LFLIP2                  = $9756
-RFLIPPER2               = $9771
-RFLIP2                  = $9771
+LFLIPPER2               = $9742
+LFLIP2                  = $9742
+RFLIPPER2               = $975D
+RFLIP2                  = $975D
 
-POLY1                   = $978C
-POLY2                   = $9797
-POLY3                   = $97A2
-POLY4                   = $97AD
+POLY1                   = $9778
+POLY2                   = $9783
+POLY3                   = $978E
+POLY4                   = $9799
 
-LANE1                   = $97B8
-LANE2                   = $97D3
-LANE3                   = $97EE
+LANE1                   = $97A4
+LANE2                   = $97BF
+LANE3                   = $97DA
 
-GATE1                   = $9809
-GATE2                   = $9824
-GATE3                   = $983F
-GATE4                   = $985A
+GATE1                   = $97F5
+GATE2                   = $9810
+GATE3                   = $982B
+GATE4                   = $9846
 
-DROP1                   = $9875
-DROP2                   = $9891
-CATCH1                  = $98AD
-CATCH2                  = $98CA
+DROP1                   = $9861
+DROP2                   = $987D
+CATCH1                  = $9899
+CATCH2                  = $98B6
 
-SPIN1                   = $98E5
-SPIN                    = $98E5
-MGNT1                   = $9900
-MGNT                    = $9900
+SPIN1                   = $98D1
+SPIN                    = $98D1
+MGNT1                   = $98EC
+MGNT                    = $98EC

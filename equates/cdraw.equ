@@ -59,20 +59,20 @@ CRSRINRECT              = $2739
 CINR                    = $2739
 
 DOMENU                  = $274C
-SELECT                  = $27A0
+SELECT                  = $279E
 
-INIT                    = $27E0
+INIT                    = $27DE
 
-MOVEUP                  = $2815
-MOVEDOWN                = $2850
+MOVEUP                  = $2813
+MOVEDOWN                = $284E
 
-ADDIYX                  = $2889
-ADDYX                   = $2897
-SUBIYX                  = $28A7
-SUBYX                   = $28B9
+ADDIYX                  = $2887
+ADDYX                   = $2895
+SUBIYX                  = $28A5
+SUBYX                   = $28B7
 
-CHARTO                  = $28D8
-PRCHAR                  = $28E2
-PRINT_                  = $291A
+CHARTO                  = $28D6
+PRCHAR                  = $28E0
+PRINT_                  = $2918
 
-VBLCURSOR               = $2A5B
+VBLCURSOR               = $2A59

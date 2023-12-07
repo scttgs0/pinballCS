@@ -11,6 +11,6 @@
 ; Code equates
 ;--------------------------------------
 
-GOATARI                 = $4B45
+GOATARI                 = $9958
 
-PATCH                   = $99B5
+PATCH                   = $999D
