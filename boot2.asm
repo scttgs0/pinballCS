@@ -39,8 +39,8 @@ EDITOR                  = $A000
 ; Disk Initialization
 ;--------------------------------------
 ;--------------------------------------
-DISK_INIT       jsr GOATARI
-                jsr INIT_ATARI
+DISK_INIT       jsr GoAtari
+                jsr InitAtari
 
                 stz DAUX2
                 stz DBUFLO

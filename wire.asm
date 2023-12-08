@@ -77,13 +77,13 @@ LOGIC                   = $4B00
 ;======================================
 START           lda #$80
                 sta CUROBJ
-                sta SCANMODE
+                sta scanMode
 
                 jsr DRAWPOLYS
 
-                stz CURSORY
-                stz CURSORXDIV8
-                stz CURSORXMOD8
+                stz cursorY
+                stz cursorX_Div8
+                stz cursorX_Mod8
 
                 stz EDITMODE
                 stz SLCTMODE
@@ -92,35 +92,35 @@ START           lda #$80
                 jsr INITSOUND
 
                 ldy #$02
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<HAND
                 ldx #>HAND
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 lda #<PLIER
                 ldx #>PLIER
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 lda #<SCREWDRIVER
                 ldx #>SCREWDRIVER
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 ldy #$38
                 ldx #$21
                 lda #$06
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<QUITMSG
                 ldx #>QUITMSG
-                jsr PRINT_
+                jsr Print_
 
                 lda #$01
 _next1          sta ANDGATE+2
 
                 lda #<ANDGATE
                 ldx #>ANDGATE
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 lda ANDGATE+2
                 clc
@@ -135,15 +135,15 @@ _next2          sta NOTE+2
 
                 lda #<NOTE
                 ldx #>NOTE
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 ldy NOTE+2
                 ldx #$16
                 lda #$01
-                jsr CHARTO
+                jsr CharTo
 
                 lda XTEMP
-                jsr PRCHAR
+                jsr PrintChar
 
                 inc XTEMP
 
@@ -155,25 +155,25 @@ _next2          sta NOTE+2
 
                 lda #<HAND
                 ldx #>HAND
-                jsr INITCRSR
+                jsr InitCursor
 
 _main           inc ETIMER
 
                 jsr SOUND
-                jsr UPDATECRSR
-                jsr GETBUTNS
+                jsr UpdateCursor
+                jsr GetButtons
                 bpl _main
 
                 lda #<TOOLB
                 ldx #>TOOLB
-                jsr CRSRINRECT
+                jsr CursorInRectangle
                 bcc _1
 
-                stz LASTITEM+1
+                stz lastItem+1
 
                 lda #<CMDMENU
                 ldx #>CMDMENU
-                jsr DOMENU
+                jsr DoMenu
                 jmp _main
 
 _1              jsr MODE0
@@ -198,23 +198,23 @@ _XIT            jmp ADDWIRE
 ;
 ;======================================
 DRAWPOLYS       ldy #$00
-                jsr GETOBJ
+                jsr GetObj
 
-_next1          lda OBJID
+_next1          lda objID
                 cmp #$02                ; BPOLYGON
                 beq _1
 
                 cmp #$01                ; POLYGON
                 bne _2
 
-_1              jsr DRAWOBJ
+_1              jsr DrawObj
 
-_2              inc NEXTOBJ
-                ldy NEXTOBJ
-                jsr GETNEXTOBJ
+_2              inc objNext
+                ldy objNext
+                jsr GetObjNext
 
-                ldy NEXTOBJ
-                cpy OBJCOUNT
+                ldy objNext
+                cpy objCount
                 bne _next1
 
                 rts
@@ -223,7 +223,7 @@ _2              inc NEXTOBJ
 ;--------------------------------------
 ;
 ;--------------------------------------
-INITHAND        jsr XDRAWCRSR
+INITHAND        jsr XDrawCursor
 
                 lda #<HAND
                 ldx #>HAND
@@ -237,13 +237,13 @@ INITHAND        jsr XDRAWCRSR
 ;--------------------------------------
 SETEDMODE       sty EDITMODE
 
-                jmp INITCRSR
+                jmp InitCursor
 
 
 ;--------------------------------------
 ;
 ;--------------------------------------
-INITPLIER       jsr XDRAWCRSR
+INITPLIER       jsr XDrawCursor
 
                 lda #<PLIER
                 ldx #>PLIER
@@ -254,7 +254,7 @@ INITPLIER       jsr XDRAWCRSR
 ;--------------------------------------
 ;
 ;--------------------------------------
-INITDRIVER      jsr XDRAWCRSR
+INITDRIVER      jsr XDrawCursor
 
                 lda #<SCREWDRIVER
                 ldx #>SCREWDRIVER
@@ -287,7 +287,7 @@ _2              jsr DRAWPOLYS
 ;--------------------------------------
 SELECTOBJ       lda #<TABLEB
                 ldx #>TABLEB
-                jsr CRSRINRECT
+                jsr CursorInRectangle
                 bcc SOBJ2
 
                 lda #$01
@@ -300,7 +300,7 @@ SELECTOBJ       lda #<TABLEB
                 jsr DISPLAYPOLY
                 jsr DOSOUND
 
-_wait1          jsr GETBUTNS
+_wait1          jsr GetButtons
                 bmi _wait1
 
                 rts
@@ -336,7 +336,7 @@ _soundCode      .byte $00,$04,$0C,$14
 ;--------------------------------------
 SOBJ2           lda #<ANDB
                 ldx #>ANDB
-                jsr CRSRINRECT
+                jsr CursorInRectangle
                 bcc _1
 
                 lda #$02
@@ -348,24 +348,24 @@ SOBJ2           lda #<ANDB
                 jsr DISPLAYAND
                 jsr DOSOUND
 
-_wait1          jsr GETBUTNS
+_wait1          jsr GetButtons
                 bmi _wait1
 
                 rts
 
 _1              lda #<NOTEB
                 ldx #>NOTEB
-                jsr CRSRINRECT
+                jsr CursorInRectangle
                 bcc SOBJ4
 
                 lda CURNOISE
                 jsr HLNOISE
 
-                stz LASTITEM+1
+                stz lastItem+1
 
                 lda #<NOTEMENU
                 ldx #>NOTEMENU
-                jsr DOMENU
+                jsr DoMenu
                 beq _2
 
                 jsr DOSOUND
@@ -422,7 +422,7 @@ SOBJ4           lda SLCTMODE
 
                 lda #<BMULTBOX
                 ldx #>BMULTBOX
-                jsr CRSRINRECT
+                jsr CursorInRectangle
                 bcc SOBJ5
 
                 lda BMULT
@@ -430,18 +430,18 @@ SOBJ4           lda SLCTMODE
 
                 lda #<BMULTBOX
                 ldx #>BMULTBOX
-                jsr DRAWRECT
+                jsr Drawrectangle
 
-_1              stz LASTITEM+1
+_1              stz lastItem+1
 
                 lda #<BMULTMENU
                 ldx #>BMULTMENU
-                jsr DOMENU
+                jsr DoMenu
                 beq _2
 
                 lda #<BMULTBOX
                 ldx #>BMULTBOX
-                jsr DRAWRECT
+                jsr Drawrectangle
 
                 jmp FIXOBJ
 
@@ -506,17 +506,17 @@ SCOREMENU       .word SCBOX1
 ;--------------------------------------
 SOBJ5           lda #<SCOREB
                 ldx #>SCOREB
-                jsr CRSRINRECT
+                jsr CursorInRectangle
                 bcc SOBJ6
 
                 lda CURSCORE
                 jsr HLSCORE
 
-                stz LASTITEM+1
+                stz lastItem+1
 
                 lda #<SCOREMENU
                 ldx #>SCOREMENU
-                jsr DOMENU
+                jsr DoMenu
                 beq _1
 
                 lda CUROBJ
@@ -610,7 +610,7 @@ _2              iny
                 ldy #$0C
                 jsr DRAWWIRE
 
-_wait1          jsr GETBUTNS
+_wait1          jsr GetButtons
                 bmi _wait1
 
 _XIT            rts
@@ -763,20 +763,20 @@ _XIT            jmp BNMENU
 ;======================================
 ;
 ;======================================
-SELECTLIB       jsr SELECTPOLY
+SELECTLIB       jsr SelectPolygon
                 bcc _1
 
                 tay
-                jsr GETOBJ
+                jsr GetObj
 
-                lda OBJID
+                lda objID
                 cmp #$03
                 beq _2
 
 _1              ldy #$00
                 beq _XIT
 
-_2              ldy NEXTOBJ
+_2              ldy objNext
 _XIT            rts
 
 
@@ -784,7 +784,7 @@ _XIT            rts
 ;
 ;======================================
 SELECTAND       ldy #$06
-                lda CURSORY
+                lda cursorY
 _next1          cmp TIMES15-1,Y
                 bcs SELECTLIB._XIT
 
@@ -821,7 +821,7 @@ DISPLAYPOLY     lda CUROBJ
                 sta CURNOISE
 
                 jsr HLNOISE
-                jsr GETBOUNDS
+                jsr GetBounds
 
                 lda PARAM
                 sta POLYB
@@ -853,7 +853,7 @@ DISPLAYPOLY     lda CUROBJ
 
                 lda #<POLYB
                 ldx #>POLYB
-                jsr DRAWRECT
+                jsr Drawrectangle
 
 _XIT            rts
 
@@ -906,7 +906,7 @@ _3              inc WIRE
 
                 lda #<BMULTBOX
                 ldx #>BMULTBOX
-                jsr DRAWRECT
+                jsr Drawrectangle
 
 _4              lda TEMP
                 lsr
@@ -924,7 +924,7 @@ _4              lda TEMP
 
                 lda #<ANDBOX
                 ldx #>ANDBOX
-                jmp DRAWRECT
+                jmp Drawrectangle
 
 
 ;======================================
@@ -938,7 +938,7 @@ HLSCORE         beq _XIT
 
                 lda #<SCBOX
                 ldx #>SCBOX
-                jmp DRAWRECT
+                jmp Drawrectangle
 
 _XIT            rts
 
@@ -961,7 +961,7 @@ HLNOISE         beq HLSCORE._XIT
 
                 lda #<NBOX
                 ldx #>NBOX
-                jmp DRAWRECT
+                jmp Drawrectangle
 
 ;--------------------------------------
 
@@ -975,8 +975,8 @@ NVERT           .byte $5C,$6A,$78,$86
 DRAWWIRE        sty CONTACTY
                 tay
 
-                jsr GETOBJ
-                jsr GETBOUNDS
+                jsr GetObj
+                jsr GetBounds
 
                 lda PARAM+3
                 sta X1_
@@ -1016,10 +1016,10 @@ DRAWWIRE        sty CONTACTY
 
                 lda #<POLYB
                 ldx #>POLYB
-                jsr GETRECT
+                jsr GetRectangle
 
                 ldx Y1_
-                jsr HLINE
+                jsr HorzLine
 
                 ldx MIDX
                 lda DIV8,X
@@ -1040,14 +1040,14 @@ DRAWWIRE        sty CONTACTY
 
                 lda #<POLYB
                 ldx #>POLYB
-                jsr GETRECT
+                jsr GetRectangle
 
                 ldx Y2_
-                jsr HLINE
+                jsr HorzLine
 
                 lda #<POLYB
                 ldx #>POLYB
-                jsr GETRECT
+                jsr GetRectangle
 
                 ldx Y1_
                 ldy Y2_
@@ -1064,21 +1064,21 @@ _1              inx
 
                 ldy LFTDIV8
                 ldx LFTMOD8
-                jmp VLINE
+                jmp VertLine
 
 
 ;======================================
 ; clear scoreboard
 ;======================================
 CLEARSB         ldy #$03
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<SCOREB
                 ldx #>SCOREB
-                jsr DRAWRECT
+                jsr Drawrectangle
 
                 ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 
 ;--------------------------------------
@@ -1096,7 +1096,7 @@ _next1          sty XTEMP
 
                 lda TXTLO,Y
                 ldx TXTHI,Y
-                jsr PRINT_
+                jsr Print_
 
                 lda CHAR+2
                 clc
@@ -1125,7 +1125,7 @@ _next1          sty XTEMP
 
                 lda TXTLO+16,Y
                 ldx TXTHI+16,Y
-                jsr PRINT_
+                jsr Print_
 
                 lda CHAR+2
                 clc
@@ -1145,7 +1145,7 @@ _next1          sty XTEMP
 
                 lda #<BONUSX
                 ldx #>BONUSX
-                jmp PRINT_
+                jmp Print_
 
 
 ;--------------------------------------

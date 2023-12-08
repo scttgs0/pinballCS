@@ -31,7 +31,7 @@
 ;======================================
 ;
 ;======================================
-GOATARI         lda #<dlistMain
+GoAtari         lda #<dlistMain
                 sta SDLSTL
                 sta DLISTL
                 lda #>dlistMain

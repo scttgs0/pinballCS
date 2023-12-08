@@ -58,12 +58,12 @@ GETBITS         sta TEMPBITS
                 ldy #$00
                 lda (TEMPBITS),Y
                 sta BASE2
-                sta XOFFDRAW._setAddr1+1    ; BITMAP
+                sta XOffDraw._setAddr1+1    ; BITMAP
 
                 iny
                 lda (TEMPBITS),Y
                 sta BASE2+1
-                sta XOFFDRAW._setAddr1+2    ; BITMAP+1
+                sta XOffDraw._setAddr1+2    ; BITMAP+1
 
                 iny
                 lda (TEMPBITS),Y
@@ -99,7 +99,7 @@ _next1          lda (BASE2),Y
 
                 dey
                 bpl _next1
-                bmi DRAWBITS._ENTRY2    ; [unc]
+                bmi DrawBits._ENTRY2    ; [unc]
 
 
 ;--------------------------------------
@@ -111,7 +111,7 @@ _next1          lda (BASE1),Y
 
                 dey
                 bpl _next1
-                bmi DRAWBITS._ENTRY2    ; [unc]
+                bmi DrawBits._ENTRY2    ; [unc]
 
 
 ;--------------------------------------
@@ -127,21 +127,21 @@ _next1          lda (BASE2),Y
 
                 dey
                 bpl _next1
-                bmi DRAWBITS._ENTRY2    ; [unc]
+                bmi DrawBits._ENTRY2    ; [unc]
 
 
 ;======================================
 ; SET GRAPHICS MODE
 ;======================================
-SETMODE         lda PTBL1,Y                 ; Y=pen mode
-                sta DRAWBITS._pmpatch1+1    ; make all patches
+SetMode         lda PTBL1,Y                 ; Y=pen mode
+                sta DrawBits._pmpatch1+1    ; make all patches
 
                 lda PTBL2,Y
-                sta HLINE._pmpatch2+1
+                sta HorzLine._pmpatch2+1
 
                 lda PTBL3,Y
-                sta HLINE._pmpatch3+1
-                sta VLINE._pmpatch4+1
+                sta HorzLine._pmpatch3+1
+                sta VertLine._pmpatch4+1
 
                 rts
 
@@ -167,7 +167,7 @@ PTBL3           .byte <STORE3
 ;======================================
 ;
 ;======================================
-DRAWBITS        jsr GETBITS
+DrawBits        jsr GETBITS
 
 _ENTRY1         ldy VERT                ; get base address
                 cpy #$C0
@@ -225,10 +225,10 @@ SOADDR          .byte >SHFOUT
 ;======================================
 ;
 ;======================================
-XOFFDRAW        jsr GETBITS
+XOffDraw        jsr GETBITS
 
                 ldy HMOD8               ; byte aligned?
-                beq DRAWBITS._ENTRY1    ;   yes, special case
+                beq DrawBits._ENTRY1    ;   yes, special case
 
                 lda SRADDR-1,Y          ; poke in shift result,
                 sta _setAddr3+2         ; shift out table addresses
@@ -237,7 +237,7 @@ XOFFDRAW        jsr GETBITS
 
 _next1          ldy VERT                ; get base
                 cpy #$C0
-                bcs DRAWBITS._XIT
+                bcs DrawBits._XIT
 
                 lda LO_,Y
                 sec
@@ -265,7 +265,7 @@ _setAddr3       lda SHFRSLT,X           ; [smc] hi-byte modified
                 sta (BASE1),Y
 
                 dec HEIGHT
-                beq DRAWBITS._XIT
+                beq DrawBits._XIT
 
                 lda _setAddr1+1         ; BITMAP
                 sec
@@ -283,7 +283,7 @@ _setAddr3       lda SHFRSLT,X           ; [smc] hi-byte modified
 ;======================================
 ; RECTANGLE ROUTINES
 ;======================================
-GETRECT         sta TEMPRECT
+GetRectangle    sta TEMPRECT
                 stx TEMPRECT+1
 
                 ldy #$00
@@ -346,7 +346,7 @@ EDGES           .byte $80,$40,$20,$10
 ;======================================
 ; HORIZONTAL LINE DRAWING
 ;======================================
-HLINE           lda LO_,X               ; X=scan line
+HorzLine        lda LO_,X               ; X=scan line
                 sta BASE1
                 lda HI_,X
                 sta BASE1+1
@@ -371,7 +371,7 @@ _XIT            jmp STORE3              ; [smc]
 ;======================================
 ; VERTICAL LINE  DRAWING
 ;======================================
-VLINE           lda EDGES,X             ; Y=DIV8, X=MOD8
+VertLine        lda EDGES,X             ; Y=DIV8, X=MOD8
                 sta LEFTEDGE
 
                 ldx TOP
@@ -404,7 +404,7 @@ XOR2            eor (BASE1),Y
                 iny
                 cpy RTDIV8
                 bcc XOR2A
-                bcs HLINE._ENTRY1       ; [unc]
+                bcs HorzLine._ENTRY1    ; [unc]
 
 
 ;--------------------------------------
@@ -418,7 +418,7 @@ CLR2            eor #$FF
                 iny
                 cpy RTDIV8
                 bcc CLR2A
-                bcs HLINE._ENTRY1       ; [unc]
+                bcs HorzLine._ENTRY1    ; [unc]
 
 
 ;--------------------------------------
@@ -431,7 +431,7 @@ OR2             ora (BASE1),Y
                 iny
                 cpy RTDIV8
                 bcc OR2A
-                bcs HLINE._ENTRY1       ; [unc]
+                bcs HorzLine._ENTRY1    ; [unc]
 
 
 ;======================================
@@ -468,16 +468,16 @@ OR3             ora (BASE1),Y
 ;======================================
 ; FRAME A RECTANGLE
 ;======================================
-FRAMERECT       jsr GETRECT
+FrameRectangle  jsr GetRectangle
 
 _ENTRY1         ldx TOP
-                jsr HLINE
+                jsr HorzLine
 
                 ldx BOTTOM
                 cpx TOP
                 beq _XIT
 
-                jsr HLINE
+                jsr HorzLine
 
                 inc TOP
                 dec BOTTOM
@@ -487,11 +487,11 @@ _ENTRY1         ldx TOP
 
                 ldy LFTDIV8
                 ldx LFTMOD8
-                jsr VLINE
+                jsr VertLine
 
                 ldy RTDIV8
                 ldx RTMOD8
-                jmp VLINE
+                jmp VertLine
 
 _XIT            rts
 
@@ -499,10 +499,10 @@ _XIT            rts
 ;======================================
 ; DRAW A RECTANGULAR AREA
 ;======================================
-DRAWRECT        jsr GETRECT
+Drawrectangle   jsr GetRectangle
 
 _ENTRY1         ldx TOP
-_next1          jsr HLINE
+_next1          jsr HorzLine
 
                 inx
                 cpx BOTTOM
@@ -515,7 +515,7 @@ _next1          jsr HLINE
 ;--------------------------------------
 ; RECTANGLE HIT TEST
 ;--------------------------------------
-INRECT          jsr GETRECT
+InRectangle     jsr GetRectangle
 
                 ldx PARAM+3
                 lda PARAM+4
@@ -552,7 +552,7 @@ _XIT            sec                     ; cursor within rectangle
 ;======================================
 ; USER INTERFACE AND MISC STUFF
 ;======================================
-GETBUTNS        lda TRIG0
+GetButtons      lda TRIG0
                 and TRIG1
                 eor #$FF
                 ror
@@ -564,7 +564,7 @@ GETBUTNS        lda TRIG0
 ;======================================
 ;
 ;======================================
-INITCRSR        jsr GETBITS
+InitCursor      jsr GETBITS
 
                 lda BASE2
                 sta CURSOR
@@ -582,39 +582,39 @@ INITCRSR        jsr GETBITS
 ;======================================
 ; SPECIAL CASE CURSOR DRAWING
 ;======================================
-XDRAWCRSR       lda #<CURSOR
+XDrawCursor     lda #<CURSOR
                 ldx #>CURSOR
-                jmp XOFFDRAW
+                jmp XOffDraw
 
 
 ;======================================
 ;
 ;======================================
-UPDATECRSR      jsr DOCRSRX
+UpdateCursor    jsr DoCursorX
                 stx NEWCURSORXDIV8
                 sta NEWCURSORXMOD8
 
-                jsr DOCRSRY
+                jsr DoCursorY
                 sta NEWCURSORY
 
-                jsr XDRAWCRSR           ; erase old one
+                jsr XDrawCursor         ; erase old one
 
                 lda NEWCURSORXDIV8
-                sta CURSORXDIV8
+                sta cursorX_Div8
                 lda NEWCURSORXMOD8
-                sta CURSORXMOD8
+                sta cursorX_Mod8
 
                 lda NEWCURSORY
-                sta CURSORY
+                sta cursorY
 
-                jmp XDRAWCRSR           ; draw new one
+                jmp XDrawCursor         ; draw new one
 
 
 ;======================================
 ; READ THE PADDLES AND UPDATE THE
 ; CURSOR LOCATION
 ;======================================
-DOCRSRX         ldx RTCLOK+2
+DoCursorX       ldx RTCLOK+2
 _delay1         dex
                 bne _delay1             ; break up beat freq
 
@@ -639,14 +639,14 @@ _1              tax
 ;======================================
 ;
 ;======================================
-GETCURSORX      lda CURSORXDIV8
+GetCursorX      lda cursorX_Div8
                 cmp #$20
                 bcs _XIT1
 
                 asl
                 asl
                 asl
-                adc CURSORXMOD8
+                adc cursorX_Mod8
                 bcc _XIT
 
 _XIT1           lda #$FF
@@ -656,7 +656,7 @@ _XIT            rts
 ;======================================
 ;
 ;======================================
-DOCRSRY         lda STKY
+DoCursorY       lda STKY
                 rts
 
 
@@ -679,48 +679,49 @@ _delay2         sbc #$01
 ;======================================
 ; CURSOR IN RECTANGLE TEST
 ;======================================
-CRSRINRECT      ldy CURSORXDIV8         ; preserve A,X
+CursorInRectangle
+                ldy cursorX_Div8        ; preserve A,X
                 sty PARAM+3
-                ldy CURSORXMOD8
+                ldy cursorX_Mod8
                 sty PARAM+4
 
-                ldy CURSORY
+                ldy cursorY
                 sty PARAM+5
 
                 sta NEWITEM
                 stx NEWITEM+1
-                jmp INRECT
+                jmp InRectangle
 
 
 ;======================================
 ; MENU SELECTION UTILITY
 ;======================================
-DOMENU          sta PARAM
+DoMenu          sta PARAM
                 stx PARAM+1
 
 _next1          ldy #$00
 _next2          lda (PARAM),Y
                 bne _3
 
-                ldx LASTITEM+1          ; end of list
+                ldx lastItem+1          ; end of list
                 beq _1
 
-                lda LASTITEM
-                jsr DRAWRECT            ; PENMODE=XOR
+                lda lastItem
+                jsr Drawrectangle       ; PENMODE=XOR
 
-                stz LASTITEM+1
+                stz lastItem+1
 
-_1              jsr UPDATECRSR
-                jsr GETBUTNS
+_1              jsr UpdateCursor
+                jsr GetButtons
                 bmi _next1
 
-                ldx LASTITEM+1
+                ldx lastItem+1
                 bne _2
 
                 rts
 
-_2              lda LASTITEM
-                jmp DRAWRECT
+_2              lda lastItem
+                jmp Drawrectangle
 
 _3              sty YTEMP               ; get rectangle
                 pha
@@ -730,7 +731,7 @@ _3              sty YTEMP               ; get rectangle
                 tax
 
                 pla
-                jsr CRSRINRECT          ; cursor within it?
+                jsr CursorInRectangle   ; cursor within it?
                 bcc _4                  ;   no
 
                 jsr SELECT
@@ -758,45 +759,45 @@ _4              lda YTEMP               ; next menu item
 ;======================================
 ;
 ;======================================
-SELECT          lda LASTITEM+1          ; no selection?
+SELECT          lda lastItem+1          ; no selection?
                 beq _2                  ;   nope
 
                 cmp NEWITEM+1           ; same as new one?
                 bne _1                  ;   no
 
-                lda LASTITEM
+                lda lastItem
                 cmp NEWITEM
                 beq _3
 
-_1              jsr DRAWRECT._ENTRY1    ;   no, not same, turn new one on
+_1              jsr Drawrectangle._ENTRY1    ;   no, not same, turn new one on
 
-                lda LASTITEM
-                ldx LASTITEM+1
+                lda lastItem
+                ldx lastItem+1
                 ldy NEWITEM
-                sty LASTITEM
+                sty lastItem
                 ldy NEWITEM+1
-                sty LASTITEM+1
+                sty lastItem+1
 
-                jsr DRAWRECT            ; turn old one off
+                jsr Drawrectangle            ; turn old one off
                 jmp _3
 
-_2              jsr DRAWRECT._ENTRY1    ; turn on new one
+_2              jsr Drawrectangle._ENTRY1    ; turn on new one
 
                 lda NEWITEM
-                sta LASTITEM
+                sta lastItem
                 lda NEWITEM+1
-                sta LASTITEM+1
+                sta lastItem+1
 
-_3              jsr UPDATECRSR
+_3              jsr UpdateCursor
 
-                jsr GETBUTNS
+                jsr GetButtons
                 clc
                 bmi _XIT
 
-                lda LASTITEM
-                ldx LASTITEM+1
+                lda lastItem
+                ldx lastItem+1
 
-                jsr DRAWRECT
+                jsr Drawrectangle
 
                 sec
 _XIT            rts
@@ -852,7 +853,7 @@ GETPTRS         pha
 ;======================================
 ;
 ;======================================
-MOVEUP          jsr GETPTRS
+MoveUp          jsr GETPTRS
 
 _next1          dec SEND+1
                 dec DEND+1
@@ -899,7 +900,7 @@ _next3          lda (SEND),Y
 ;======================================
 ;
 ;======================================
-MOVEDOWN        jsr GETPTRS
+MoveDown        jsr GETPTRS
 
 _next1          ldx SBEGIN+1
                 inx
@@ -945,7 +946,7 @@ _next3          lda (SBEGIN),Y
 ;======================================
 ;
 ;======================================
-ADDIYX          clc
+AddiYX          clc
                 adc $0000,Y
                 sta $0000,X
                 lda $0001,Y
@@ -958,7 +959,7 @@ ADDIYX          clc
 ;======================================
 ;
 ;======================================
-ADDYX           lda $0000,X
+AddYX           lda $0000,X
                 clc
                 adc $0000,Y
                 sta $0000,X
@@ -973,7 +974,7 @@ ADDYX           lda $0000,X
 ;======================================
 ;
 ;======================================
-SUBIYX          sta TEMP
+SubtractiYX     sta TEMP
 
                 sec
                 lda $0000,Y
@@ -990,7 +991,7 @@ SUBIYX          sta TEMP
 ;======================================
 ;
 ;======================================
-SUBYX           lda $0000,X
+SubtractYX      lda $0000,X
                 sec
                 sbc $0000,Y
                 sta $0000,X
@@ -1019,7 +1020,7 @@ _XIT            rts
 ;======================================
 ; MINI-FONT STUFF
 ;======================================
-CHARTO          sta CHARBITS+4
+CharTo          sta CHARBITS+4
                 stx CHARBITS+3
                 sty CHARBITS+2
 
@@ -1029,7 +1030,7 @@ CHARTO          sta CHARBITS+4
 ;======================================
 ;
 ;======================================
-PRCHAR          sta TEMP
+PrintChar       sta TEMP
                 cmp #$24
                 beq _1
 
@@ -1048,7 +1049,7 @@ PRCHAR          sta TEMP
 
                 lda #<CHARBITS
                 ldx #>CHARBITS
-                jsr XOFFDRAW
+                jsr XOffDraw
 
 _1              ldy TEMP
                 lda CWIDTH,Y
@@ -1071,7 +1072,7 @@ _2              sta CHARBITS+4
 ;======================================
 ;
 ;======================================
-PRINT_          sta TBASE
+Print_          sta TBASE
                 stx TBASE+1
 
                 ldy #$00
@@ -1079,14 +1080,14 @@ _next1          lda (TBASE),Y
                 bmi _1
 
                 sty YTEMP
-                jsr PRCHAR
+                jsr PrintChar
 
                 ldy YTEMP
                 iny
                 bne _next1
 
 _1              and #$7F
-                jmp PRCHAR
+                jmp PrintChar
 
 
 ;--------------------------------------
@@ -1097,7 +1098,7 @@ _1              and #$7F
 
 ;--------------------------------------
 ;--------------------------------------
-VBLCURSOR       inc STKTIMER
+VBICursor       inc STKTIMER
 
                 lda PORTA               ; PORTA, STICK 0
                 and #$0F
@@ -1111,7 +1112,7 @@ VBLCURSOR       inc STKTIMER
                 and #$01
                 beq _1
 
-                jsr GETBUTNS
+                jsr GetButtons
                 bpl _2
 
 _1              stz RTCLOK+1
@@ -1158,11 +1159,11 @@ CRSRRT          clc
 
                 inx
 _1              cpx #$01
-                bcc VBLCURSOR._ENTRY3
+                bcc VBICursor._ENTRY3
 
                 cmp #$30
-                bcc VBLCURSOR._ENTRY3
-_XIT            bcs VBLCURSOR._XIT      ; [unc]
+                bcc VBICursor._ENTRY3
+_XIT            bcs VBICursor._XIT      ; [unc]
 
 
 ;--------------------------------------
@@ -1171,11 +1172,11 @@ _XIT            bcs VBLCURSOR._XIT      ; [unc]
 CRSRLFT         ror ITEMP
                 sec
                 sbc STKSPEED
-                bcs VBLCURSOR._ENTRY3
+                bcs VBICursor._ENTRY3
 
                 dex
-                bpl VBLCURSOR._ENTRY3
-                bmi VBLCURSOR._XIT      ; [unc]
+                bpl VBICursor._ENTRY3
+                bmi VBICursor._XIT      ; [unc]
 
 
 ;--------------------------------------
@@ -1184,8 +1185,8 @@ CRSRLFT         ror ITEMP
 CRSRDWN         clc
                 adc STKSPEED
                 cmp #$C0
-                bcc VBLCURSOR._ENTRY1
-                bcs VBLCURSOR._ENTRY2   ; [unc]
+                bcc VBICursor._ENTRY1
+                bcs VBICursor._ENTRY2   ; [unc]
 
 
 ;--------------------------------------
@@ -1194,8 +1195,8 @@ CRSRDWN         clc
 CRSRUP          ror ITEMP
                 sec
                 sbc STKSPEED
-                bcs VBLCURSOR._ENTRY1
-                bcc VBLCURSOR._ENTRY2   ; [unc]
+                bcs VBICursor._ENTRY1
+                bcc VBICursor._ENTRY2   ; [unc]
 
 
 ;--------------------------------------

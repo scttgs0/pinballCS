@@ -11,8 +11,8 @@
 ; Code equates
 ;--------------------------------------
 
-SWAPWIRE                = $4A00
-SWAPDISK                = $4A08
-SWAPUSER                = $4A10
+SwapWire                = $4A00
+SwapDisk                = $4A08
+SwapUser                = $4A10
 
-RELOAD                  = $4A14
+Reload                  = $4A14

@@ -80,7 +80,7 @@ PRESTART        tsx
 ;
 ;--------------------------------------
 START           ldy #$02
-                jsr SETMODE
+                jsr SetMode
 
                 lda #$40
                 sta SHFLOC
@@ -97,7 +97,7 @@ _next1          sty XTEMP
                 lda TXTLO,Y
                 ldx TXTHI,Y
 
-                jsr PRINT_
+                jsr Print_
 
                 lda CHAR+2
                 clc
@@ -120,22 +120,22 @@ _2              iny
 
                 lda #<HAND
                 ldx #>HAND
-                jsr INITCRSR
+                jsr InitCursor
 
-_wait1          jsr UPDATECRSR
-                jsr GETBUTNS
+_wait1          jsr UpdateCursor
+                jsr GetButtons
                 bpl _wait1
 
                 lda #<MENUBOX
                 ldx #>MENUBOX
-                jsr CRSRINRECT
+                jsr CursorInRectangle
                 bcc _3
 
-                stz LASTITEM+1
+                stz lastItem+1
 
                 lda #<DISKMENU
                 ldx #>DISKMENU
-                jsr DOMENU
+                jsr DoMenu
 
 _3              jmp _wait1
 
@@ -327,12 +327,12 @@ _6              lda #<BLFMSG
 _7              jsr INIT
 
                 ldy PBDATA
-                jsr GETOBJ
+                jsr GetObj
                 jsr DECOMPRESS
 
-                stz SCANMODE
+                stz scanMode
 
-                jsr DRAWDISPLAY
+                jsr DrawDisplay
 
 
 ;--------------------------------------
@@ -354,9 +354,9 @@ SAVE_           jsr GETNAME
                 sta DISKCMD
 
                 lda #$80
-                sta SCANMODE
+                sta scanMode
 
-                jsr DRAWDISPLAY
+                jsr DrawDisplay
                 jsr COMPRESS
 
                 lda #<PBBASE
@@ -374,9 +374,9 @@ SAVE_           jsr GETNAME
 
                 jsr BSAVE
 
-                stz SCANMODE
+                stz scanMode
 
-                jsr DRAWDISPLAY
+                jsr DrawDisplay
                 jmp RESETUP
 
 
@@ -522,20 +522,20 @@ PRINTERR        pha
                 cmp #$01
                 bne _1
 
-                sta SCANMODE
+                sta scanMode
 
-                jsr DRAWDISPLAY
+                jsr DrawDisplay
 _1              jsr DODIALOG
 
                 ldy #$59
                 ldx #$01
                 lda #$01
-                jsr CHARTO
+                jsr CharTo
 
                 pla
                 tax
                 pla
-                jsr PRINT_
+                jsr Print_
 
                 lda #$FF
                 sta CH_
@@ -591,8 +591,8 @@ MAKE            jsr GETNAME
                 jsr CLEARMENU
 
                 ldy #$BF
-                jsr MAKEHOLE
-                jsr SWAPUSER
+                jsr MakeHole
+                jsr SwapUser
                 jsr INPROMPT1
 
                 lda #<$2480
@@ -600,9 +600,9 @@ MAKE            jsr GETNAME
                 lda #>$2480
                 sta BASE1+1
 
-                lda #<PATCH
+                lda #<patch
                 sta BASE2
-                lda #>PATCH
+                lda #>patch
                 sta BASE2+1
 
                 ldy #$00
@@ -661,7 +661,7 @@ _next1          lda (BASE1),Y
 ;
 ;--------------------------------------
 MAKEOUT         lda STACKTEMP
-                jmp RELOAD
+                jmp Reload
 
 
 ;======================================
@@ -672,11 +672,11 @@ INPROMPT1       jsr DODIALOG
                 ldy #$59
                 ldx #$01
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<INSERTMSG
                 ldx #>INSERTMSG
-                jsr PRINT_
+                jsr Print_
 
 _wait1          lda CH_
                 cmp #$FF
@@ -691,8 +691,8 @@ _wait1          lda CH_
 PLAY            jsr CLEARMENU
 
                 ldy #$BF
-                jsr MAKEHOLE
-                jsr SWAPUSER
+                jsr MakeHole
+                jsr SwapUser
                 jsr PLAYGAME
 
                 jmp MAKEOUT
@@ -701,54 +701,54 @@ PLAY            jsr CLEARMENU
 ;======================================
 ;
 ;======================================
-CLEARMENU       jsr XDRAWCRSR
+CLEARMENU       jsr XDrawCursor
 
                 ldy #$03
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<MENUBOX
                 ldx #>MENUBOX
-                jsr DRAWRECT
+                jsr Drawrectangle
 
                 ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 
 ;======================================
 ;
 ;======================================
 DODIALOG        ldy #$01
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<DIALOGBITS
                 ldx #>DIALOGBITS
-                jsr DRAWBITS
+                jsr DrawBits
 
                 ldy #$03
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<DIALOGBOX
                 ldx #>DIALOGBOX
-                jsr DRAWRECT
+                jsr Drawrectangle
 
                 ldy #$02
-                jsr SETMODE
+                jsr SetMode
 
-                jmp FRAMERECT+3
+                jmp FrameRectangle+3
 
 
 ;======================================
 ;
 ;======================================
 UNDODIALOG      ldy #$00
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<DIALOGBITS
                 ldx #>DIALOGBITS
-                jsr DRAWBITS
+                jsr DrawBits
 
                 ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 
 ;======================================
@@ -775,7 +775,7 @@ GETNAME         jsr CLEARMENU
                 sta BOXCURSORON
                 sta CHARINDX
 
-                jsr CHARTO
+                jsr CharTo
 
 _next1          jsr CHECKCURSOR
 
@@ -905,7 +905,7 @@ _next1          tax
                 sta LINELEN+9,Y
 
                 txa
-                jsr PRCHAR
+                jsr PrintChar
 
                 lda CHAR+3
                 sta BOXCURSOR+3
@@ -947,14 +947,14 @@ _5              dey
                 sta CHARBUF+3,Y
 
                 ldy #$03
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<CLRRECT
                 ldx #>CLRRECT
-                jsr DRAWRECT
+                jsr Drawrectangle
 
                 ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 ;--------------------------------------
 
@@ -988,7 +988,7 @@ CHECKCURSOR     inc DTIMER1
 
 DOCURSOR        lda #<BOXCURSOR
                 ldx #>BOXCURSOR
-                jmp XOFFDRAW
+                jmp XOffDraw
 
 _XIT            rts
 

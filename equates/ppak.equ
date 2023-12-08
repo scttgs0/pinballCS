@@ -11,35 +11,34 @@
 ; Zero-page equates
 ;--------------------------------------
 
-CURSORY                 = $0082
-CURSORXDIV8             = $0083
-CURSORXMOD8             = $0084
+cursorY                 = $0082
+cursorX_Div8            = $0083
+cursorX_Mod8            = $0084
 
-LASTITEM                = $008C         ; [word]
+lastItem                = $008C         ; [word]
 
-OBJID                   = $0096
-NEXTOBJ                 = $0090
-OBJCOUNT                = $0091
+objID                   = $0096
+objNext                 = $0090
+objCount                = $0091
 
 LBASE                   = $0099         ; [word]
 
-SCANMODE                = $009B
+scanMode                = $009B
 
 
 ;--------------------------------------
 ; Code equates
 ;--------------------------------------
 
-DRAWDISPLAY             = $9920
+DrawDisplay             = $9920
 
-GETOBJ                  = $995E
-GETNEXTOBJ              = $996A
-GETNOBJ                 = $996A
-DRAWOBJ                 = $99C3
+GetObj                  = $995E
+GetObjNext              = $996A
+DrawObj                 = $99C3
 
-ALIGNPOLY               = $9E0A
-MAKEHOLE                = $9E9A
-SELECTPOLY              = $9EE4
-POLYPOINTS              = $9F17
-REMOVEPOLY              = $9F4E
-GETBOUNDS               = $9FBC
+AlignPolygon            = $9E0A
+MakeHole                = $9E9A
+SelectPolygon           = $9EE4
+PolygonPoints           = $9F17
+RemovePolygon           = $9F4E
+GetBounds               = $9FBC

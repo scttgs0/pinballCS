@@ -76,30 +76,30 @@ HCNT2           = HCNT+1
 ; MAIN PROGRAM LOCALS, GLOBALS
 
 CURSOR          = $80
-CURSORY         = CURSOR+2
-CURSORXDIV8     = CURSORY+1
-CURSORXMOD8     = CURSORXDIV8+1
-CURSORHEIGHT    = CURSORXMOD8+1
+cursorY         = CURSOR+2
+cursorX_Div8    = cursorY+1
+cursorX_Mod8    = cursorX_Div8+1
+CURSORHEIGHT    = cursorX_Mod8+1
 CURSORWIDTH     = CURSORHEIGHT+1
 NEWCURSORXDIV8  = CURSORWIDTH+1
 NEWCURSORXMOD8  = NEWCURSORXDIV8+1
 NEWCURSORY      = NEWCURSORXMOD8+1
 NEWITEM         = NEWCURSORY+1
-LASTITEM        = NEWITEM+2
+lastItem        = NEWITEM+2
 
 ; OBJECT PROCESSING STUFF
 
-OBJ             = LASTITEM+2
-NEXTOBJ         = OBJ+2
-OBJCOUNT        = NEXTOBJ+1
-PLYPTRX         = OBJCOUNT+1
+OBJ             = lastItem+2
+objNext         = OBJ+2
+objCount        = objNext+1
+PLYPTRX         = objCount+1
 PLYPTRY         = PLYPTRX+2
-OBJID           = PLYPTRY+2
-FILLCOLOR       = OBJID+1
+objID           = PLYPTRY+2
+FILLCOLOR       = objID+1
 VRTXCOUNT       = FILLCOLOR+1
 LBASE           = VRTXCOUNT+1
-SCANMODE        = LBASE+2
-MEMBTM          = SCANMODE+1
+scanMode        = LBASE+2
+MEMBTM          = scanMode+1
 MIDBTM          = MEMBTM+2
 MIDTOP          = MIDBTM+2
 MIDY            = MIDTOP+2
@@ -129,35 +129,35 @@ PBDX            = $7A40
 
 ; EXTERNAL CALLS AND ADDRESSES
 
-LO              = MOD8+$100
-HI              = LO+$C0
-;DRAWBITS        = SETMODE+$25
-;XOFFDRAW        = DRAWBITS+$41
-;MASKS           = XOFFDRAW+$9C
-;HLINE           = MASKS+$11
-;VLINE           = HLINE+$20
-;FRAMERECT       = VLINE+$58
-;DRAWRECT        = FRAMERECT+$28
-;INRECT          = DRAWRECT+$10
-;GETBUTNS        = INRECT+$2D
-;INITCRSR        = GETBUTNS+$B
-;XDRAWCRSR       = INITCRSR+$14
-;UPDATECRSR      = XDRAWCRSR+$7
-;DOCRSRX         = UPDATECRSR+$1E
-;GETCURSORX      = DOCRSRX+$17
-;DOCRSRY         = GETCURSORX+$10
-;WAIT            = DOCRSRY+$3
-;CRSRINRECT      = WAIT+$C
-;DOMENU          = CRSRINRECT+$13
-;SELECT          = DOMENU+$54
-;INIT            = SELECT+$40
-;MOVEUP          = INIT+$35
-;MOVEDOWN        = MOVEUP+$3B
-;ADDIYX          = MOVEDOWN+$39
-;ADDYX           = ADDIYX+$E
-;SUBIYX          = ADDYX+$10
-;SUBYX           = SUBIYX+$12
-;CMPYX           = SUBYX+$10
+LO                  = MOD8+$100
+HI                  = LO+$C0
+;DrawBits           = SetMode+$25
+;XOffDraw           = DrawBits+$41
+;MASKS              = XOffDraw+$9C
+;HorzLine           = MASKS+$11
+;VertLine           = HorzLine+$20
+;FrameRectangle     = VertLine+$58
+;Drawrectangle      = FrameRectangle+$28
+;InRectangle        = Drawrectangle+$10
+;GetButtons         = InRectangle+$2D
+;InitCursor         = GetButtons+$B
+;XDrawCursor        = InitCursor+$14
+;UpdateCursor       = XDrawCursor+$7
+;DoCursorX          = UpdateCursor+$1E
+;GetCursorX         = DoCursorX+$17
+;DoCursorY          = GetCursorX+$10
+;WAIT               = DoCursorY+$3
+;CursorInRectangle  = WAIT+$C
+;DoMenu             = CursorInRectangle+$13
+;SELECT             = DoMenu+$54
+;INIT               = SELECT+$40
+;MoveUp             = INIT+$35
+;MoveDown           = MoveUp+$3B
+;AddiYX             = MoveDown+$39
+;AddYX              = AddiYX+$E
+;SubtractiYX        = AddYX+$10
+;SubtractYX         = SubtractiYX+$12
+;CMPYX              = SubtractYX+$10
 
 
 ;--------------------------------------
@@ -169,10 +169,10 @@ HI              = LO+$C0
 ; POLYGON SCAN CONVERSION,
 ; PINBALL DATA BASE CONSTRUCTION
 ;======================================
-DRAWDISPLAY     ldy PBDATA              ; GET OBJ COUNT
-                sty OBJCOUNT            ; INIT INTERNAL DB
+DrawDisplay     ldy PBDATA              ; GET OBJ COUNT
+                sty objCount            ; INIT INTERNAL DB
 
-                jsr GETOBJ
+                jsr GetObj
 
                 lda OBJ
                 sta MEMBTM
@@ -197,16 +197,16 @@ _next1          sta PBDX-1,Y
                 dey
                 bne _next1
 
-                jsr GETOBJ
-_next2          jsr DRAWOBJ
+                jsr GetObj
+_next2          jsr DrawObj
 
-                inc NEXTOBJ
-                ldy NEXTOBJ
+                inc objNext
+                ldy objNext
 
-                jsr GETNEXTOBJ
+                jsr GetObjNext
 
-                ldy NEXTOBJ
-                cpy OBJCOUNT
+                ldy objNext
+                cpy objCount
                 bne _next2
 
                 rts
@@ -215,12 +215,12 @@ _next2          jsr DRAWOBJ
 ;======================================
 ;
 ;======================================
-GETOBJ          lda #<PBDATA+1
+GetObj          lda #<PBDATA+1
                 sta OBJ
                 lda #>PBDATA+1
                 sta OBJ+1
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldy #0
 
@@ -230,7 +230,7 @@ GETOBJ          lda #<PBDATA+1
 ;======================================
 ;
 ;======================================
-GETNEXTOBJ      lda PBDATA,Y
+GetObjNext      lda PBDATA,Y
                 clc
                 adc OBJ
                 sta OBJ
@@ -238,19 +238,19 @@ GETNEXTOBJ      lda PBDATA,Y
                 adc OBJ+1
                 sta OBJ+1
 
-                cpy NEXTOBJ
+                cpy objNext
                 beq _1
 
                 iny
-                bne GETNEXTOBJ
+                bne GetObjNext
 
-_1              lda SCANMODE
+_1              lda scanMode
                 and #$80
-                sta SCANMODE
+                sta scanMode
 
                 ldy #0
                 lda (OBJ),Y             ; GET OBJECT ID
-                sta OBJID
+                sta objID
 
                 cmp #<POLYGON
                 bne _2
@@ -268,19 +268,19 @@ _next1          iny
                 lda #3
                 ldy #<OBJ
                 ldx #<PLYPTRX
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda VRTXCOUNT
                 ldy #<PLYPTRX
                 ldx #<PLYPTRY
-                jmp ADDIYX
+                jmp AddiYX
 
 _2              cmp #<BPOLYGON
                 bne _3
 
                 lda #$40
-                ora SCANMODE
-                sta SCANMODE
+                ora scanMode
+                sta scanMode
                 bne _next1
 
 _3              jsr _next1
@@ -288,13 +288,13 @@ _3              jsr _next1
                 lda VRTXCOUNT
                 ldy #<PLYPTRY
                 ldx #<LBASE
-                jmp ADDIYX
+                jmp AddiYX
 
 
 ;======================================
 ;
 ;======================================
-DRAWOBJ         lda OBJID
+DrawObj         lda objID
                 cmp #<LIBOBJ+1
                 bcs SCANOUT._XIT
 
@@ -303,7 +303,7 @@ DRAWOBJ         lda OBJID
 
                 lda LBASE
                 ldx LBASE+1
-                jsr XOFFDRAW
+                jsr XOffDraw
 
 _XIT            jmp SCANPOLY
 
@@ -311,22 +311,22 @@ _XIT            jmp SCANPOLY
 ;--------------------------------------
 ;
 ;--------------------------------------
-SCANPOLY        bit SCANMODE
+SCANPOLY        bit scanMode
                 bmi _1
 
                 jsr GETMINY
 
                 iny
-                jsr MAKEHOLE
+                jsr MakeHole
 
-_1              lda OBJID
+_1              lda objID
                 cmp #<LIBOBJ
                 beq _2
 
                 ldy FILLCOLOR
                 bne _2
 
-                jsr POLYPOINTS
+                jsr PolygonPoints
 _2              jsr PROCESSPOLY
 
 ; THE ACTIVE LIST IS EMPTY, SO SKIP TO NEXT START
@@ -518,7 +518,7 @@ _3              lda AXFRACT,X
                 sta (MIDBTM),Y
 
                 iny
-                lda NEXTOBJ
+                lda objNext
                 sta (MIDBTM),Y
 
                 lda ADXCODE,X
@@ -971,7 +971,7 @@ DOSCAN          ldy SCANLINE
                 ldy HCNT
                 beq _2
 
-                bit SCANMODE
+                bit scanMode
                 bvc _next1
 
                 ldx #159
@@ -1005,7 +1005,7 @@ _1              dey
                 lda #0
                 jsr DOBAR
 
-_2              bit SCANMODE
+_2              bit scanMode
                 bmi _XIT
 
                 ldy HCNT
@@ -1051,7 +1051,7 @@ _next2          dey
                 lda HCNT
                 ldy #<MIDBTM
                 ldx #<MIDBTM
-                jsr ADDIYX
+                jsr AddiYX
 
 ; PBDB IS IN NORMAL CONDITION
 
@@ -1082,12 +1082,12 @@ _next3          dey
 
                 ldx #<MIDBTM
                 ldy #<MIDBTM
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda TEMP
                 ldx #<MIDTOP
                 ldy #<MIDTOP
-                jsr ADDIYX
+                jsr AddiYX
 
 _XIT            rts
 
@@ -1164,7 +1164,7 @@ _3              and FILLCOLOR
 ; ALIGN POLY SO FIRST EDGE HAS
 ;  NEGATIVE SLOPE
 ;======================================
-ALIGNPOLY       lda #0
+AlignPolygon    lda #0
                 sta YTEMP
 
 _next1          ldy #0
@@ -1280,7 +1280,7 @@ _1              iny
 ;======================================
 ; PREPARE HOLE IN PB-TABLE
 ;======================================
-MAKEHOLE        jsr GETSCAN
+MakeHole        jsr GETSCAN
 
                 dey                     ; Y>0
                 cpy MIDY
@@ -1290,15 +1290,15 @@ MAKEHOLE        jsr GETSCAN
                 lda #<MIDBTM            ; MOVE CHUNK
                 ldx #<TEMP
                 ldy #<MIDTOP
-                jsr MOVEUP
+                jsr MoveUp
 
                 ldy #<TEMP
                 ldx #<MIDBTM
-                jsr SUBYX               ; MIDBTM = DIFF
+                jsr SubtractYX               ; MIDBTM = DIFF
 
                 ldy #<MIDBTM
                 ldx #<MIDTOP
-                jsr SUBYX
+                jsr SubtractYX
 
                 lda TEMP                ; TEMP -> NEW BTM
                 sta MIDBTM
@@ -1310,15 +1310,15 @@ MAKEHOLE        jsr GETSCAN
 _1              lda #<TEMP
                 ldx #<MIDTOP
                 ldy #<MIDBTM
-                jsr MOVEDOWN            ; MOVE CHUNK
+                jsr MoveDown            ; MOVE CHUNK
 
                 ldx #<MIDTOP
                 ldy #<TEMP
-                jsr SUBYX               ; MIDTOP = -DIFF
+                jsr SubtractYX               ; MIDTOP = -DIFF
 
                 ldx #<MIDBTM
                 ldy #<MIDTOP
-                jsr SUBYX
+                jsr SubtractYX
 
                 lda TEMP
                 sta MIDTOP
@@ -1332,14 +1332,14 @@ _1              lda #<TEMP
 ; WHICH POLYGON IS THE USER
 ;  SELECTING?
 ;======================================
-SELECTPOLY      ldy CURSORY
+SelectPolygon   ldy cursorY
                 lda PBDX,Y
                 beq _5
 
                 sta HCNT
 
                 jsr GETSCAN
-                jsr GETCURSORX
+                jsr GetCursorX
                 sta YTEMP
 
                 ldy HCNT
@@ -1375,7 +1375,7 @@ _5              clc
 ;======================================
 ; DRAW A POLY'S VERTICES
 ;======================================
-POLYPOINTS      ldy #0
+PolygonPoints   ldy #0
 _next1          lda (PLYPTRY),Y
                 sec
                 sbc #1
@@ -1394,7 +1394,7 @@ _next1          lda (PLYPTRY),Y
                 sty YTEMP
                 lda #<POINT
                 ldx #>POINT
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 ldy YTEMP
                 iny
@@ -1413,8 +1413,8 @@ POINT           .addr POINT+7
 ;======================================
 ; REMOVE A POLY FROM THE DB
 ;======================================
-REMOVEPOLY      jsr GETMINY
-                jsr MAKEHOLE
+RemovePolygon   jsr GETMINY
+                jsr MakeHole
 
                 ldx MIDY
 _next1          inx
@@ -1432,7 +1432,7 @@ _next1          inx
 
 _next2          ldy #1
                 lda (MIDTOP),Y
-                cmp NEXTOBJ
+                cmp objNext
                 beq _1
 
                 sta (MIDBTM),Y          ; PRESERVE IT
@@ -1494,7 +1494,7 @@ _4              stx MIDY
 ;======================================
 ;
 ;======================================
-GETBOUNDS       ldy #0
+GetBounds       ldy #0
                 lda (PLYPTRY),Y
                 sta PARAM
                 sta PARAM+1
