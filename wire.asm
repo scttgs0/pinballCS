@@ -8,7 +8,7 @@
 
 
                 .include "equates/system_atari8.equ"
-                ;.include "equates/zeropage.equ"
+                .include "equates/system_f256.equ"
 
                 .include "equates/gpak.equ"
                 .include "equates/ppak.equ"

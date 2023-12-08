@@ -8,6 +8,7 @@
 
 
                 .include "equates/system_atari8.equ"
+                .include "equates/system_f256.equ"
 
                 .include "equates/dlist.equ"
 
@@ -31,7 +32,7 @@
 ;======================================
 ;
 ;======================================
-GoAtariTest     lda #<dlistMain
+GoFoenixTest    lda #<dlistMain
                 sta SDLSTL
                 sta DLISTL
                 lda #>dlistMain

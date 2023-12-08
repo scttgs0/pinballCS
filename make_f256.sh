@@ -104,10 +104,10 @@ mkdir -p obj/
 64tass  --m65c02 \
         --flat \
         --nostart \
-        -o obj/platform_a8.bin \
-        --list=obj/platform_a8.lst \
-        --labels=obj/platform_a8.lbl \
-        platform_a8.asm
+        -o obj/platform_f256.bin \
+        --list=obj/platform_f256.lst \
+        --labels=obj/platform_f256.lbl \
+        platform_f256.asm
 
 64tass  --m65c02 \
         --flat \
@@ -166,7 +166,7 @@ cat     obj/boot2.bin \
         obj/cdraw.bin \
         obj/TITLE.bin \
         obj/DLIST.bin \
-        obj/platform_a8.bin \
+        obj/platform_f256.bin \
         obj/swap.bin \
         obj/tst.bin \
         obj/BITMAPS.bin \

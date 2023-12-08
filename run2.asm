@@ -8,9 +8,10 @@
 
 
                 .include "equates/system_atari8.equ"
+                .include "equates/system_f256.equ"
                 .include "equates/zeropage.equ"
 
-                .include "equates/platform_a8.equ"
+                .include "equates/platform_f256.equ"
                 .include "equates/dlist.equ"
                 .include "equates/gpak.equ"
 
@@ -139,8 +140,8 @@ L903F           .byte $00,$06,$01,$70,$88,$00,$00,$88,$70
 ;======================================
 ;======================================
 MAIN            jsr MAKEPATCH
-                jsr InitAtari
-                jsr GoAtari
+                jsr InitFoenix
+                jsr GoFoenix
 
                 lda #$FF
 _next1          sta GAMEMODE
@@ -496,7 +497,7 @@ _next3          sta MOD8,Y
 _1              iny
                 bne _next3
 
-; make HI/LO tables for Atari
+; make HI/LO tables for Foenix
 ; HIRES display
 
                 lda #<HIRES
@@ -1639,7 +1640,7 @@ ELASTHI         .byte $83,$83,$83,$83,$82,$82,$82,$82
 ;======================================
 ;
 ;======================================
-GoAtari         lda #<dlistMain
+GoFoenix         lda #<dlistMain
                 sta SDLSTL
                 lda #>dlistMain
                 sta SDLSTH

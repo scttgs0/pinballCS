@@ -8,8 +8,9 @@
 
 
                 .include "equates/system_atari8.equ"
+                .include "equates/system_f256.equ"
 
-                .include "equates/platform_a8.equ"
+                .include "equates/platform_f256.equ"
                 .include "equates/tst.equ"
 
 
@@ -40,8 +41,8 @@ EDITOR                  = $A000
 ; Disk Initialization
 ;--------------------------------------
 ;--------------------------------------
-DISK_INIT       jsr GoAtariTest
-                jsr InitAtari
+DISK_INIT       jsr GoFoenixTest
+                jsr InitFoenix
 
                 stz DAUX2
                 stz DBUFLO

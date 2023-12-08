@@ -8,6 +8,7 @@
 
 
                 .include "equates/system_atari8.equ"
+                .include "equates/system_f256.equ"
 
                 .include "equates/boot2.equ"
                 .include "equates/cdraw.equ"

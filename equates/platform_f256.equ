@@ -11,4 +11,4 @@
 ; Code equates
 ;--------------------------------------
 
-InitAtari               = $49DC
+InitFoenix              = $49DC

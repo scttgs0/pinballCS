@@ -11,4 +11,4 @@
 ; Code equates
 ;--------------------------------------
 
-GoAtariTest             = $4B45
+GoFoenixTest            = $4B45
