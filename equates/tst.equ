@@ -11,8 +11,4 @@
 ; Code equates
 ;--------------------------------------
 
-SwapWire                = $4A00
-SwapDisk                = $4A08
-SwapUser                = $4A10
-
-Reload                  = $4A14
+GoAtariTest             = $4B45

@@ -21,7 +21,7 @@
 ;======================================
 ; INIT ATARI 800
 ;======================================
-INIT_ATARI      lda #$00
+InitAtari       lda #$00
                 sta STKX
                 sta STKX+1
                 sta STKY
@@ -35,9 +35,9 @@ INIT_ATARI      lda #$00
 _wait1          cmp RTCLOK+2            ; wait one jiffy
                 beq _wait1
 
-                lda #<VBLCURSOR            ;;$2A5B
+                lda #<VBICursor
                 sta VVBLKI
-                lda #>VBLCURSOR
+                lda #>VBICursor
                 sta VVBLKI+1
 
                 rts

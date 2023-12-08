@@ -156,7 +156,7 @@ LAUNCHRUN       bit BTN0
                 cmp #$05
                 bcs _XIT
 
-                jmp ADVANCE
+                jmp Advance
 
 _XIT1           jmp RETREAT
 
@@ -265,7 +265,7 @@ FLIPRUN         sta TEMP
                 lda FXHEIGHT+1,X
                 sta (LBASE),Y
 
-                jsr ADVANCE
+                jsr Advance
 
                 ldx XTEMP
                 ldy #$07
@@ -677,12 +677,12 @@ SFRAME8         .byte $07,$0C,$04,$0C,$02,$0B,$01,$09
 ;--------------------------------------
 ;
 ;--------------------------------------
-INITBALL        bit INITMODE
+InitBall        bit INITMODE
                 bpl INITB2
 
                 lda LBASE
                 ldx LBASE+1
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 ldy #$10
                 lda (LBASE),Y
@@ -692,7 +692,7 @@ INITBALL        bit INITMODE
 ;======================================
 ;
 ;======================================
-DRAWBALL        ldy #$12
+DrawBall        ldy #$12
                 lda (LBASE),Y
                 sta IBALL+2
                 dey
@@ -706,7 +706,7 @@ DRAWBALL        ldy #$12
 
                 lda #<IBALL
                 ldx #>IBALL
-                jmp XOFFDRAW
+                jmp XOffDraw
 
 ;--------------------------------------
 
@@ -764,7 +764,7 @@ BUMPRUN         ldy #$08
                 lda #$00
                 sta (LBASE),Y
 
-                jmp ADVANCE
+                jmp Advance
 
 _1              beq _XIT
                 jmp RETREAT
@@ -841,7 +841,7 @@ KNOCKRUN        ldy #$08
 
                 cmp #$82
                 beq _1
-                jmp ADVANCE
+                jmp Advance
 
 _1              lda #$02
                 sta (LBASE),Y
@@ -904,7 +904,7 @@ FLASHRUN        ldy #$08
                 cmp #$80
                 bne _2
 
-                jmp ADVANCE
+                jmp Advance
 
 _1              beq _XIT
 _2              jmp RETREAT
@@ -1075,7 +1075,7 @@ _1              ldy #$02
 
                 lda #<DROPTYB
                 ldx #>DROPTYB
-_2              jsr XOFFDRAW
+_2              jsr XOffDraw
 
                 lda TEMP
                 ldx XTEMP
@@ -1337,7 +1337,7 @@ CATCH2RUN       ldy #$08
                 cmp #$84
                 beq _1
 
-                jmp ADVANCE
+                jmp Advance
 
 _1              lda #$00
                 sta (LBASE),Y
@@ -1693,7 +1693,7 @@ _XIT            sec
 ;======================================
 ;
 ;======================================
-ADVANCE         ldy #$07
+Advance         ldy #$07
                 lda (LBASE),Y
                 clc
 
@@ -1713,7 +1713,7 @@ ADVANCE         ldy #$07
 
                 lda LBASE
                 ldx LBASE+1
-                jmp XOFFDRAW
+                jmp XOffDraw
 
 
 ;======================================
@@ -1721,7 +1721,7 @@ ADVANCE         ldy #$07
 ;======================================
 RETREAT         lda LBASE
                 ldx LBASE+1
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 ldy #$00
                 lda (LBASE),Y
@@ -2068,7 +2068,7 @@ _11             ldy #$07
                 bit BSTAT
                 bpl _XIT
 
-                jmp DRAWBALL
+                jmp DrawBall
 
 _XIT            rts
 
@@ -2080,7 +2080,7 @@ DOHIT           inc HTCNT
 
                 sty HT
 
-                ldy OBJID
+                ldy objID
                 lda VHI,Y
                 bne _1
 
@@ -2165,7 +2165,7 @@ _4              iny
 ;======================================
 HITLEFT         iny
                 lda (BASE1),Y
-                sta OBJID
+                sta objID
 
                 iny
                 iny
@@ -2173,7 +2173,7 @@ HITLEFT         iny
                 and #$0F
                 sta BASE3
 
-                lda OBJID
+                lda objID
                 bne _ENTRY2
 
 _ENTRY1         lda #$10
@@ -2192,7 +2192,7 @@ _1              sec
 ;======================================
 HITRIGHT        dey
                 lda (BASE1),Y
-                sta OBJID
+                sta objID
 
                 iny
                 iny
@@ -2203,7 +2203,7 @@ HITRIGHT        dey
                 lsr
                 sta BASE3
 
-                lda OBJID
+                lda objID
                 bne HITLEFT._ENTRY1
                 beq HITLEFT._ENTRY2     ; [unc]
 
@@ -2214,7 +2214,7 @@ HITRIGHT        dey
 FIXLEFT         lda BDX
                 bne _ENTRY3
 
-                lda OBJID
+                lda objID
                 bne _ENTRY2
 
 _ENTRY1         inc BDX
@@ -2235,7 +2235,7 @@ _ENTRY3         lda BXACC
 FIXRIGHT        lda BDX
                 bne FIXLEFT._ENTRY3
 
-                lda OBJID
+                lda objID
                 bne FIXLEFT._ENTRY1
                 beq FIXLEFT._ENTRY2     ; [unc]
 
@@ -2274,7 +2274,7 @@ _next2          lda (BASE1),Y
 
                 iny
                 lda (BASE1),Y
-                sta OBJID
+                sta objID
                 beq _5
 
                 cpx X2_
@@ -2332,7 +2332,7 @@ _next4          lda (BASE1),Y
                 lda (BASE1),Y
                 bne _8
 
-                sta OBJID
+                sta objID
 
 _6              lda X2_
                 cmp P1_
@@ -2494,7 +2494,7 @@ _XIT            rts
 ;======================================
 BALLDOWN        lda #<VBALL
                 ldx #>VBALL
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 inc Y1_
                 inc Y2_
@@ -2518,7 +2518,7 @@ BALLUP          dec Y1_
 
                 lda #<VBALL
                 ldx #>VBALL
-                jmp XOFFDRAW
+                jmp XOffDraw
 
 
 ;======================================
@@ -2530,7 +2530,7 @@ BALLRIGHT       lda X2_
 
                 lda #<HBALL
                 ldx #>HBALL
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 inc X1_
                 inc X2_
@@ -2567,7 +2567,7 @@ BALLLEFT        lda X1_
 
                 lda #<HBALL
                 ldx #>HBALL
-                jmp XOFFDRAW
+                jmp XOffDraw
 
 ;--------------------------------------
 
@@ -2665,21 +2665,21 @@ _next1          sta SCORE1,Y
                 ldy #$80
                 ldx #$15
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<BMMSG
                 ldx #>BMMSG
-                jsr PRINT_
+                jsr Print_
                 jsr PRBMULT
 
                 ldy #$B0
                 ldx #$15
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<P1MSG
                 ldx #>P1MSG
-                jsr PRINT_
+                jsr Print_
 
                 ldy #<SCORE1
                 ldx #>SCORE1
@@ -2688,11 +2688,11 @@ _next1          sta SCORE1,Y
                 ldy #$98
                 ldx #$15
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<BMSG
                 ldx #>BMSG
-                jsr PRINT_
+                jsr Print_
 
                 ldy #<BONUS
                 ldx #>BONUS
@@ -2707,18 +2707,18 @@ PRSCORE         sty SCBASE
                 stx SCBASE+1
 
 _ENTRY1         ldy #$00
-                jsr SETMODE
+                jsr SetMode
 
                 ldy CHAR+2
                 ldx #$24
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 ldy #$08
 _next1          sty YTEMP
 
                 lda (SCBASE),Y
-                jsr PRCHAR
+                jsr PrintChar
 
                 dec CHAR+3
 
@@ -2730,19 +2730,19 @@ _next1          sty YTEMP
                 bne _next1
 
                 ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 
 ;======================================
 ;
 ;======================================
 PRBMULT         ldy #$00
-                jsr SETMODE
+                jsr SetMode
 
                 ldy #$80
                 ldx #$1C
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 ldx BMULT
                 inx
@@ -2752,10 +2752,10 @@ PRBMULT         ldy #$00
                 stx BMULT
                 txa
 
-                jsr PRCHAR
+                jsr PrintChar
 
 _1              ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 ;--------------------------------------
 
@@ -3009,13 +3009,13 @@ ELASTHI         .byte $83,$83,$83,$83
 PLAYSTART       ldy #$00
                 sty RUNLEN
 
-                jsr GETOBJ
+                jsr GetObj
 
-_next1          lda OBJID
+_next1          lda objID
                 cmp #$03
                 bne _1
 
-                ldx NEXTOBJ
+                ldx objNext
                 lda LBASE
                 sta VLO,X
                 lda LBASE+1
@@ -3035,17 +3035,17 @@ _next1          lda OBJID
 
                 jmp _2
 
-_1              ldx NEXTOBJ
+_1              ldx objNext
                 lda #$00
                 sta VLO,X
                 sta VHI,X
 
-_2              inc NEXTOBJ
-                ldy NEXTOBJ
-                jsr GETNOBJ
+_2              inc objNext
+                ldy objNext
+                jsr GetObjNext
 
-                ldy NEXTOBJ
-                cpy OBJCOUNT
+                ldy objNext
+                cpy objCount
                 bne _next1
 
                 sty INITMODE
@@ -3059,7 +3059,7 @@ _2              inc NEXTOBJ
                 sta CASINI
 
                 ldy #$01
-                jsr MAKEHOLE
+                jsr MakeHole
 
                 ldy #$01
                 lda MIDTOP
@@ -3094,7 +3094,7 @@ _4              lda PTIMER1
                 and #$1F
                 bne _5
 
-                jsr DOCRSRY
+                jsr DoCursorY
                 sta PDL0
 
 _5              lda TRIG0
@@ -3132,7 +3132,7 @@ _setValue1      lda #$18                ; [smc]
 _next5          cpy RUNLEN
                 bcs _7
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldx RCN,Y
                 lda TIME,X
@@ -3153,7 +3153,7 @@ _next5          cpy RUNLEN
 
 _setAddr1       jsr $FFFF               ; [smc]
 
-                ldy NEXTOBJ
+                ldy objNext
                 ldx RCN,Y
                 lda TIME,X
                 bne _6
@@ -3171,9 +3171,9 @@ _setAddr1       jsr $FFFF               ; [smc]
                 lda #$80
                 sta (LBASE),Y
 
-                jsr DRAWBALL
+                jsr DrawBall
 
-_6              ldy NEXTOBJ
+_6              ldy objNext
                 iny
                 bne _next5
 
@@ -3214,7 +3214,7 @@ INITOBJS        ldy #$00
 _next1          cpy RUNLEN
                 beq _XIT
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldx RCN,Y
                 lda VLO,X
@@ -3234,14 +3234,14 @@ _setAddr1       jsr $FFFF               ; [smc]
                 bit INITMODE
                 bpl _1
 
-                ldy NEXTOBJ
+                ldy objNext
                 ldx RCN,Y
                 lda TIME,X
 
                 ldy #$08
                 sta (LBASE),Y
 
-_1              ldy NEXTOBJ
+_1              ldy objNext
                 iny
                 bne _next1
 
@@ -3260,7 +3260,7 @@ LAUNCHER        .byte $03,$00,$04
                 .addr LAUNCHRUN
                 .addr INITB
                 .addr LAUNCHHIT
-LEFTFLIPPER     .byte $03,$00,$04
+FLIPPER_L       .byte $03,$00,$04
                 .byte $DC,$DC,$CA,$CA
                 .byte $02,$11,$11,$02
                 .addr gfxLeftFlipper
@@ -3268,7 +3268,7 @@ LEFTFLIPPER     .byte $03,$00,$04
                 .addr LFLIPRUN
                 .addr FLIPINIT
                 .addr LFLIPHIT
-RIGHTFLIPPER    .byte $03,$00,$04
+FLIPPER_R       .byte $03,$00,$04
                 .byte $EC,$EC,$DA,$DA
                 .byte $02,$11,$11,$02
                 .addr gfxRightFlipper
@@ -3282,9 +3282,9 @@ BALL            .byte $03,$00,$04
                 .addr gfxBall
                 .byte $05,$1E,$05,$05,$01,$05,$00,$80
                 .addr MOVEBALL
-                .addr INITBALL
+                .addr InitBall
                 .addr NULLBOUNCE
-BMP1            .byte $03,$00,$08
+BUMPER1         .byte $03,$00,$08
                 .byte $B2,$B7,$B7,$B2,$AB,$A6,$A6,$AB
                 .byte $30,$34,$39,$3D,$3D,$39,$34,$30
                 .addr gfxBumper1
@@ -3292,7 +3292,7 @@ BMP1            .byte $03,$00,$08
                 .addr BUMPRUN
                 .addr BUMPINIT
                 .addr BUMPHIT
-BMP2            .byte $03,$00,$08
+BUMPER2         .byte $03,$00,$08
                 .byte $C1,$C5,$C5,$C1,$BC,$B8,$B8,$BC
                 .byte $31,$34,$38,$3B,$3B,$38,$34,$31
                 .addr gfxBumper2
@@ -3300,7 +3300,7 @@ BMP2            .byte $03,$00,$08
                 .addr BUMPRUN
                 .addr BUMPINIT
                 .addr BUMPHIT
-BMP3            .byte $03,$00,$04
+BUMPER3         .byte $03,$00,$04
                 .byte $CC,$CC,$C8,$C8
                 .byte $30,$3F,$3F,$30
                 .addr gfxBumper3
@@ -3308,7 +3308,7 @@ BMP3            .byte $03,$00,$04
                 .addr BUMPRUN
                 .addr BUMPINIT
                 .addr BUMPHIT
-BMP4            .byte $03,$00,$04
+BUMPER4         .byte $03,$00,$04
                 .byte $E1,$E1,$CF,$CF
                 .byte $35,$39,$39,$35
                 .addr gfxBumper4
@@ -3316,7 +3316,7 @@ BMP4            .byte $03,$00,$04
                 .addr BUMPRUN
                 .addr BUMPINIT
                 .addr BUMPHIT
-BMP5            .byte $03,$00,$04
+BUMPER5         .byte $03,$00,$04
                 .byte $E6,$EF,$EC,$E3
                 .byte $30,$39,$3C,$33
                 .addr gfxBumper5
@@ -3324,7 +3324,7 @@ BMP5            .byte $03,$00,$04
                 .addr BUMPRUN
                 .addr BUMPINIT
                 .addr BUMPHIT
-BMP6            .byte $03,$00,$04
+BUMPER6         .byte $03,$00,$04
                 .byte $FA,$FD,$F4,$F1
                 .byte $30,$33,$3C,$39
                 .addr gfxBumper6
@@ -3332,7 +3332,7 @@ BMP6            .byte $03,$00,$04
                 .addr BUMPRUN
                 .addr BUMPINIT
                 .addr BUMPHIT
-LKICK           .byte $03,$00,$05
+KICK_L          .byte $03,$00,$05
                 .byte $AA,$B8,$B8,$A6,$A6
                 .byte $44,$5A,$5D,$59,$44
                 .addr gfxLeftKicker
@@ -3340,7 +3340,7 @@ LKICK           .byte $03,$00,$05
                 .addr BUMPRUN
                 .addr BUMPINIT
                 .addr KICKHIT
-RKICK           .byte $03,$00,$05
+KICK_R          .byte $03,$00,$05
                 .byte $D1,$D1,$BE,$BE,$CE
                 .byte $44,$59,$5D,$5A,$44
                 .addr gfxRightKicker
@@ -3436,7 +3436,7 @@ TARG6           .byte $03,$00,$04
                 .addr FLASHRUN
                 .addr BUMPINIT
                 .addr FLASHHIT
-LFLIPPER2       .byte $03,$00,$04
+FLIPPER_L2      .byte $03,$00,$04
                 .byte $B2,$B2,$A6,$A6
                 .byte $05,$0E,$0E,$05
                 .addr gfxLeftFlip2
@@ -3444,7 +3444,7 @@ LFLIPPER2       .byte $03,$00,$04
                 .addr LFLIP2RUN
                 .addr FLIP2INIT
                 .addr LFLIP2HIT
-RFLIPPER2       .byte $03,$00,$04
+FLIPPER_R2      .byte $03,$00,$04
                 .byte $BF,$BF,$B3,$B3
                 .byte $05,$0E,$0E,$05
                 .addr gfxRightFlip2

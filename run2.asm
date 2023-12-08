@@ -40,9 +40,9 @@ PBASE4                  = $008A         ; [word]
 
 LAST_Y_                 = $008C
 
-OBJCOUNT                = $0091
-OBJID                   = $0096
-NEXTOBJ                 = $0090
+objCount                = $0091
+objID                   = $0096
+objNext                 = $0090
 
 LBASE                   = $0099         ; [word]
 
@@ -124,7 +124,7 @@ L900C           lda X1_
 
                 lda #$2F
                 ldx #$90
-                jmp XOFFDRAW
+                jmp XOffDraw
 
 
 ;--------------------------------------
@@ -139,8 +139,8 @@ L903F           .byte $00,$06,$01,$70,$88,$00,$00,$88,$70
 ;======================================
 ;======================================
 MAIN            jsr MAKEPATCH
-                jsr INIT_ATARI
-                jsr GOATARI
+                jsr InitAtari
+                jsr GoAtari
 
                 lda #$FF
 _next1          sta GAMEMODE
@@ -346,7 +346,7 @@ MAKEBALL        tya
 
                 lda #<MBALL
                 ldx #>MBALL
-                jmp XOFFDRAW
+                jmp XOffDraw
 
 ;--------------------------------------
 
@@ -561,18 +561,18 @@ _next5          sta SLEEPHI,Y
 ; now set up the game
 
                 lda PBDATA
-                sta OBJCOUNT
+                sta objCount
 
                 ldy #$00
                 sty RUNLEN
 
-                jsr GETOBJ
+                jsr GetObj
 
-_next6          lda OBJID
+_next6          lda objID
                 cmp #<LIBOBJ
                 bne _4
 
-                ldx NEXTOBJ
+                ldx objNext
                 lda LBASE
                 sta VECTLO,X
 
@@ -594,17 +594,17 @@ _next6          lda OBJID
 
                 jmp _5
 
-_4              ldx NEXTOBJ
+_4              ldx objNext
                 lda #$00
                 sta VECTLO,X
                 sta VECTHI,X
 
-_5              inc NEXTOBJ
-                ldy NEXTOBJ
-                jsr GETNEXTOBJ
+_5              inc objNext
+                ldy objNext
+                jsr GetObjNext
 
-                ldy NEXTOBJ
-                cpy OBJCOUNT
+                ldy objNext
+                cpy objCount
                 bne _next6
 
                 ldy #$01
@@ -638,11 +638,11 @@ _next8          dey
                 lda #$00
                 sta BMULT
 
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<BMMSG
                 ldx #>BMMSG
-                jsr PRINT_
+                jsr Print_
                 jsr PRBMULT
 
                 ldx #$03
@@ -665,11 +665,11 @@ _next9          stx PLAYER
                 ldy #$58
                 ldx #$15
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<BMSG
                 ldx #>BMSG
-                jsr PRINT_
+                jsr Print_
 
                 ldy #<BONUS
                 ldx #>BONUS
@@ -684,18 +684,18 @@ PRSCORE         sty SCBASE
                 stx SCBASE+1
 
 _ENTRY1         ldy #$00
-                jsr SETMODE
+                jsr SetMode
 
                 ldy CHAR+2
                 ldx #$25
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 ldy #$08
 _next1          sty YTEMP
 
                 lda (SCBASE),Y
-                jsr PRCHAR
+                jsr PrintChar
 
                 dec CHAR+3
 
@@ -707,7 +707,7 @@ _next1          sty YTEMP
                 bne _next1
 
                 ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 
 ;======================================
@@ -784,12 +784,12 @@ _2              sta (SCBASE),Y
 ;
 ;======================================
 PRBMULT         ldy #$00
-                jsr SETMODE
+                jsr SetMode
 
                 ldy #$48
                 ldx #$1D
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 ldx BMULT
                 inx
@@ -799,10 +799,10 @@ PRBMULT         ldy #$00
                 stx BMULT
 
                 txa
-                jsr PRCHAR
+                jsr PrintChar
 
 _1              ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 
 ;======================================
@@ -818,7 +818,7 @@ PRINTPLAYER     lda SCVERT,Y
 
                 lda PMSGLO,Y
                 ldx PMSGHI,Y
-                jmp PRINT_
+                jmp Print_
 
 ;--------------------------------------
 
@@ -1124,7 +1124,7 @@ _1              lda PTIMER1
                 and #$1F
                 bne _2
 
-                jsr DOCRSRY
+                jsr DoCursorY
                 sta PDL0
 
 _2              lda TRIG0
@@ -1162,7 +1162,7 @@ _setValue1      lda #$10                ; [smc]
 _next1          cpy RUNLEN
                 bcs _7
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldx RUNCHN,Y
                 lda TIME,X
@@ -1183,7 +1183,7 @@ _next1          cpy RUNLEN
 
 _setAddr1       jsr $FFFF               ; [smc]
 
-                ldy NEXTOBJ
+                ldy objNext
                 ldx RUNCHN,Y
                 lda TIME,X
                 bne _6
@@ -1215,8 +1215,8 @@ _next2          lda (LBASE),Y
                 dey
                 bpl _next2
 
-                jsr INITBALL
-                jsr DRAWBALL
+                jsr InitBall
+                jsr DrawBall
                 jmp _4
 
 _3              lda Y2_
@@ -1229,9 +1229,9 @@ _4              lda #$FF
 
 _5              lda #$80
                 sta (LBASE),Y
-                jsr DRAWBALL
+                jsr DrawBall
 
-_6              ldy NEXTOBJ
+_6              ldy objNext
                 iny
                 bne _next1
 
@@ -1257,7 +1257,7 @@ _10             ldy #$00
 _next3          cpy SLEEPCNT
                 bcs _XIT
 
-                sty NEXTOBJ
+                sty objNext
 
                 lda SLEEPCODE,Y
                 cmp PLAYER
@@ -1290,9 +1290,9 @@ _setAddr2       jsr $FFFF               ; [smc]
                 sta LIVEBALLS
                 bne _13
 
-_11             jsr DRAWBALL
+_11             jsr DrawBall
 
-                ldy NEXTOBJ
+                ldy objNext
                 cpy SLEEPCNT
                 beq _12
 
@@ -1314,7 +1314,7 @@ _next4          lda (BASE1),Y
 
 _12             dec SLEEPCNT
 
-_13             ldy NEXTOBJ
+_13             ldy objNext
                 iny
                 bne _next3
 
@@ -1328,7 +1328,7 @@ INITOBJS        ldy #$00
 _next1          cpy RUNLEN
                 beq PLAY._XIT
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldx RUNCHN,Y
                 lda VECTLO,X
@@ -1345,7 +1345,7 @@ _next1          cpy RUNLEN
 
 _setAddr1       jsr $FFFF               ; [smc]
 
-                ldy NEXTOBJ
+                ldy objNext
                 iny
                 bne _next1
 
@@ -1361,7 +1361,7 @@ _ENTRY1         ldy #$00
 _next1          cpy RUNLEN
                 beq PLAY._XIT
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldx RUNCHN,Y
                 lda VECTLO,X
@@ -1373,7 +1373,7 @@ _next1          cpy RUNLEN
                 ldy #$08
                 sta (LBASE),Y
 
-                ldy NEXTOBJ
+                ldy objNext
                 iny
                 bne _next1
 
@@ -1381,12 +1381,12 @@ _next1          cpy RUNLEN
 ;======================================
 ;
 ;======================================
-GETOBJ          lda #<PBDATA+1
+GetObj          lda #<PBDATA+1
                 sta OBJ
                 lda #>PBDATA+1
                 sta OBJ+1
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldy #$00
 
@@ -1396,7 +1396,7 @@ GETOBJ          lda #<PBDATA+1
 ;======================================
 ;
 ;======================================
-GETNEXTOBJ      lda PBDATA,Y
+GetObjNext      lda PBDATA,Y
                 clc
                 adc OBJ
                 sta OBJ
@@ -1405,15 +1405,15 @@ GETNEXTOBJ      lda PBDATA,Y
                 adc OBJ+1
                 sta OBJ+1
 
-                cpy NEXTOBJ
+                cpy objNext
                 beq _1
 
                 iny
-                bne GETNEXTOBJ
+                bne GetObjNext
 
 _1              ldy #$00
                 lda (OBJ),Y             ; GET OBJECT ID
-                sta OBJID
+                sta objID
 
 ; GET THE OBJECT'S L-BASE
 
@@ -1447,7 +1447,7 @@ SAVEPLAYER      jsr PBASES
 _next1          cpy RUNLEN
                 bcs _ENTRY1
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldx RUNCHN,Y
                 lda VECTLO,X
@@ -1468,7 +1468,7 @@ _next1          cpy RUNLEN
                 lda (LBASE),Y
                 sta PARAM+3
 
-                ldy NEXTOBJ
+                ldy objNext
                 lda PARAM
                 sta (PBASE1),Y
                 lda PARAM+1
@@ -1485,7 +1485,7 @@ _ENTRY1         ldy #$00
 _next2          cpy SLEEPCNT
                 bcs _XIT
 
-                sty NEXTOBJ
+                sty objNext
 
                 lda SLEEPCODE,Y
                 cmp PLAYER
@@ -1496,9 +1496,9 @@ _next2          cpy SLEEPCNT
                 lda SLEEPHI,Y
                 sta LBASE+1
 
-                jsr DRAWBALL
+                jsr DrawBall
 
-_1              ldy NEXTOBJ
+_1              ldy objNext
                 iny
                 bne _next2
 
@@ -1518,7 +1518,7 @@ RESTOREPLAYER   jsr PBASES
 _next1          cpy RUNLEN
                 bcs SAVEPLAYER._ENTRY1
 
-                sty NEXTOBJ
+                sty objNext
 
                 ldx RUNCHN,Y
                 lda VECTLO,X
@@ -1562,7 +1562,7 @@ _1              lda STEMP
 _setAddr1       jsr $FFFF               ; [smc]
                 jmp _next2
 
-_2              jsr ADVANCE
+_2              jsr Advance
                 jmp _next2
 
 _3              lda PARAM+2
@@ -1584,7 +1584,7 @@ _4              lda PARAM+3
 _5              ldy #$10
                 sta (LBASE),Y
 
-_6              ldy NEXTOBJ
+_6              ldy objNext
                 iny
                 bne _next1
 
@@ -1654,7 +1654,7 @@ ELASTHI         .byte $83,$83,$83,$83,$82,$82,$82,$82
 ;======================================
 ;
 ;======================================
-GOATARI         lda #<dlistMain
+GoAtari         lda #<dlistMain
                 sta SDLSTL
                 lda #>dlistMain
                 sta SDLSTH
@@ -1706,5 +1706,5 @@ _next1          lda (BASE2),Y
 ;--------------------------------------
 ;--------------------------------------
 
-PATCH           .byte $FF
+patch           .byte $FF
                 .fill 74,$00

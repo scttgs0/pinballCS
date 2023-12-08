@@ -36,7 +36,7 @@ VALIDBUF                = $BF00
 ;======================================
 ;
 ;======================================
-SWAPWIRE        ldx #$01
+SwapWire        ldx #$01
                 jsr SWAPPIECE
 
                 jmp DRAWKIT
@@ -45,7 +45,7 @@ SWAPWIRE        ldx #$01
 ;======================================
 ;
 ;======================================
-SWAPDISK        ldx #$02
+SwapDisk        ldx #$02
                 jsr SWAPPIECE
 
                 jmp EDITOR_RUN
@@ -54,14 +54,14 @@ SWAPDISK        ldx #$02
 ;======================================
 ;
 ;======================================
-SWAPUSER        ldx #$03
+SwapUser        ldx #$03
                 bne SWAPSECTORS         ; unc
 
 
 ;--------------------------------------
 ;
 ;--------------------------------------
-RELOAD          pha
+Reload          pha
 
                 jsr PCSINSERTED
 
@@ -155,31 +155,31 @@ _next1          lda VALIDBUF,Y
                 rts
 
 _1              ldy #$01
-                jsr SETMODE
+                jsr SetMode
 
                 lda #$F0
                 ldx #$4A
-                jsr DRAWBITS
+                jsr DrawBits
 
                 ldy #$03
-                jsr SETMODE
+                jsr SetMode
 
                 lda #$F7
                 ldx #$4A
-                jsr DRAWRECT
+                jsr Drawrectangle
 
                 ldy #$02
-                jsr SETMODE
+                jsr SetMode
                 jsr FRAMERECT_ENTRY1
 
                 ldy #$59
                 ldx #$01
                 lda #$00
-                jsr CHARTO
+                jsr CharTo
 
                 lda #$E1
                 ldx #$4A
-                jsr PRINT_
+                jsr Print_
 
                 lda #$FF
                 sta CH_
@@ -192,14 +192,14 @@ _next2          lda CH_
                 sta CH_
 
                 ldy #$00
-                jsr SETMODE
+                jsr SetMode
 
                 lda #$F0
                 ldx #$4A
-                jsr DRAWBITS
+                jsr DrawBits
 
                 ldy #$02
-                jsr SETMODE
+                jsr SetMode
                 jmp PCSINSERTED
 
 

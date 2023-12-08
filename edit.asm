@@ -98,12 +98,12 @@ GETINFO                 = $9985
 EDITOR          jsr INIT
 
                 lda #$00
-                sta CURSORY
-                sta CURSORXDIV8
-                sta CURSORXMOD8
-                sta SCANMODE
+                sta cursorY
+                sta cursorX_Div8
+                sta cursorX_Mod8
+                sta scanMode
 
-                jsr DRAWDISPLAY
+                jsr DrawDisplay
 
                 ;[fall-through]
 
@@ -129,7 +129,7 @@ _next1          sty YTEMP
                 lda ICONS,Y
                 ldx ICONS+1,Y
 
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 ldy YTEMP
                 iny
@@ -138,10 +138,10 @@ _next1          sty YTEMP
                 bne _next1
 
                 lda #$80
-                sta SCANMODE
+                sta scanMode
 
                 ldy #$00
-_next2          sty NEXTOBJ
+_next2          sty objNext
 
                 lda POLYS,Y
                 sta OBJ
@@ -149,9 +149,9 @@ _next2          sty NEXTOBJ
                 sta OBJ+1
 
                 jsr GETINFO
-                jsr DRAWOBJ
+                jsr DrawObj
 
-                ldy NEXTOBJ
+                ldy objNext
                 iny
                 iny
                 cpy #$08
@@ -159,19 +159,19 @@ _next2          sty NEXTOBJ
 
                 lda #<HAND
                 ldx #>HAND
-                jsr INITC
+                jsr InitCursor
 
 
 ;--------------------------------------
 ;
 ;--------------------------------------
-MAIN            jsr UPDATEC
-                jsr GETB
+MAIN            jsr UpdateCursor
+                jsr GetButtons
                 bpl MAIN
 
                 lda #<TABLEB
                 ldx #>TABLEB
-                jsr CINR
+                jsr CursorInRectangle
                 bcc MAIN2
 
                 jsr MODE0
@@ -206,11 +206,11 @@ _XIT            jmp PAINTOBJ
 ;--------------------------------------
 MAIN2           lda #<TOOLB
                 ldx #>TOOLB
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _1
 
                 lda #$00
-                sta LASTITEM+1
+                sta lastItem+1
 
                 jmp _3
 
@@ -222,7 +222,7 @@ _next1          lda BOXLO,Y
                 ldx BOXHI,Y
                 sty YTEMP
 
-                jsr CINR
+                jsr CursorInRectangle
 
                 ldy YTEMP
                 bcc _2
@@ -244,7 +244,7 @@ _XIT1           jmp MAIN
 
 _3              lda #<CMDMENU
                 ldx #>CMDMENU
-                jsr DOMENU
+                jsr DoMenu
 
                 jmp MAIN
 
@@ -290,7 +290,7 @@ INITHAND        jsr POINTSOFF
 ;
 ;--------------------------------------
 SETEDMODE       sty EDITMODE
-                jmp INITC
+                jmp InitCursor
 
 
 ;--------------------------------------
@@ -357,7 +357,7 @@ POINTSOFF       bit EDITMODE
 
 _ENTRY1         jsr DRAWPOINTS
 
-_ENTRY2         jmp XDRAWC
+_ENTRY2         jmp XDrawCursor
 
 
 ;======================================
@@ -365,18 +365,18 @@ _ENTRY2         jmp XDRAWC
 ;======================================
 DRAWLOGO        lda #<LOGO
                 ldx #>LOGO
-                jmp DRAWBITS
+                jmp DrawBits
 
 
 ;======================================
 ;
 ;======================================
 SAVELOGO        ldy #$01
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<LOGO
                 ldx #>LOGO
-                jmp DRAWBITS
+                jmp DrawBits
 
 ;-------------------------------------
 
@@ -418,14 +418,14 @@ VIOLET          ldy #$AA
 ;
 ;======================================
 CLEARKIT        ldy #$03
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<KITB
                 ldx #>KITB
-                jsr DRAWR
+                jsr Drawrectangle
 
                 ldy #$02
-                jmp SETMODE
+                jmp SetMode
 
 
 ;--------------------------------------
@@ -470,7 +470,7 @@ SETWORLD        jsr POINTSOFF
 ;--------------------------------------
 WIREKIT         jsr POINTSOFF
                 jsr CLEARKIT
-                jsr SWAPWIRE
+                jsr SwapWire
                 jmp DRAWKIT
 
 
@@ -480,35 +480,35 @@ WIREKIT         jsr POINTSOFF
 DISKIO          jsr POINTSOFF
                 jsr CLEARKIT
                 jsr DRAWLOGO
-                jsr SWAPDISK
+                jsr SwapDisk
                 jmp REEDIT
 
 
 ;--------------------------------------
 ;
 ;--------------------------------------
-DRAGOBJ         jsr SELECTPOLY
+DRAGOBJ         jsr SelectPolygon
                 bcs _1
 
                 rts
 
 _1              ldx #$80
-                stx SCANMODE            ; NO MERGE
+                stx scanMode            ; NO MERGE
                 tay
 
-                jsr GETOBJ
-                jsr REMOVEPOLY
+                jsr GetObj
+                jsr RemovePolygon
 
-_ENTRY1         jsr XDRAWC
-                jsr GETBOUNDS
+_ENTRY1         jsr XDrawCursor
+                jsr GetBounds
 
                 ldx PARAM+3
                 lda D8_,X
-                sta CURSORXDIV8
+                sta cursorX_Div8
                 lda M8_,X
-                sta CURSORXMOD8
+                sta cursorX_Mod8
 
-                jsr XDRAWC
+                jsr XDrawCursor
 
                 ldy #$00
                 sty RTSTOP
@@ -542,7 +542,7 @@ _5              iny
                 cpy VRTXCOUNT
                 bne _next1
 
-                jsr GETCX
+                jsr GetCursorX
                 sta DRAGX
 
                 sec
@@ -560,7 +560,7 @@ _5              iny
                 sbc #$01
                 sta RTSTOP
 
-                lda CURSORY
+                lda cursorY
                 sta DRAGY
                 sec
                 sbc TOPSTOP
@@ -572,13 +572,13 @@ _5              iny
                 sec
                 sbc BTMSTOP
                 clc
-                adc CURSORY
+                adc cursorY
                 sec
                 sbc #$01
                 sta BTMSTOP
 
-_next2          jsr DRAWOBJ
-                jsr GETCX
+_next2          jsr DrawObj
+                jsr GetCursorX
 
                 cmp LFTSTOP
                 bcs _6
@@ -600,7 +600,7 @@ _7              tax
 _8              sta DELX
                 stx DRAGX
 
-                lda CURSORY
+                lda cursorY
                 cmp TOPSTOP
                 bcs _9
 
@@ -630,7 +630,7 @@ _next3          lda (PLYPTRX),Y
                 cpy VRTXCOUNT
                 bne _next3
 
-                lda OBJID
+                lda objID
                 cmp #<LIBOBJ
                 bcc _11
 
@@ -658,28 +658,28 @@ _next3          lda (PLYPTRX),Y
                 lda D8_,X
                 sta (LBASE),Y
 
-_11             jsr GETB
+_11             jsr GetButtons
                 bpl _12
 
-                jsr DRAWOBJ
-                jsr UPDATEC
+                jsr DrawObj
+                jsr UpdateCursor
                 jmp _next2
 
 _12             lda #<TABLEB
                 ldx #>TABLEB
-                jsr CINR
+                jsr CursorInRectangle
                 bcc DELETEOBJ
 
-                lda SCANMODE
+                lda scanMode
                 and #$7F                ; MERGE
-                sta SCANMODE
+                sta scanMode
 
-                jsr DRAWOBJ
+                jsr DrawObj
                 bcc _XIT
 
-                jsr REMOVEPOLY
-                jsr DRAWOBJ
-                jsr REMOVEPOLY
+                jsr RemovePolygon
+                jsr DrawObj
+                jsr RemovePolygon
                 jmp DELETEOBJ
 
 _XIT            rts
@@ -688,7 +688,7 @@ _XIT            rts
 ;--------------------------------------
 ;
 ;--------------------------------------
-DELETEOBJ       ldy NEXTOBJ
+DELETEOBJ       ldy objNext
                 lda OBJDX,Y
                 sta YTEMP
 
@@ -703,29 +703,29 @@ DELETEOBJ       ldy NEXTOBJ
                 lda #$01
                 ldy #<TEMP
                 ldx #<OBJ2
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #<OBJ
                 ldx #<OBJ2
                 ldy #<TEMP
-                jsr MOVEDOWN
+                jsr MoveDown
 
                 lda YTEMP
                 ldy #<OBJ
                 ldx #<OBJ2
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #$01
                 ldy #<OBJ
                 ldx #<OBJ
-                jsr SUBIYX
+                jsr SubtractiYX
 
                 lda #$9E
                 ldx #<OBJ2
                 ldy #<OBJ
-                jsr MOVEDOWN
+                jsr MoveDown
 
-                dec OBJCOUNT
+                dec objCount
                 dec PBDATA
 
                 ldx YTEMP
@@ -735,15 +735,15 @@ DELETEOBJ       ldy NEXTOBJ
 
                 ldy #<MEMBTM
                 ldx #<MEMBTM
-                jsr SUBIYX
+                jsr SubtractiYX
 
                 lda TEMP
                 ldy #<MIDBTM
                 ldx #<MIDBTM
-                jsr SUBIYX
+                jsr SubtractiYX
 
                 ldy #$01
-                jsr MAKEHOLE
+                jsr MakeHole
 
                 lda MIDTOP
                 sta BASE1
@@ -752,7 +752,7 @@ DELETEOBJ       ldy NEXTOBJ
 
                 ldy #$01
 _next1          lda (BASE1),Y
-                cmp NEXTOBJ
+                cmp objNext
                 bcc _1
 
                 sbc #$01
@@ -792,7 +792,7 @@ _next2          jsr FIXINDX
 ;
 ;======================================
 FIXINDX         lda LOGIC,Y
-                cmp NEXTOBJ
+                cmp objNext
                 bcc _XIT
                 bne _1
 
@@ -810,7 +810,7 @@ ADDOBJ          stx OBJ2
                 sty OBJ2+1
                 sta YTEMP               ; SIZE + 1
 
-                ldx OBJCOUNT
+                ldx objCount
                 inx
                 bmi _XIT1
 
@@ -832,7 +832,7 @@ _XIT1           rts
 _1              lda YTEMP
                 ldy #<MIDBTM
                 ldx #<TEMP
-                jsr ADDIYX
+                jsr AddiYX
 
                 inc TEMP
                 bne _2
@@ -842,7 +842,7 @@ _1              lda YTEMP
 _2              lda #<MIDBTM
                 ldx #<MEMBTM
                 ldy #<TEMP
-                jsr MOVEUP
+                jsr MoveUp
 
                 lda TEMP
                 sta MIDBTM
@@ -850,17 +850,17 @@ _2              lda #<MIDBTM
                 sta MIDBTM+1
 
                 ldy #$00
-                jsr GETOBJ
+                jsr GetObj
 
                 lda #$01
                 ldy #<MEMBTM
                 ldx #<TEMP
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #<MEMBTM
                 ldx #<OBJ
                 ldy #<TEMP
-                jsr MOVEUP
+                jsr MoveUp
 
                 inc MEMBTM
                 bne _3
@@ -875,29 +875,29 @@ _next1          lda (OBJ2),Y
                 cpy YTEMP
                 bne _next1
 
-                inc OBJCOUNT
+                inc objCount
                 inc PBDATA
 
-                ldy OBJCOUNT
+                ldy objCount
                 lda YTEMP
                 sta PBDATA,Y
 
                 ldx #<MEMBTM
                 ldy #<MEMBTM
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #$80
-                sta SCANMODE
+                sta scanMode
 
-                ldy OBJCOUNT
+                ldy objCount
                 dey
 
-                jsr GETOBJ
-                jsr DRAWOBJ
+                jsr GetObj
+                jsr DrawObj
                 bcc _XIT
 
-                jsr REMOVEPOLY
-                jsr DRAWOBJ
+                jsr RemovePolygon
+                jsr DrawObj
                 jmp DELETEOBJ
 
 _XIT            jmp DRAGOBJ._ENTRY1
@@ -911,17 +911,17 @@ DRAGPOINT       jsr SELECTPOINT
 
                 rts
 
-_1              jsr REMOVEPOLY
+_1              jsr RemovePolygon
 
                 lda #$80                ; NO MERGE
-                ora SCANMODE
-                sta SCANMODE
+                ora scanMode
+                sta scanMode
                 lda FILLCOLOR
                 beq _next1
 
-                jsr POLYPOINTS
+                jsr PolygonPoints
 
-_next1          jsr DRAWOBJ
+_next1          jsr DrawObj
 
                 ldy MINPT
                 lda (PLYPTRX),Y
@@ -929,7 +929,7 @@ _next1          jsr DRAWOBJ
                 lda (PLYPTRY),Y
                 sta DRAGY
 
-                jsr GETCX
+                jsr GetCursorX
                 bne _2
 
                 lda #$01
@@ -939,7 +939,7 @@ _2              cmp #$9E                ; 22*7-2
                 lda #$9E
 _3              sta (PLYPTRX),Y
 
-                lda CURSORY
+                lda cursorY
                 bne _4
 
                 lda #$01
@@ -949,7 +949,7 @@ _4              cmp #$BE                ; 192-2
                 lda #$BE
 _5              sta (PLYPTRY),Y
 
-_ENTRY1         jsr ALIGNPOLY
+_ENTRY1         jsr AlignPolygon
                 php
 
                 lda MINPT
@@ -969,42 +969,42 @@ _6              sta MINPT
                 lda DRAGY
                 sta (PLYPTRY),Y
 
-                jsr ALIGNPOLY
+                jsr AlignPolygon
 
-_7              jsr GETB
+_7              jsr GetButtons
                 bpl ENDPTEDIT
 
-                jsr DRAWOBJ
+                jsr DrawObj
                 bcs CUTPOINT._ENTRY1
 
-                jsr UPDATEC
+                jsr UpdateCursor
                 jmp _next1
 
 
 ;--------------------------------------
 ;
 ;--------------------------------------
-ENDPTEDIT       lda SCANMODE
+ENDPTEDIT       lda scanMode
                 and #$7F                ; MERGE
-                sta SCANMODE
+                sta scanMode
 
                 lda FILLCOLOR
                 beq _1
 
-                jsr POLYPOINTS
+                jsr PolygonPoints
 
-_1              jsr DRAWOBJ
+_1              jsr DrawObj
                 bcc CUTPOINT._XIT
 
-                jsr REMOVEPOLY
+                jsr RemovePolygon
 
                 lda FILLCOLOR
                 beq _2
 
-                jsr POLYPOINTS
+                jsr PolygonPoints
 
-_2              jsr DRAWOBJ
-                jsr REMOVEPOLY
+_2              jsr DrawObj
+                jsr RemovePolygon
 
                 jmp CUTPOINT._ENTRY2
 
@@ -1017,24 +1017,24 @@ CUTPOINT        jsr SELECTPOINT
 
 _XIT            rts
 
-_1              jsr REMOVEPOLY
+_1              jsr RemovePolygon
 
-                lda SCANMODE
+                lda scanMode
                 ora #$80
-                sta SCANMODE
+                sta scanMode
 
                 lda FILLCOLOR
                 beq _ENTRY1
 
-                jsr POLYPOINTS
+                jsr PolygonPoints
 
-_ENTRY1         jsr DRAWOBJ
+_ENTRY1         jsr DrawObj
 
 _ENTRY2         ldx VRTXCOUNT
                 cpx #$04
                 bcs _2
 
-                lda NEXTOBJ
+                lda objNext
                 beq ENDPTEDIT
 
                 jmp DELETEOBJ
@@ -1047,62 +1047,62 @@ _2              dex
                 lda MINPT               ; CHANGE POLY
                 ldy #<PLYPTRX
                 ldx #<PLYPTRX
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #$01
                 ldy #<PLYPTRX
                 ldx #<TEMP
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda MINPT
                 ldy #<PLYPTRY
                 ldx #<PLYPTRY
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #<PLYPTRY
                 ldx #<TEMP
                 ldy #<PLYPTRX
-                jsr MOVEDOWN
+                jsr MoveDown
 
                 lda #$01
                 ldy #<PLYPTRY
                 ldx #<PLYPTRY
-                jsr SUBIYX
+                jsr SubtractiYX
 
                 lda #$02
                 ldy #<PLYPTRY
                 ldx #<TEMP
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #<MIDBTM
                 ldx #<TEMP
                 ldy #<PLYPTRY
-                jsr MOVEDOWN
+                jsr MoveDown
 
                 lda #$02
                 ldx #<MEMBTM
                 ldy #<MEMBTM
-                jsr SUBIYX
+                jsr SubtractiYX
 
                 lda #$02
                 ldx #<MIDBTM
                 ldy #<MIDBTM
-                jsr SUBIYX
+                jsr SubtractiYX
 
-                ldy NEXTOBJ
+                ldy objNext
                 lda PBDATA+1,Y
                 sec
                 sbc #$02
                 sta PBDATA+1,Y
 
-                ldy NEXTOBJ
-                jsr GETOBJ
-                jsr ALIGNPOLY
+                ldy objNext
+                jsr GetObj
+                jsr AlignPolygon
                 bcc _next1
 
                 jmp DELETEOBJ
 
-_next1          jsr GETB
+_next1          jsr GetButtons
                 bmi _next1
 
                 jmp ENDPTEDIT
@@ -1135,18 +1135,18 @@ _1              ldx VRTXCOUNT
 
 _XIT1           rts
 
-_2              jsr REMOVEPOLY
+_2              jsr RemovePolygon
 
                 lda #$80                ; ODDS, NO MERGE
-                ora SCANMODE
-                sta SCANMODE
+                ora scanMode
+                sta scanMode
 
                 lda FILLCOLOR
                 beq _3
 
-                jsr POLYPOINTS
+                jsr PolygonPoints
 
-_3              jsr DRAWOBJ
+_3              jsr DrawObj
 
                 ldx VRTXCOUNT
                 inx
@@ -1158,35 +1158,35 @@ _3              jsr DRAWOBJ
                 lda MINPT
                 ldy #<PLYPTRY
                 ldx #<PLYPTRY
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #$02
                 ldy #<MIDBTM
                 ldx #<TEMP
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #<MIDBTM
                 ldx #<PLYPTRY
                 ldy #<TEMP
-                jsr MOVEUP
+                jsr MoveUp
 
                 lda MINPT
                 ldy #<PLYPTRX
                 ldx #<PLYPTRX
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #$01
                 ldy #<PLYPTRY
                 ldx #<TEMP
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #<PLYPTRY
                 ldx #<PLYPTRX
                 ldy #<TEMP
-                jsr MOVEUP
+                jsr MoveUp
 
-                ldy NEXTOBJ
-                jsr GETOBJ
+                ldy objNext
+                jsr GetObj
 
                 ldy MINPT
                 lda MINX
@@ -1197,14 +1197,14 @@ _3              jsr DRAWOBJ
                 lda #$02
                 ldx #<MEMBTM
                 ldy #<MEMBTM
-                jsr ADDIYX
+                jsr AddiYX
 
                 lda #$02
                 ldx #<MIDBTM
                 ldy #<MIDBTM
-                jsr ADDIYX
+                jsr AddiYX
 
-                ldy NEXTOBJ
+                ldy objNext
                 lda PBDATA+1,Y
                 clc
                 adc #$02
@@ -1217,28 +1217,28 @@ _3              jsr DRAWOBJ
 ;
 ;======================================
 DRAWPOINTS      ldy #$00
-                jsr GETOBJ
+                jsr GetObj
 
-_next1          lda OBJID
+_next1          lda objID
                 cmp #<POLYGON
                 bne _1
 
 _next2          lda FILLCOLOR
                 beq _XIT1
 
-                jsr POLYPOINTS
+                jsr PolygonPoints
 
 _XIT1           jmp _2
 
 _1              cmp #<BPOLYGON
                 beq _next2
 
-_2              inc NEXTOBJ
-                ldy NEXTOBJ
-                jsr GETNEXTOBJ
+_2              inc objNext
+                ldy objNext
+                jsr GetObjNext
 
-                ldy NEXTOBJ
-                cpy OBJCOUNT
+                ldy objNext
+                cpy objCount
                 bne _next1
 
                 rts
@@ -1247,16 +1247,16 @@ _2              inc NEXTOBJ
 ;======================================
 ;
 ;======================================
-SELECTPOINT     jsr GETCX
+SELECTPOINT     jsr GetCursorX
                 sta CX_
 
                 lda #$FF
                 sta MINDIST
 
                 ldy #$00
-                jsr GETOBJ
+                jsr GetObj
 
-_next1          lda OBJID
+_next1          lda objID
                 cmp #<POLYGON
                 beq _1
 
@@ -1309,7 +1309,7 @@ _4              cmp #$08
 
                 lda YTEMP
                 sec
-                sbc CURSORY
+                sbc cursorY
                 bpl _5
 
                 eor #$FF
@@ -1328,19 +1328,19 @@ _5              cmp #$08
                 sta MINX
                 lda YTEMP
                 sta MINY
-                lda NEXTOBJ
+                lda objNext
                 sta MINPOLY
 
 _6              iny
                 cpy VRTXCOUNT
                 bne _next2
 
-_7              inc NEXTOBJ
-                ldy NEXTOBJ
-                jsr GETNEXTOBJ
+_7              inc objNext
+                ldy objNext
+                jsr GetObjNext
 
-                ldy NEXTOBJ
-                cpy OBJCOUNT
+                ldy objNext
+                cpy objCount
                 beq _8
 
                 jmp _next1
@@ -1352,8 +1352,8 @@ _8              lda MINDIST
                 rts
 
 _9              ldy MINPOLY
-                sty NEXTOBJ
-                jsr GETOBJ
+                sty objNext
+                jsr GetObj
 
                 clc
                 rts
@@ -1362,21 +1362,21 @@ _9              ldy MINPOLY
 ;--------------------------------------
 ;
 ;--------------------------------------
-PAINTOBJ        jsr XDRAWC
-                jsr SELECTPOLY
+PAINTOBJ        jsr XDrawCursor
+                jsr SelectPolygon
                 bcs _1
 
                 lda #$00
 _1              tay
-                jsr GETOBJ
+                jsr GetObj
 
-                lda OBJID
+                lda objID
                 cmp #<LIBOBJ
                 beq _XIT
 
-                lda SCANMODE
+                lda scanMode
                 ora #$80
-                sta SCANMODE
+                sta scanMode
 
                 lda FILLCOLOR
                 beq _2
@@ -1384,7 +1384,7 @@ _1              tay
                 eor COLOR
                 bne _3
 
-_2              jsr POLYPOINTS
+_2              jsr PolygonPoints
 
 _3              lda COLOR
                 cmp FILLCOLOR
@@ -1398,12 +1398,12 @@ _4              ldy #$01
                 beq _next1
 
                 sta FILLCOLOR
-                jsr DRAWOBJ
+                jsr DrawObj
 
-_next1          jsr GETB
+_next1          jsr GetButtons
                 bmi _next1
 
-_XIT            jmp XDRAWC
+_XIT            jmp XDrawCursor
 
 ;--------------------------------------
 
@@ -1471,29 +1471,29 @@ OBJLEN          .byte $0B,$1B,$1B,$1B
                 .byte $1B,$1C,$1C,$1E
                 .byte $1B,$1C,$1B
 
-OBJADDRLO       .byte <POLY,<LAUNCHER,<LEFTFLIPPER,<RIGHTFLIPPER
-                .byte <BALL,<BMP1,<BMP2,<BMP3
-                .byte <BMP4,<BMP5,<BMP6,<LKICK
-                .byte <RKICK,<KICK1,<KICK2,<ROLL1
+OBJADDRLO       .byte <POLY,<LAUNCHER,<FLIPPER_L,<FLIPPER_R
+                .byte <BALL,<BUMPER1,<BUMPER2,<BUMPER3
+                .byte <BUMPER4,<BUMPER5,<BUMPER6,<KICK_L
+                .byte <KICK_R,<KICK1,<KICK2,<ROLL1
                 .byte <ROLL2,<ROLL3,<TARG1,<TARG2
                 .byte <TARG3,<TARG4,<TARG5,<TARG6
-                .byte <LFLIP2,<RFLIP2,<POLY1,<POLY2
+                .byte <FLIPPER_L2,<FLIPPER_R2,<POLY1,<POLY2
                 .byte <POLY3,<POLY4,<LANE1,<LANE2
                 .byte <LANE3,<GATE1,<GATE2,<GATE3
                 .byte <GATE4,<DROP1,<DROP2,<CATCH1
-                .byte <CATCH2,<SPIN,<MGNT
+                .byte <CATCH2,<SPIN1,<MAGNET1
 
-OBJADDRHI       .byte >POLY,>LAUNCHER,>LEFTFLIPPER,>RIGHTFLIPPER
-                .byte >BALL,>BMP1,>BMP2,>BMP3
-                .byte >BMP4,>BMP5,>BMP6,>LKICK
-                .byte >RKICK,>KICK1,>KICK2,>ROLL1
+OBJADDRHI       .byte >POLY,>LAUNCHER,>FLIPPER_L,>FLIPPER_R
+                .byte >BALL,>BUMPER1,>BUMPER2,>BUMPER3
+                .byte >BUMPER4,>BUMPER5,>BUMPER6,>KICK_L
+                .byte >KICK_R,>KICK1,>KICK2,>ROLL1
                 .byte >ROLL2,>ROLL3,>TARG1,>TARG2
                 .byte >TARG3,>TARG4,>TARG5,>TARG6
-                .byte >LFLIP2,>RFLIP2,>POLY1,>POLY2
+                .byte >FLIPPER_L2,>FLIPPER_R2,>POLY1,>POLY2
                 .byte >POLY3,>POLY4,>LANE1,>LANE2
                 .byte >LANE3,>GATE1,>GATE2,>GATE3
                 .byte >GATE4,>DROP1,>DROP2,>CATCH1
-                .byte >CATCH2,>SPIN,>MGNT
+                .byte >CATCH2,>SPIN1,>MAGNET1
 
 TABLEB          .byte $00,$00,$00,$BF,$13,$07
 KITB            .byte $00,$14,$00,$BF,$13,$07
@@ -1573,17 +1573,17 @@ ICONS           .addr HAND
                 .addr DISK
                 .addr POLYICON
                 .addr LAUNCHER+$B
-                .addr LEFTFLIPPER+$B
-                .addr RIGHTFLIPPER+$B
+                .addr FLIPPER_L+$B
+                .addr FLIPPER_R+$B
                 .addr BALL+$B
-                .addr BMP1+$13
-                .addr BMP2+$13
-                .addr BMP3+$B
-                .addr BMP4+$B
-                .addr BMP5+$B
-                .addr BMP6+$B
-                .addr LKICK+$D
-                .addr RKICK+$D
+                .addr BUMPER1+$13
+                .addr BUMPER2+$13
+                .addr BUMPER3+$B
+                .addr BUMPER4+$B
+                .addr BUMPER5+$B
+                .addr BUMPER6+$B
+                .addr KICK_L+$D
+                .addr KICK_R+$D
                 .addr KICK1+$B
                 .addr KICK2+$B
                 .addr ROLL1+$B
@@ -1595,8 +1595,8 @@ ICONS           .addr HAND
                 .addr TARG4+$B
                 .addr TARG5+$B
                 .addr TARG6+$B
-                .addr LFLIP2+$B
-                .addr RFLIP2+$B
+                .addr FLIPPER_L2+$B
+                .addr FLIPPER_R2+$B
                 .addr LANE1+$B
                 .addr LANE2+$B
                 .addr LANE3+$B
@@ -1608,8 +1608,8 @@ ICONS           .addr HAND
                 .addr DROP2+$B
                 .addr CATCH1+$D
                 .addr CATCH2+$B
-                .addr SPIN+$B
-                .addr MGNT+$B
+                .addr SPIN1+$B
+                .addr MAGNET1+$B
 
 POLYS           .addr POLY1
                 .addr POLY2
@@ -1660,25 +1660,25 @@ POLYICON        .word POLYICON+7
 ;======================================
 MAGSTART        lda #<ICON1
                 ldx #>ICON1
-                jsr XOFFDRAW
+                jsr XOffDraw
                 jsr DRAWQUIT
 
                 lda #<ICON2
                 ldx #>ICON2
-                jsr XOFFDRAW
+                jsr XOffDraw
                 jsr INITMAG
 
                 lda #<BRUSH
                 ldx #>BRUSH
-                jsr INITC
+                jsr InitCursor
 
-_next1          jsr UPDATEC
-                jsr GETB
+_next1          jsr UpdateCursor
+                jsr GetButtons
                 bpl _next1
 
                 lda #<VR
                 ldx #>VR
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _1
 
 _next2          jsr DRAG
@@ -1686,12 +1686,12 @@ _next2          jsr DRAG
 
 _1              lda #<gfxMagnet
                 ldx #>gfxMagnet
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _3
 
                 lda #<MAG
                 ldx #>MAG
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _2
 
                 jsr PLOT
@@ -1702,16 +1702,16 @@ _2              jsr SLIDEMAG
 
 _3              lda #<MCMDB
                 ldx #>MCMDB
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _next2
 
                 lda #$00
-                sta LASTITEM+1
+                sta lastItem+1
                 jmp _4
 
 _4              lda #<MCMDMENU
                 ldx #>MCMDMENU
-                jsr DOMENU
+                jsr DoMenu
 
                 jmp _next1
 
@@ -1748,11 +1748,11 @@ MQUIT           jsr DRAWVIEWR
 DRAWQUIT        lda #$06
                 ldx #$17
                 ldy #$B2
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<QUITMSG
                 ldx #>QUITMSG
-                jmp PRINT_
+                jmp Print_
 
 ;--------------------------------------
 
@@ -1824,8 +1824,8 @@ _next1          jsr INSQR
 
 _3              jsr DISPLAYPLOT
 
-_4              jsr UPDATEC
-                jsr GETB
+_4              jsr UpdateCursor
+                jsr GetButtons
                 bmi _next1
 
                 jmp DRAWVIEWR
@@ -1834,9 +1834,9 @@ _4              jsr UPDATEC
 ;======================================
 ;
 ;======================================
-DISPLAYPLOT     jsr XDRAWC
+DISPLAYPLOT     jsr XDrawCursor
 
-                lda CURSORY
+                lda cursorY
                 sec
                 sbc #$47
 
@@ -1866,7 +1866,7 @@ _1              tya
                 sta M8A
 
                 jsr DOROW
-                jmp XDRAWC
+                jmp XDrawCursor
 
 
 ;======================================
@@ -1878,7 +1878,7 @@ INMAG           stx PARAM+3
 
                 lda #<MCMDB
                 ldx #>MCMDB
-                jsr INR
+                jsr InRectangle
 
                 lda TEMP
                 ldx XTEMP
@@ -1983,23 +1983,23 @@ ICON2           .word $AD56
 ;
 ;======================================
 INITMAG         ldy #$04
-                jsr SETMODE
+                jsr SetMode
 
                 lda #<MBAR1
                 ldx #>MBAR1
-                jsr DRAWR
+                jsr Drawrectangle
 
                 lda #<MBAR2
                 ldx #>MBAR2
-                jsr DRAWR
+                jsr Drawrectangle
 
                 lda #<MBAR3
                 ldx #>MBAR3
-                jsr DRAWR
+                jsr Drawrectangle
 
                 lda #<MBAR4
                 ldx #>MBAR4
-                jsr DRAWR
+                jsr Drawrectangle
 
                 lda #$00
                 sta COLBW
@@ -2023,7 +2023,7 @@ INITMAG         ldy #$04
                 jsr BLOWUP
 
                 ldy #$02
-                jsr SETMODE
+                jsr SetMode
 
 
 ;======================================
@@ -2031,7 +2031,7 @@ INITMAG         ldy #$04
 ;======================================
 DRAWVIEWR       lda #<VR
                 ldx #>VR
-                jmp FRAMER
+                jmp FrameRectangle
 
 
 ;--------------------------------------
@@ -2087,11 +2087,11 @@ _1              lda #$FE
 ;======================================
 INSQR           lda #<MAG
                 ldx #>MAG
-                jsr CINR
+                jsr CursorInRectangle
 
                 php
 
-                lda CURSORY
+                lda cursorY
                 sec
                 sbc #$47
 
@@ -2108,7 +2108,7 @@ _1              tya
                 adc VRY
                 tay
 
-                lda CURSORXDIV8
+                lda cursorX_Div8
                 sec
                 sbc #$15
                 clc
@@ -2136,7 +2136,7 @@ SLIDEMAG        lda #$00
 
                 lda #<MBAR1
                 ldx #>MBAR1
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _1
 
                 ldy #$FE
@@ -2145,7 +2145,7 @@ SLIDEMAG        lda #$00
 
 _1              lda #<MBAR4
                 ldx #>MBAR4
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _2
 
                 ldy #$02
@@ -2153,7 +2153,7 @@ _1              lda #<MBAR4
 
 _2              lda #<MBAR2
                 ldx #>MBAR2
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _3
 
                 ldx #$FE
@@ -2162,15 +2162,15 @@ _2              lda #<MBAR2
 
 _3              lda #<MBAR3
                 ldx #>MBAR3
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _4
 
                 ldx #$02
                 stx XDIR
 
-_4              jsr XDRAWC
+_4              jsr XDrawCursor
                 jsr SLIDEVIEWR
-                jsr XDRAWC
+                jsr XDrawCursor
 
                 rts
 
@@ -2226,7 +2226,7 @@ _8              jsr BLOWUP
 
                 lda #$32
                 jsr WAIT_
-                jsr GETB
+                jsr GetButtons
                 bpl _XIT
 
                 jmp SLIDEVIEWR
@@ -2237,24 +2237,24 @@ _XIT            rts
 ;======================================
 ;
 ;======================================
-DRAG            jsr XDRAWC
+DRAG            jsr XDrawCursor
 
 _next1          jsr DRAWVIEWR
-                jsr DOCX
+                jsr DoCursorX
 
-                stx CURSORXDIV8
-                sta CURSORXMOD8
-                jsr DOCY
+                stx cursorX_Div8
+                sta cursorX_Mod8
+                jsr DoCursorY
 
-                sta CURSORY
+                sta cursorY
                 cmp #$B2
                 bcc _1
 
                 lda #$B2
 _1              sta VRY
 
-                ldx CURSORXDIV8
-                lda CURSORXMOD8
+                ldx cursorX_Div8
+                lda cursorX_Mod8
                 and #$FE
                 cpx #$26
                 bcc _3
@@ -2270,10 +2270,10 @@ _3              stx VRXD8
 
                 lda #$50
                 jsr WAIT_
-                jsr GETB
+                jsr GetButtons
                 bmi _next1
 
-                jsr XDRAWC
+                jsr XDrawCursor
 
                 rts
 
@@ -2581,7 +2581,7 @@ _next1          sty YTEMP
 
                 lda SLIDESLO,Y
                 ldx SLIDESHI,Y
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 ldy YTEMP
                 jsr INITSLIDE
@@ -2593,52 +2593,52 @@ _next1          sty YTEMP
                 lda #$00
                 ldx #$15
                 ldy #$06
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<HEAD1
                 ldx #>HEAD1
-                jsr PRINT_
+                jsr Print_
 
                 lda #$01
                 ldx #$1D
                 ldy #$06
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<HEAD2
                 ldx #>HEAD2
-                jsr PRINT_
+                jsr Print_
 
                 lda #$01
                 ldx #$16
                 ldy #$46
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<HEAD3
                 ldx #>HEAD3
-                jsr PRINT_
+                jsr Print_
 
                 lda #$01
                 ldx #$1B
                 ldy #$46
-                jsr CHARTO
+                jsr CharTo
 
                 lda #<HEAD4
                 ldx #>HEAD4
-                jsr PRINT_
+                jsr Print_
 
                 lda #<HAND
                 ldx #>HAND
-                jsr INITC
+                jsr InitCursor
 
-_next2          jsr UPDATEC
-                jsr GETB
+_next2          jsr UpdateCursor
+                jsr GetButtons
                 bpl _next2
 
                 ldy #$00
 _next3          lda SLBLO,Y
                 ldx SLBHI,Y
                 sty YTEMP
-                jsr CINR
+                jsr CursorInRectangle
 
                 ldy YTEMP
                 bcc _1
@@ -2652,17 +2652,17 @@ _1              iny
 
                 lda #<MCMDB
                 ldx #>MCMDB
-                jsr CINR
+                jsr CursorInRectangle
                 bcc _next2
 
                 lda #$00
-                sta LASTITEM+1
+                sta lastItem+1
 
                 jmp _2
 
 _2              lda #<WCMDMENU
                 ldx #>WCMDMENU
-                jsr DOMENU
+                jsr DoMenu
 
                 jmp _next2
 
@@ -2684,7 +2684,7 @@ DOSLIDE         lda SLIDESLO,Y
 _next1          lda WSET,Y
                 sta SLOLD
 
-                lda CURSORY
+                lda cursorY
                 sec
                 ldy #$02
                 sbc (SLB),Y
@@ -2707,10 +2707,10 @@ _2              sty SLNEW
                 sta WSET,Y
 
                 jsr MOVESLIDE
-                jsr UPDATEC
+                jsr UpdateCursor
 
                 ldy YTEMP
-                jsr GETB
+                jsr GetButtons
                 bmi _next1
 
                 rts
@@ -2766,7 +2766,7 @@ _2              clc
 
                 lda #<SLDX
                 ldx #>SLDX
-                jsr XOFFDRAW
+                jsr XOffDraw
 
                 jmp _next1
 

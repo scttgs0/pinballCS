@@ -11,68 +11,48 @@
 ; Code equates
 ;--------------------------------------
 
-SETMODE                 = $24CF
+SetMode                 = $24CF
 
-DRAWBITS                = $24F4
-XOFFDRAW                = $2535
+DrawBits                = $24F4
+XOffDraw                = $2535
 
-GETRECT                 = $2590
+GetRectangle            = $2590
 
 MASKS                   = $25D1
 
-HLINE                   = $25E2
-VLINE                   = $2602
+HorzLine                = $25E2
+VertLine                = $2602
 
-FRAMERECT               = $265A
-FRAMER                  = $265A
+FrameRectangle          = $265A
+Drawrectangle           = $2682
+InRectangle             = $2692
 
-DRAWRECT                = $2682
-DRAWR                   = $2682
+GetButtons              = $26BF
 
-INRECT                  = $2692
-INR                     = $2692
-
-GETBUTNS                = $26BF
-GETB                    = $26BF
-
-INITCRSR                = $26CA
-INITC                   = $26CA
-
-XDRAWCRSR               = $26DE
-XDRAWC                  = $26DE
-
-UPDATECRSR              = $26E5
-UPDATEC                 = $26E5
-
-DOCRSRX                 = $2703
-DOCX                    = $2703
-
-GETCURSORX              = $271A
-GETCX                   = $271A
-
-DOCRSRY                 = $272A
-DOCY                    = $272A
-
+InitCursor              = $26CA
+XDrawCursor             = $26DE
+UpdateCursor            = $26E5
+DoCursorX               = $2703
+GetCursorX              = $271A
+DoCursorY               = $272A
 WAIT_                   = $272D
+CursorInRectangle       = $2739
 
-CRSRINRECT              = $2739
-CINR                    = $2739
-
-DOMENU                  = $274C
+DoMenu                  = $274C
 SELECT                  = $27A0
 
 INIT                    = $27E0
 
-MOVEUP                  = $2815
-MOVEDOWN                = $2850
+MoveUp                  = $2815
+MoveDown                = $2850
 
-ADDIYX                  = $2889
-ADDYX                   = $2897
-SUBIYX                  = $28A7
-SUBYX                   = $28B9
+AddiYX                  = $2889
+AddYX                   = $2897
+SubtractiYX             = $28A7
+SubtractYX              = $28B9
 
-CHARTO                  = $28D8
-PRCHAR                  = $28E2
-PRINT_                  = $291A
+CharTo                  = $28D8
+PrintChar               = $28E2
+Print_                  = $291A
 
-VBLCURSOR               = $2A5B
+VBICursor               = $2A5B

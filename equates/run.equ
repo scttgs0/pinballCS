@@ -11,26 +11,31 @@
 ; Code equates
 ;--------------------------------------
 
-DRAWBALL                = $8766
-INITBALL                = $8790
+DrawBall                = $8766
+InitBall                = $8790
+Advance                 = $8BDE
 
-ADVANCE                 = $8BDE
+;--------------------------------------
 
 POLY                    = $94CA
+
 LAUNCHER                = $94D5
-LEFTFLIPPER             = $94F0
-RIGHTFLIPPER            = $950B
+
+FLIPPER_L               = $94F0
+FLIPPER_R               = $950B
+
 BALL                    = $9526
 
-BMP1                    = $9541
-BMP2                    = $9564
-BMP3                    = $9587
-BMP4                    = $95A2
-BMP5                    = $95BD
-BMP6                    = $95D8
+BUMPER1                 = $9541
+BUMPER2                 = $9564
+BUMPER3                 = $9587
+BUMPER4                 = $95A2
+BUMPER5                 = $95BD
+BUMPER6                 = $95D8
 
-LKICK                   = $95F3
-RKICK                   = $9610
+KICK_L                  = $95F3
+KICK_R                  = $9610
+
 KICK1                   = $962D
 KICK2                   = $9648
 
@@ -45,10 +50,8 @@ TARG4                   = $9705
 TARG5                   = $9720
 TARG6                   = $973B
 
-LFLIPPER2               = $9756
-LFLIP2                  = $9756
-RFLIPPER2               = $9771
-RFLIP2                  = $9771
+FLIPPER_L2              = $9756
+FLIPPER_R2              = $9771
 
 POLY1                   = $978C
 POLY2                   = $9797
@@ -66,10 +69,10 @@ GATE4                   = $985A
 
 DROP1                   = $9875
 DROP2                   = $9891
+
 CATCH1                  = $98AD
 CATCH2                  = $98CA
 
 SPIN1                   = $98E5
-SPIN                    = $98E5
-MGNT1                   = $9900
-MGNT                    = $9900
+
+MAGNET1                 = $9900
