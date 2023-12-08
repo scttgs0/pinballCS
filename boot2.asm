@@ -6,10 +6,11 @@
 
 ; SPDX-FileCopyrightText: Copyright 2023 Scott Giese
 
+
                 .include "equates/system_atari8.equ"
 
                 .include "equates/platform_a8.equ"
-                .include "equates/run2.equ"
+                .include "equates/tst.equ"
 
 
 ;--------------------------------------
@@ -39,7 +40,7 @@ EDITOR                  = $A000
 ; Disk Initialization
 ;--------------------------------------
 ;--------------------------------------
-DISK_INIT       jsr GoAtari
+DISK_INIT       jsr GoAtariTest
                 jsr InitAtari
 
                 stz DAUX2
@@ -50,6 +51,9 @@ DISK_INIT       jsr GoAtari
                 ldx #$C0                ; sector 192
                 ldy #$70                ; 112 sectors
                 jsr GetSectors
+
+;   DEBUG: pause on the title screen
+;_endless        jmp _endless
 
                 jmp EDITOR
 
