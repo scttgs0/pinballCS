@@ -182,3 +182,5 @@ cat     obj/boot2.bin \
         obj/DEMO4.PB \
         obj/DEMO5.PB \
         >obj/pinballCS.bin
+
+cp obj/pinballCS.bin /media/scott/ExternData/src/GameEngines/FoenixRetroSystems/bin/SDCARDs/F256/SDCARD_JR/
