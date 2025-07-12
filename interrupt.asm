@@ -1,6 +1,15 @@
 
-HandleIrq       .proc
-                .m16i16
+; SPDX-FileName: interrupt.asm
+; SPDX-FileCopyrightText: Copyright 2025, Scott Giese
+; SPDX-License-Identifier: GPL-3.0-or-later
+
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Main IRQ Handler
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+irqMain         .proc
                 pha
                 phx
                 phy
@@ -19,7 +28,7 @@ _1              lda @l INT_PENDING_REG0
                 bit #FNX0_INT00_SOF
                 beq _XIT
 
-                jsl VBIHandler
+                jsl irqVBIHandler
 
                 lda @l INT_PENDING_REG0
                 sta @l INT_PENDING_REG0
@@ -29,15 +38,13 @@ _XIT            .m16i16
                 plx
                 pla
 
-                .m8i8
-HandleIrq_END   rti
-                ;jmp IRQ_PRIOR
-
+irqMain_END     ;jmp IRQ_PRIOR
+                rti
                 .endproc
 
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; Handle Key notifications
+; Key Notifications
 ;--------------------------------------
 ;   ESC         $01/$81  press/release
 ;   R-Ctrl      $1D/$9D
@@ -61,13 +68,9 @@ KEY_DOWN        = $50
 KEY_CTRL        = $1D                   ; fire button
 ;---
 
-                .m16i16
                 pha
                 phx
                 phy
-
-                .m8i8
-                .setbank $00
 
                 lda KBD_INPT_BUF
                 pha
@@ -87,6 +90,7 @@ _1              pla                     ;   no
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _1r             pla
                 pha
                 cmp #KEY_F2|$80
@@ -98,6 +102,7 @@ _1r             pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _2              pla
                 pha
                 cmp #KEY_F3
@@ -109,6 +114,7 @@ _2              pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _2r             pla
                 pha
                 cmp #KEY_F3|$80
@@ -120,6 +126,7 @@ _2r             pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _3              pla
                 pha
                 cmp #KEY_F4
@@ -131,6 +138,7 @@ _3              pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _3r             pla
                 pha
                 cmp #KEY_F4|$80
@@ -142,17 +150,18 @@ _3r             pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _4              pla
                 pha
                 cmp #KEY_UP
                 bne _5
 
                 lda InputFlags
-                bit #$01
+                bit #joyUP
                 beq _4a
 
-                eor #$01
-                ora #$02                ; cancel KEY_DOWN
+                eor #joyUP
+                ora #joyDOWN            ; cancel KEY_DOWN
                 sta InputFlags
 
 _4a             lda #itKeyboard
@@ -160,28 +169,30 @@ _4a             lda #itKeyboard
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _4r             pla
                 pha
                 cmp #KEY_UP|$80
                 bne _5r
 
                 lda InputFlags
-                ora #$01
+                ora #joyUP
                 sta InputFlags
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _5              pla
                 pha
                 cmp #KEY_DOWN
                 bne _6
 
                 lda InputFlags
-                bit #$02
+                bit #joyDOWN
                 beq _5a
 
-                eor #$02
-                ora #$01                ; cancel KEY_UP
+                eor #joyDOWN
+                ora #joyUP              ; cancel KEY_UP
                 sta InputFlags
 
 _5a             lda #itKeyboard
@@ -189,28 +200,30 @@ _5a             lda #itKeyboard
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _5r             pla
                 pha
                 cmp #KEY_DOWN|$80
                 bne _6r
 
                 lda InputFlags
-                ora #$02
+                ora #joyDOWN
                 sta InputFlags
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _6              pla
                 pha
                 cmp #KEY_LEFT
                 bne _7
 
                 lda InputFlags
-                bit #$04
+                bit #joyLEFT
                 beq _6a
 
-                eor #$04
-                ora #$08                ; cancel KEY_RIGHT
+                eor #joyLEFT
+                ora #joyRIGHT           ; cancel KEY_RIGHT
                 sta InputFlags
 
 _6a             lda #itKeyboard
@@ -224,7 +237,7 @@ _6r             pla
                 bne _7r
 
                 lda InputFlags
-                ora #$04
+                ora #joyLEFT
                 sta InputFlags
 
                 bra _CleanUpXIT
@@ -235,11 +248,11 @@ _7              pla
                 bne _8
 
                 lda InputFlags
-                bit #$08
+                bit #joyRIGHT
                 beq _7a
 
-                eor #$08
-                ora #$04                ; cancel KEY_LEFT
+                eor #joyRIGHT
+                ora #joyLEFT            ; cancel KEY_LEFT
                 sta InputFlags
 
 _7a             lda #itKeyboard
@@ -253,7 +266,7 @@ _7r             pla
                 bne _8r
 
                 lda InputFlags
-                ora #$08
+                ora #joyRIGHT
                 sta InputFlags
 
                 bra _CleanUpXIT
@@ -263,7 +276,7 @@ _8              pla
                 bne _XIT
 
                 lda InputFlags
-                eor #$10
+                eor #joyButton0
                 sta InputFlags
 
                 lda #itKeyboard
@@ -277,7 +290,7 @@ _8r             pla
                 bne _XIT
 
                 lda InputFlags
-                ora #$10
+                ora #joyButton0
                 sta InputFlags
 
                 stz KEYCHAR
@@ -286,32 +299,24 @@ _8r             pla
 _CleanUpXIT     stz KEYCHAR
                 pla
 
-_XIT            .m16i16
-                ply
+_XIT            ply
                 plx
                 pla
-
-                .m8i8
-                rtl
+                rts
                 .endproc
 
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; VBI ROUTINE
+; Vertical Blank Interrupt (SOF)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 VBIHandler      .proc
 KEY_SPACE       = $39
 ;---
 
-                php
-
-                .m16i16
                 pha
                 phx
                 phy
 
-                .m8i8
-                .setbank $00
                 inc JIFFYCLOCK          ; increment the jiffy clock each VBI
 
                 lda JOYSTICK0           ; read joystick0
@@ -336,9 +341,9 @@ _pause          lda KEYCHAR
 
 _1              lda isPaused            ; are we paused?
                 beq _2                  ;   no!
-
                 jmp _XIT                ; when paused, no VBI!
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda vBumpSndCount       ; more bump sound?
                 bmi _3                  ;   no, process timer
 
@@ -357,9 +362,9 @@ _3              lda TIMER               ; timer down to zero?
 
 _4              lda isFillOn            ; are we filling?
                 beq _5                  ;   no, do rest of VBI
-
                 jmp _XIT                ; when filling, exit VBI
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda #0                  ; clear out dead flag
                 sta isDead
 
@@ -389,13 +394,14 @@ _8              lda vStarMoveTimer      ; star move timer zero?
 
                 dec vStarMoveTimer
 
-_9              lda vStarRotTimer       ; star rot. timer zero?
-                beq _10                 ;   yes, rotate star!
+_9              lda vStarRotTimer       ; star rotation timer zero?
+                beq _rotate             ;   yes, rotate star!
 
                 dec vStarRotTimer       ; decrement timer
                 jmp _12                 ; and skip rotation.
 
-_10             lda #1                  ; set rot. timer to 1
+; - - - - - - - - - - - - - - - - - - -
+_rotate         lda #1                  ; set rot. timer to 1
                 sta vStarRotTimer
 
                 lda StarRotPos          ; increment star rotation counter
@@ -408,34 +414,35 @@ _10             lda #1                  ; set rot. timer to 1
                 lda #0                  ; zero rot. counter.
 _11             sta StarRotPos          ; save rot. pos.
 
-
-;   this section draws the star.
+; - - - - - - - - - - - - - - - - - - -
+;   this section draws the star
+; - - - - - - - - - - - - - - - - - - -
 
 _12             ;ldy StarRotPos
                 ;ldx StarVertPos
 
-                .m16
+                ;!!.m16
                 lda StarHorzPos         ; set star's horiz. pos.
                 and #$FF                ; byte->word
-                asl A                   ; *2, account for double-pixel display
+                asl                     ; *2, account for double-pixel display
                 clc                     ; +32, account for off-screen border
                 adc #32-6               ; -6, distance to star center
                 sta SP01_X_POS
 
                 lda StarVertPos         ; set star's vert. pos.
                 and #$FF                ; byte->word
-                asl A                   ; *2, account for double-pixel display
+                asl                     ; *2, account for double-pixel display
                 clc                     ; +32, account for off-screen border
                 adc #32+24-6            ; +24, account for playfield vertical displacement
                 sta SP01_Y_POS          ; -6, distance to star center
 
                 lda StarRotPos
                 and #$FF                ; byte->word
-                asl A                   ; *2, word lookup table
+                asl                     ; *2, word lookup table
                 tay
                 lda StarRotTbl,Y
                 sta SP01_ADDR
-                .m8
+                ;!!.m8
 
                 lda zpPlayerColorClock  ; is it time to change color?
                 cmp JIFFYCLOCK
@@ -449,22 +456,23 @@ _12             ;ldy StarRotPos
 _13             lda isHidePlayer        ; ok to show player?
                 bne _XIT                ;   no, exit VBI
 
-                .m16
+                ;!!.m16
                 lda PX                  ; set player's horizontal position
                 and #$FF                ; byte->word
-                asl A                   ; *2, account for double-pixel display
+                asl                     ; *2, account for double-pixel display
                 clc                     ; +32, account for off-screen border
                 adc #32-2               ; -2, distance to player center
                 sta SP00_X_POS
 
                 lda PY                  ; set player's vertical position
                 and #$FF                ; byte->word
-                asl A                   ; *2, account for double-pixel display
+                asl                     ; *2, account for double-pixel display
                 clc                     ; +32, account for off-screen border
                 adc #32+24-2            ; +24, account for playfield vertical displacement
                 sta SP00_Y_POS          ; -2, distance to player center
-                .m8
+                ;!!.m8
 
+;   color cycle
                 lda isPreventColorChange ; color change ok?
                 bne _XIT                ;   no, exit VBI
 
@@ -475,12 +483,14 @@ _13             lda isHidePlayer        ; ok to show player?
                 stz zpPlayerColorIdx
 
 _14             lda zpPlayerColorIdx
-                asl A                   ; *4
-                asl A
+                asl                     ; *4
+                asl
                 tax
+
                 ldy #0
 _nextColor      lda palColor0,X
                 sta SprColor0,Y
+
                 inx
                 iny
                 cpy #4
@@ -488,12 +498,8 @@ _nextColor      lda palColor0,X
 
                 jsr InitLUT
 
-_XIT            .m16i16
-                ply
+_XIT            ply
                 plx
                 pla
-
-                .m8i8
-                plp
-                rtl
+                rts
                 .endproc

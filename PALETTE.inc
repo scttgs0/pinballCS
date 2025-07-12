@@ -8,7 +8,7 @@ PfColor4        .dword $00462075
 PfColor5        .dword $00300400
 PfColor6        .dword $000000e2
 PfColor7        .dword $00400000
-SprColor0       .dword $005868fc    ; [09] player 
+SprColor0       .dword $005868fc    ; [09] player
 SprColor1       .dword $00dc241c    ; [0A] star
 SprColor2       .dword $00ebd77e
 SprColor3       .dword $00610000
